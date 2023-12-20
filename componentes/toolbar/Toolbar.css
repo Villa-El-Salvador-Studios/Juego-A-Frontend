@@ -1,0 +1,27 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #82bfa0;
+    margin: 0;
+}
+  
+.button-container {
+display: flex;
+margin-left: auto;
+}
+
+.login-button,
+.register-button {
+margin-left: 10px;
+padding: 8px 12px;
+cursor: pointer;
+} 
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Para prevenir la barra de desplazamiento horizontal */
+}
+  
