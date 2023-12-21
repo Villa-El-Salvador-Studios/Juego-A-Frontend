@@ -4,6 +4,7 @@ import './Toolbar.css'
    return (
     <div className="toolbar">
       <div className="button-container">
+
         {Object.keys(botones).map((nombreBoton) => {
           const boton = botones[nombreBoton];
           return (
@@ -16,6 +17,7 @@ import './Toolbar.css'
             </button>
           );
         })}
+
       </div>
     </div>
    )
