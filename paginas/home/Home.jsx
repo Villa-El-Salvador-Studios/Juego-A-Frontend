@@ -28,10 +28,14 @@ const Home = () => {
 
     const botones = {
         boton1: {
+            texto: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMjEgMTN2MTBoLTZ2LTZoLTZ2NmgtNnYtMTBoLTNsMTItMTIgMTIgMTJoLTN6bS0xLTUuOTA3di01LjA5M2gtM3YyLjA5M2wzIDN6Ii8+PC9zdmc+",
+            ruta: "/home"
+        },
+        boton2: {
             texto: "Iniciar Sesión",
             ruta: "/inicio-sesion"
         },
-        boton2: {
+        boton3: {
             texto: "Registrarse",
             ruta: "/registro"
         }
