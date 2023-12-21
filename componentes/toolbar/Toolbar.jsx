@@ -1,5 +1,6 @@
 import './Toolbar.css' 
- 
+import { Link } from 'react-router-dom';
+
  const Toolbar = ({botones}) => {
    return (
     <div className="toolbar">
@@ -8,13 +9,11 @@ import './Toolbar.css'
         {Object.keys(botones).map((nombreBoton) => {
           const boton = botones[nombreBoton];
           return (
-            <button
-              key={nombreBoton}
-              className='toolbar-button'
-              onClick={boton.funcion}
-            >
-              {boton.texto}
-            </button>
+            <Link to={boton.ruta} key={nombreBoton}>
+              <button className='toolbar-button'>
+                {boton.texto}
+              </button>
+            </Link>
           );
         })}
 

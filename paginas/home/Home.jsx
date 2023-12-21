@@ -29,11 +29,11 @@ const Home = () => {
     const botones = {
         boton1: {
             texto: "Iniciar Sesión",
-            funcion: () => console.log("Hola, Erick")
+            ruta: "/inicio-sesion"
         },
         boton2: {
             texto: "Registrarse",
-            funcion: () => console.log("Hola, Gabriel")
+            ruta: "/registro"
         }
     }
 

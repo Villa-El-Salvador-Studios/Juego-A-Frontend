@@ -1,7 +1,7 @@
  const Registro = () => {
      return (
          <div>
-            <p>Hola Erick</p>
+            <p>Soy el registro de una nueva cuenta.</p>
         </div>
      )
  }
