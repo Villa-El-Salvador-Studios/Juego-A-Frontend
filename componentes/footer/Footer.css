@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Para prevenir la barra de desplazamiento horizontal */
+}
+
+.footer {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas */
+    grid-template-rows: auto auto; /* Dos filas */
+    gap: 10px;
+    padding: 10px;
+    background-color: #7a6f5d; /* Cambia el color de fondo según tus necesidades */
+  }
+  
+  .top-left,
+  .bottom-left,
+  .top-right,
+  .bottom-right {
+    padding: 10px;
+    font-size: 1vw;
+  }
+  
+  .top-left {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+  
+  .bottom-left {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+  }
+  
+  .top-right {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    text-align: right;
+    margin-right: 30px;
+  }
+  
+  .bottom-right {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .bottom-right img {
+    margin-right: 20px; /* Ajusta el margen entre los iconos según tus necesidades */
+  }
+  
