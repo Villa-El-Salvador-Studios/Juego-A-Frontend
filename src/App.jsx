@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import Home from '../paginas/home/Home'
+import AppRouter from '../routing/AppRouting'
 
 function App() {
   return (
-    <Home></Home>
+    <AppRouter></AppRouter>
   )
 }
 
