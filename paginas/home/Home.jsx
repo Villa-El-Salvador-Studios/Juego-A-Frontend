@@ -1,7 +1,7 @@
-import Toolbar from "../toolbar/Toolbar";
+import Toolbar from "../../componentes/toolbar/Toolbar";
+import Nosotros from "../../componentes/componenteNosotros/Nosotros";
+import Footer from "../../componentes/footer/Footer";
 import "./Home.css";
-import Nosotros from "../componenteNosotros/Nosotros";
-import Footer from "../footer/Footer";
 
 const Home = () => {
     const informacion = ["Misión",
