@@ -1,12 +1,22 @@
 import './Toolbar.css' 
  
- const Toolbar = () => {
+ const Toolbar = ({botones}) => {
    return (
     <div className="toolbar">
-        <div className="button-container">
-            <button className="login-button">Iniciar Sesión</button>
-            <button className="register-button">Registrarse</button>
-        </div>
+      <div className="button-container">
+        {Object.keys(botones).map((nombreBoton) => {
+          const boton = botones[nombreBoton];
+          return (
+            <button
+              key={nombreBoton}
+              className='toolbar-button'
+              onClick={boton.funcion}
+            >
+              {boton.texto}
+            </button>
+          );
+        })}
+      </div>
     </div>
    )
  }

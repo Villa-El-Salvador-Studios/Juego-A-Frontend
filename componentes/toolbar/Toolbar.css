@@ -12,8 +12,7 @@ display: flex;
 margin-left: auto;
 }
 
-.login-button,
-.register-button {
+.toolbar-button {
 margin-left: 10px;
 padding: 8px 12px;
 cursor: pointer;
