@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import AppRouter from '../routing/AppRouting'
 
 function App() {
