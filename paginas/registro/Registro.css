@@ -1,11 +1,35 @@
 .espacio-registro {
     background-color: #efe8b2;
-    height: 100vh;
+    min-height: 100vh; /* Establece una altura mínima para evitar que los elementos se sobrepongan */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 .centrado {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 80vh;
+    flex-grow: 1; /* Permite que el contenido central crezca para ocupar todo el espacio disponible */
 } 
+.boton-registro {
+    background-color: #f8a348;
+    border: 2px solid transparent;
+    border-color: #f8a348;
+    min-width: 10vw; /* Ajusta el ancho según tus preferencias */
+    min-height: 5vh;
+    font-size: 1.5vw;
+    white-space: nowrap; /* Evita el salto de línea en el texto */
+    padding: 10px 15px;
+    margin-top: 10px;
+}
+.boton-registro:hover {
+    background-color: #efe8b2;
+    border-color: #f8a348;
+}
+.instrucciones {
+    font-size: 1.5vw;
+    margin-top: 5%; /* Ajusta la posición vertical */
+    margin-bottom: 10px; /* Ajusta el espacio inferior */
+    bottom: 0;
+}
