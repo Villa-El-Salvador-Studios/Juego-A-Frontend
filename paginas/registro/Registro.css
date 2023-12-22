@@ -1,1 +1,11 @@
- 
+.espacio-registro {
+    background-color: #efe8b2;
+    height: 100vh;
+}
+.centrado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+} 

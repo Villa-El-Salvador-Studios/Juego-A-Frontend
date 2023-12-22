@@ -2,7 +2,7 @@ body {
     font-family: 'Silkscreen', sans-serif;
 }
   
-h1, h2, h3, button, p {
+h1, h2, h3, button, p, input {
     font-family: 'Silkscreen', sans-serif;
     /* Ajusta según sea necesario para diferentes elementos */
 }

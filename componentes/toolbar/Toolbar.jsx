@@ -1,7 +1,7 @@
 import './Toolbar.css' 
 import { Link } from 'react-router-dom';
 
- const Toolbar = ({botones}) => {
+ const Toolbar = ({ botones }) => {
    return (
     <div className="toolbar">
       
