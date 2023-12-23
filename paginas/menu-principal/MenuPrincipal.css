@@ -41,3 +41,10 @@ body {
     width: 8vw;
     height: 8vh;
 }
+.icono-individual:hover {
+    transform: scale(1.5);
+    cursor: pointer;
+}
+::backdrop {
+    background-color: #82bfa0;
+}
