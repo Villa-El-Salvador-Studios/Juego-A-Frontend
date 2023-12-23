@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Llenar-informacion.css'
 
-const LlenarInformacion = ({textoH1, textoInput, onInputChange, tipo, sources}) => {
+const LlenarInformacion = ({textoH1, textoInput, onInputChange, tipo, sources, onKeyDown}) => {
     const [inputValue, setInputValue] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     
@@ -17,6 +17,13 @@ const LlenarInformacion = ({textoH1, textoInput, onInputChange, tipo, sources}) 
         setShowPassword(!showPassword);
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            // Llama a la función de devolución de llamada para manejar la tecla Enter
+            onKeyDown(event);
+        }
+    };
+
     return (
         <div className='llenar-informacion'>
             <h1>{textoH1}</h1>
@@ -27,6 +34,7 @@ const LlenarInformacion = ({textoH1, textoInput, onInputChange, tipo, sources}) 
                 placeholder={textoInput}
                 value={inputValue}
                 onChange={handleChange}
+                onKeyDown={handleKeyPress}
                 />
                 {tipo === 'password' && (
                 <img
