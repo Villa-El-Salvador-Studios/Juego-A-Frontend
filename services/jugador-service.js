@@ -24,6 +24,10 @@
     Login(data) {
         return http.post('/jugadores/buscar', data)
     }
+
+    VerifyUser(data) {
+        return http.post('/jugadores/verificar-usuario', data)
+    }
  }
 
  export default new JugadorService()
