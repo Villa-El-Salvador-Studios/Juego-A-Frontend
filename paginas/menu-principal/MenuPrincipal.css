@@ -1,1 +1,43 @@
- 
+body {
+    background-color: #82bfa0;
+    margin: 0; /* Elimina el margen predeterminado del cuerpo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.menu-principal {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: column;
+}
+.titulo {
+    font-size: 4vw;
+}
+.espacio-botones {
+    display: flex;
+    flex-direction:row;
+    gap: 10%;
+    margin: 15%;
+}
+.boton-menu {
+    background-color: #998496;
+    height: 10vh;
+    width: 30vw;
+    font-size: 2vw;
+    cursor: pointer;
+}
+.boton-menu:hover {
+    background-color: #79254a;
+    color: #998496;
+}
+.iconos {
+    display: flex;
+    flex-direction:row;
+    gap: 10vw;
+}
+.icono-individual {
+    width: 8vw;
+    height: 8vh;
+}

@@ -22,6 +22,7 @@
     white-space: nowrap; /* Evita el salto de línea en el texto */
     padding: 10px 15px;
     margin-top: 10px;
+    cursor: pointer;
 }
 .boton-registro:hover {
     background-color: #efe8b2;
