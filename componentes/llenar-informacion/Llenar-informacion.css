@@ -4,6 +4,9 @@
     flex-direction: column;
     align-items: center;
 }
+.custom-input-container {
+    position: relative;
+  }
 .custom-input {
     line-height: 2.5vw;
     font-size: 1.3vw;
@@ -11,4 +14,15 @@
 .custom-input::placeholder {
     text-align: center;
     font-size: 1.3vw;
+}
+.show-password-img {
+    position: absolute;
+    right: 8px; /* Ajusta este valor según sea necesario */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    max-height: 5vh;
+    max-width: 5vw;
 }

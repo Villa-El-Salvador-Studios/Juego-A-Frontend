@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import './Llenar-informacion.css'
 
-const LlenarInformacion = ({textoH1, textoInput, onInputChange}) => {
+const LlenarInformacion = ({textoH1, textoInput, onInputChange, tipo, sources}) => {
     const [inputValue, setInputValue] = useState('');
-
+    const [showPassword, setShowPassword] = useState(false);
+    
     const handleChange = (event) => {
         const value = event.target.value;
         setInputValue(value);
@@ -12,10 +13,30 @@ const LlenarInformacion = ({textoH1, textoInput, onInputChange}) => {
         onInputChange(textoInput, value);
     };
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
         <div className='llenar-informacion'>
             <h1>{textoH1}</h1>
-            <input className="custom-input" type="text" placeholder={textoInput} value={inputValue} onChange={handleChange} />
+            <div className="custom-input-container">
+                <input
+                className="custom-input"
+                type={showPassword ? 'text' : tipo}
+                placeholder={textoInput}
+                value={inputValue}
+                onChange={handleChange}
+                />
+                {tipo === 'password' && (
+                <img
+                    className="show-password-img"
+                    src={showPassword ? sources[1] : sources[0]}
+                    alt={showPassword ? 'Ocultar' : 'Mostrar'}
+                    onClick={togglePasswordVisibility}
+                />
+                )}
+            </div>
         </div>
     )
 }

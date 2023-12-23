@@ -29,7 +29,6 @@
 }
 .instrucciones {
     font-size: 1.5vw;
-    margin-top: 5%; /* Ajusta la posición vertical */
     margin-bottom: 10px; /* Ajusta el espacio inferior */
     bottom: 0;
 }
