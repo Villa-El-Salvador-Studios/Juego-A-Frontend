@@ -61,20 +61,23 @@ const Registro = () => {
             "mundoMaximo": 0
         }
 
+        const usuario = {
+            "usuario": informacion.Usuario.toLowerCase()
+        }
+
+        JugadorService.VerifyUser(usuario)
+            .then(response => {
+                toast.error('Ya existe un jugador registrado con ese usuario. Por favor, ingrese un usuario distinto.');
+            })
+
         JugadorService.Create(data)
             .then(response => {
                 // Mostrar notificación de éxito
                 toast.success('Cuenta creada exitosamente');
             })
-            .catch(error => { //CORREGIR ERROR PARA QUE SE MUESTRE EL TOAST CORRECTO
-                // Mostrar notificación de error
-                if (error.response && error.response.data && error.response.data.error === "Ya existe un jugador con ese nombre de usuario registrado.") {
-                    // Mostrar notificación de error específica
-                    toast.error('Ya existe un jugador con ese nombre de usuario registrado.');
-                } else {
-                    // Mostrar notificación de error genérica
-                    toast.error('Error al crear la cuenta');
-                }
+            .catch(error => {
+                // Mostrar notificación de error genérica
+                toast.error('Error al crear la cuenta');
             });
 
 
