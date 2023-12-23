@@ -4,6 +4,7 @@ import LlenarInformacion from "../../componentes/llenar-informacion/Llenar-infor
 import JugadorService from "../../services/jugador-service"
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './InicioSesion.css';
 
 //ESPERAR A MODIFICAR EL BACKEND PARA LA VALIDACIÓN DE INICIO DE SESIÓN
  const InicioSesion = () => {
