@@ -20,6 +20,10 @@
     Delete(id) {
         return http.delete(`/jugadores/${id}`)
     }
+
+    Login(data) {
+        return http.post('/jugadores/buscar', data)
+    }
  }
 
  export default new JugadorService()

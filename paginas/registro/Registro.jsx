@@ -57,14 +57,14 @@ const Registro = () => {
         }
 
         JugadorService.Create(data)
-        .then(response => {
-            // Mostrar notificación de éxito
-            toast.success('Cuenta creada exitosamente');
-        })
-        .catch(error => {
-            // Mostrar notificación de error
-            toast.error('Error al crear la cuenta');
-        });
+            .then(response => {
+                // Mostrar notificación de éxito
+                toast.success('Cuenta creada exitosamente');
+            })
+            .catch(error => {
+                // Mostrar notificación de error
+                toast.error('Error al crear la cuenta');
+            });
 
 
         console.log("enviarInformacion", informacion)

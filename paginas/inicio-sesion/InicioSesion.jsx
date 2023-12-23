@@ -44,20 +44,18 @@ import 'react-toastify/dist/ReactToastify.css';
 
         const data = {
             "usuario": informacion.Usuario.toLowerCase(),
-            "contrasenia": informacion.Contraseña.toLowerCase(),
-            "fotoPerfil": "string",
-            "mundoMaximo": 0
+            "contraseña": informacion.Contraseña.toLowerCase()
         }
 
-        JugadorService.Create(data)
-        .then(response => {
-            // Mostrar notificación de éxito
-            toast.success('Cuenta creada exitosamente');
-        })
-        .catch(error => {
-            // Mostrar notificación de error
-            toast.error('Error al crear la cuenta');
-        });
+        JugadorService.Login(data)
+            .then(response => {
+                // Mostrar notificación de éxito
+                toast.success('Sesión iniciada exitosamente');
+            })
+            .catch(error => {
+                // Mostrar notificación de error
+                toast.error('Error al iniciar sesión. La contrasenia o el usuario puede no ser el correcto.');
+            });
 
 
         console.log("enviarInformacion", informacion)
