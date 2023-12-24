@@ -1,0 +1,9 @@
+.configuracion {
+    display: flex;
+    justify-content: space-between; /* Distribuir elementos verticalmente en el contenedor */
+    align-items: center;
+    min-height: 100vh;
+    min-width: 100vw;
+    flex-direction: column; /* Distribuir los elementos uno debajo de otro en el centro de la pantalla */
+    background-color: #82bfa0;
+}
