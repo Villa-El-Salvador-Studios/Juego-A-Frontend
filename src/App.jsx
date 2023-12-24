@@ -1,8 +1,12 @@
 import AppRouter from '../routing/AppRouting'
+import { FullScreenProvider } from '../shared/full-screen/FullScreen'
+
 
 function App() {
   return (
-    <AppRouter></AppRouter>
+    <FullScreenProvider>
+      <AppRouter></AppRouter>
+    </FullScreenProvider>
   )
 }
 

@@ -1,12 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
+import { useFullScreen } from '../../shared/full-screen/FullScreen';
 import './MenuPrincipal.css'
 
 const MenuPrincipal = () => {
     const navegar = useNavigate(); // Variable para navegar entre rutas
-    const [isFullScreen, setFullScreen] = useState(false);
-    const handle = useFullScreenHandle();
+    const { isFullScreen, enterFullScreen, exitFullScreen } = useFullScreen();
 
     const volverHome = () => {
         navegar('/home');
@@ -17,7 +16,9 @@ const MenuPrincipal = () => {
                          "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMjEuNDE0IDE4LjU4NmwyLjU4Ni0yLjU4NnY4aC04bDIuNTg2LTIuNTg2LTUuMTcyLTUuMTcyIDIuODI4LTIuODI4IDUuMTcyIDUuMTcyem0tMTMuNjU2LThsMi44MjgtMi44MjgtNS4xNzItNS4xNzIgMi41ODYtMi41ODZoLTh2OGwyLjU4Ni0yLjU4NiA1LjE3MiA1LjE3MnptMTAuODI4LThsLTIuNTg2LTIuNTg2aDh2OGwtMi41ODYtMi41ODYtNS4xNzIgNS4xNzItMi44MjgtMi44MjggNS4xNzItNS4xNzJ6bS04IDEzLjY1NmwtMi44MjgtMi44MjgtNS4xNzIgNS4xNzItMi41ODYtMi41ODZ2OGg4bC0yLjU4Ni0yLjU4NiA1LjE3Mi01LjE3MnoiLz48L3N2Zz4=",
                          "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTYuNTg2IDE5LjQxNGwtMi41ODYgMi41ODZ2LThoOGwtMi41ODYgMi41ODYgNC41ODYgNC41ODYtMi44MjggMi44MjgtNC41ODYtNC41ODZ6bS0xMy43NTgtMTkuNDE0bC0yLjgyOCAyLjgyOCA0LjU4NiA0LjU4Ni0yLjU4NiAyLjU4Nmg4di04bC0yLjU4NiAyLjU4Ni00LjU4Ni00LjU4NnptMTYuNTg2IDcuNDE0bDIuNTg2IDIuNTg2aC04di04bDIuNTg2IDIuNTg2IDQuNTg2LTQuNTg2IDIuODI4IDIuODI4LTQuNTg2IDQuNTg2em0tMTkuNDE0IDEzLjc1OGwyLjgyOCAyLjgyOCA0LjU4Ni00LjU4NiAyLjU4NiAyLjU4NnYtOGgtOGwyLjU4NiAyLjU4Ni00LjU4NiA0LjU4NnoiLz48L3N2Zz4="]
 
-    const renderizarContenido = () => (
+    const iconSrc = isFullScreen ? iconSources[3] : iconSources[2];
+
+    return (
         <div className='menu-principal'>
             <h1 className='titulo'>Juego-A</h1>
             <div className="espacio-botones">
@@ -31,22 +32,13 @@ const MenuPrincipal = () => {
                 <img className='icono-individual' src={iconSources[1]} alt="Controles" />
                 <img
                     className='icono-individual'
-                    src={isFullScreen ? iconSources[3] : iconSources[2]}
+                    src={iconSrc}
                     alt={isFullScreen ? "Salir pantalla completa" : "Pantalla completa"}
                     onClick={() => {
-                        setFullScreen(!isFullScreen);
-                        isFullScreen ? handle.exit() : handle.enter();
+                        isFullScreen ? exitFullScreen() : enterFullScreen();
                     }}
                 />
             </div>
-        </div>
-    );
-    return (
-        <div>
-            {renderizarContenido()}
-            <FullScreen handle={handle}>
-                {isFullScreen && renderizarContenido()}
-            </FullScreen>
         </div>
     )
 }
