@@ -7,3 +7,17 @@
     flex-direction: column; /* Distribuir los elementos uno debajo de otro en el centro de la pantalla */
     background-color: #82bfa0;
 }
+.titulo {
+    font-size: 6vmin;
+}
+.titulo-dificultad {
+    font-size: 4vmin;
+}
+.dificultad {
+    margin-bottom: 5vh;
+    height: 5vh;
+    width: 20vw;
+    font-size: 3vmin;
+    text-align: center;
+    border-radius: 1vmin;
+}

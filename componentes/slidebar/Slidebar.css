@@ -1,1 +1,12 @@
- 
+.sliderbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+.titulo-sliderbar {
+    font-size: 4vmin;
+}
+.slider {
+    width: 35vmin;
+}
