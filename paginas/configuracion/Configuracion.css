@@ -1,13 +1,19 @@
 .configuracion {
+    position: fixed;
+    top: 50%; /* top, left y transform juntos hacen que el elemento se posicione en el centro de la pantalla */
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     justify-content: space-between; /* Distribuir elementos verticalmente en el contenedor */
     align-items: center;
-    min-height: 100vh;
-    min-width: 100vw;
+    height: 70vh;
+    width: 50vw;
     flex-direction: column; /* Distribuir los elementos uno debajo de otro en el centro de la pantalla */
     background-color: #82bfa0;
+    border: #5c7569 5px solid;
+    overflow:auto /* Para permitir el desplazamiento del scrollbar cuando los elementos se salgan de su contenedor */
 }
-.titulo {
+.titulo-configuracion {
     font-size: 6vmin;
 }
 .titulo-dificultad {

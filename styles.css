@@ -9,4 +9,28 @@ h1, h2, h3, button, p, input, select {
     font-family: 'Silkscreen', sans-serif;
     /* Ajusta según sea necesario para diferentes elementos */
 }
-  
+
+/* Estilos para el scrollbar con un toque pixelado y color combinado */
+.configuracion::-webkit-scrollbar {
+    width: 16px;
+}
+
+.configuracion::-webkit-scrollbar-thumb {
+    background-color: #bed6ab; /* Un verde azulado que combina con #82bfa0 */
+    border: 3px solid #4d7258; /* Bordes sólidos oscuros para imitar píxeles */
+    border-radius: 4px; /* Borde redondeado del thumb */
+}
+
+.configuracion::-webkit-scrollbar-track {
+    background-color: #4d7258; /* Fondo oscuro para el track */
+}
+
+.configuracion::-webkit-scrollbar-corner {
+    background-color: #4d7258; /* Color de la esquina del scrollbar */
+}
+
+/* Estilo adicional para el hover del thumb */
+.configuracion::-webkit-scrollbar-thumb:hover {
+    background-color: #d6e4c3; /* Un verde azulado más claro al pasar el mouse sobre el thumb */
+}
+

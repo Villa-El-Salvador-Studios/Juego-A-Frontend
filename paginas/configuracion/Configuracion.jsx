@@ -12,7 +12,7 @@ const Configuracion = () => {
 
     return (
         <div className='configuracion'>
-            <h1 className='titulo'>Configuración</h1>
+            <h1 className='titulo-configuracion'>Configuración</h1>
             <Slidebar titulo="Sonido"/>
             <Slidebar titulo="Música"/>
             <Slidebar titulo="Brillo"/>

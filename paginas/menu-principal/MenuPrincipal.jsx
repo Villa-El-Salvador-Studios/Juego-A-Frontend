@@ -1,11 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { useFullScreen } from '../../shared/full-screen/FullScreen';
+import Configuracion from '../configuracion/Configuracion';
 import './MenuPrincipal.css'
 
 const MenuPrincipal = () => {
     const navegar = useNavigate(); // Variable para navegar entre rutas
     const { isFullScreen, enterFullScreen, exitFullScreen } = useFullScreen();
+    const [mostrarConfiguracion, setMostrarConfiguracion] = useState(false);
+
+    const toggleConfiguracion = () => {
+        setMostrarConfiguracion(!mostrarConfiguracion);
+    };
 
     const volverHome = () => {
         navegar('/home');
@@ -28,9 +34,17 @@ const MenuPrincipal = () => {
                 </button>
             </div>
             <div className='iconos'>
-                <Link to='/configuracion'>
-                    <img className='icono-individual' src={iconSources[0]} alt="Configuración" />
-                </Link>
+                {mostrarConfiguracion ?
+                    (
+                        <Configuracion onClose={toggleConfiguracion} />
+                    ) : (
+                        <img
+                            className='icono-individual'
+                            src={iconSources[0]}
+                            alt="Configuración"
+                            onClick={toggleConfiguracion}
+                        />
+                    )}
                 <img className='icono-individual' src={iconSources[1]} alt="Controles" />
                 <img
                     className='icono-individual'
