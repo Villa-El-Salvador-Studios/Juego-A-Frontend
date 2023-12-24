@@ -3,6 +3,7 @@ import Home from '../paginas/home/Home';
 import InicioSesion from '../paginas/inicio-sesion/InicioSesion';
 import Registro from '../paginas/registro/Registro';
 import MenuPrincipal from '../paginas/menu-principal/MenuPrincipal';
+import Configuracion from '../paginas/configuracion/Configuracion';
 
 const AppRouter = () => {
     return (
@@ -12,6 +13,7 @@ const AppRouter = () => {
                 <Route path="/inicio-sesion" element={<InicioSesion/>}></Route>
                 <Route path="/registro" element={<Registro />}></Route>
                 <Route path='/menu-principal' element={<MenuPrincipal />}></Route>
+                <Route path="/configuracion" element={<Configuracion />}></Route>
 
                 <Route path="*" element={<Navigate to="/home" />} />
             </Routes>

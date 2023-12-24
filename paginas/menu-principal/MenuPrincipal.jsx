@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { useFullScreen } from '../../shared/full-screen/FullScreen';
 import './MenuPrincipal.css'
@@ -28,7 +28,9 @@ const MenuPrincipal = () => {
                 </button>
             </div>
             <div className='iconos'>
-                <img className='icono-individual' src={iconSources[0]} alt="Configuración" />
+                <Link to='/configuracion'>
+                    <img className='icono-individual' src={iconSources[0]} alt="Configuración" />
+                </Link>
                 <img className='icono-individual' src={iconSources[1]} alt="Controles" />
                 <img
                     className='icono-individual'
