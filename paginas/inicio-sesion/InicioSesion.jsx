@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Toolbar from "../../componentes/toolbar/Toolbar" 
 import LlenarInformacion from "../../componentes/llenar-informacion/Llenar-informacion"
 import JugadorService from "../../services/jugador-service"
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useAudio } from '../../shared/AudioContext/AudioContext';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './InicioSesion.css';
@@ -11,6 +12,7 @@ import './InicioSesion.css';
  const InicioSesion = () => {
     const [informacion, setInformacion] = useState({});
     const navegar = useNavigate(); // Variable para navegar entre rutas
+    const { audioIsPlaying } = useAudio();
 
     const onInputChange = (campo, valor) => {
         setInformacion({
@@ -43,6 +45,8 @@ import './InicioSesion.css';
         }
     }
 
+    
+
     const enviarInformacion = () => {
         // Verificar si alguno de los campos está vacío
         if (!informacion.Usuario || !informacion.Contraseña) {
@@ -58,6 +62,11 @@ import './InicioSesion.css';
 
         JugadorService.Login(data)
             .then(response => {
+                // Reproducir el audio si el inicio de sesión es exitoso
+                if (!audioIsPlaying) {
+                    window.playAudio(); // Utilizando la función expuesta en el objeto global
+                }
+                
                 // Redireccionar a la ruta /menu-principal
                 navegar('/menu-principal');
             })

@@ -15,6 +15,18 @@
 }
 .titulo-configuracion {
     font-size: 6vmin;
+    text-align: center;
+}
+.boton-cerrar {
+    height: 10%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 2%;
+}
+.boton-cerrar:hover {
+    transform: scale(1.5);
+    cursor: pointer;
 }
 .titulo-dificultad {
     font-size: 4vmin;
