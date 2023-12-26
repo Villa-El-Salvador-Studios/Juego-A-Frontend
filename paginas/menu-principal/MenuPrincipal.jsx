@@ -9,7 +9,7 @@ const MenuPrincipal = () => {
     const navegar = useNavigate(); // Variable para navegar entre rutas
     const { isFullScreen, enterFullScreen, exitFullScreen } = useFullScreen();
     const [mostrarConfiguracion, setMostrarConfiguracion] = useState(false);
-    const { audioIsPlaying, playAudio, stopAudio } = useAudio();
+    const { playAudio, stopAudio } = useAudio();
 
     const volverHome = () => {
         navegar('/home');
@@ -20,8 +20,9 @@ const MenuPrincipal = () => {
     };
 
     const handleUserInteraction = () => {
-        if (!audioIsPlaying) {
-          playAudio();
+        if (localStorage.getItem('audioIsPlaying') === 'false') {
+            localStorage.setItem('audioIsPlaying', 'true');
+            playAudio(0);
         }
     };
 
@@ -34,16 +35,16 @@ const MenuPrincipal = () => {
 
     useEffect(() => {
         document.addEventListener('click', handleUserInteraction);
-    
-        return () => {
-          document.removeEventListener('click', handleUserInteraction);
 
-          // Detener la reproducción al salir de la página
-          if (audioIsPlaying) {
-            stopAudio(); // Puedes ajustar esto según cómo quieras manejar la detención de la reproducción
-        }
+        return () => {
+            document.removeEventListener('click', handleUserInteraction);
+            // Detener la reproducción al desmontar el componente
+            if (localStorage.getItem('audioIsPlaying') === 'true') {
+                localStorage.setItem('audioIsPlaying', 'false');
+                stopAudio();
+            }
         };
-    }, [audioIsPlaying, playAudio]);
+    }, [stopAudio]);
 
     return (
         <div className='menu-principal'>

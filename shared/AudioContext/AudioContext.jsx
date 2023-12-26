@@ -11,20 +11,36 @@ export const useAudio = () => {
 };
 
 export const AudioProvider = ({ children }) => {
-  const [audioIsPlaying, setAudioIsPlaying] = useState(false);
   const audioElement = useRef(null);
+  const [volume, setVolume] = useState(1); // Inicializado en 1 (volumen completo)
+
+  // Lista de pistas de música de fondo
+  const backgroundMusicAudioElements = [
+    new Audio('../../src/assets/audios/Beach-Sakura Girl.mp3'),
+    new Audio('../../src/assets/audios/DRIVE.mp3'),
+    new Audio('../../src/assets/audios/Fluffing-a-Duck.mp3'),
+    new Audio('../../src/assets/audios/Powerful Trap Beat.mp3'),
+    new Audio('../../src/assets/audios/Run-Amok.mp3'),
+    new Audio('../../src/assets/audios/Sneaky-Snitch.mp3')
+  ];
+  
+  // Establecer el volumen inicial
+  backgroundMusicAudioElements.forEach((audioElement) => {
+    audioElement.volume = volume;
+  });
 
   useEffect(() => {
     audioElement.current = new Audio('../../src/assets/audios/Beach-Sakura Girl.mp3');
   }, []);
 
-  const playAudio = () => {
-    const playPromise = audioElement.current.play();
+  const playAudio = (index) => {
+    stopAudio();
+    const playPromise = backgroundMusicAudioElements[index].play();
 
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
-          setAudioIsPlaying(true);
+          localStorage.setItem('audioIsPlaying', 'true');
         })
         .catch((error) => {
           console.error('Error al reproducir el audio:', error);
@@ -32,14 +48,30 @@ export const AudioProvider = ({ children }) => {
     }
   };
 
+  const pauseAudio = () => {
+    backgroundMusicAudioElements.forEach((audioElement) => {
+      audioElement.pause();
+    });
+    localStorage.setItem('audioIsPlaying', 'false');
+  };
+
   const stopAudio = () => {
-    audioElement.current.pause();
-    audioElement.current.currentTime = 0;
-    setAudioIsPlaying(false);
+    backgroundMusicAudioElements.forEach((audioElement) => {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+    });
+    localStorage.setItem('audioIsPlaying', 'false');
+  };
+
+  const setVolumeForAll = (newVolume) => {
+    backgroundMusicAudioElements.forEach((audioElement) => {
+      audioElement.volume = newVolume;
+    });
+    setVolume(newVolume);
   };
 
   return (
-    <AudioContext.Provider value={{ audioIsPlaying, playAudio, stopAudio }}>
+    <AudioContext.Provider value={{ playAudio, pauseAudio, stopAudio, setVolumeForAll }}>
       {children}
     </AudioContext.Provider>
   );

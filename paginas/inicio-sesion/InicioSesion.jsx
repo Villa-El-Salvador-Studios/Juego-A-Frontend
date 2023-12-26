@@ -12,7 +12,6 @@ import './InicioSesion.css';
  const InicioSesion = () => {
     const [informacion, setInformacion] = useState({});
     const navegar = useNavigate(); // Variable para navegar entre rutas
-    const { audioIsPlaying, playAudio } = useAudio();
 
     const onInputChange = (campo, valor) => {
         setInformacion({
@@ -60,11 +59,6 @@ import './InicioSesion.css';
 
         JugadorService.Login(data)
             .then(response => {
-                // Reproducir el audio si el inicio de sesión es exitoso
-                if (!audioIsPlaying) {
-                    playAudio(); // Utilizando la función expuesta en el objeto global
-                }
-
                 // Redireccionar a la ruta /menu-principal
                 navegar('/menu-principal');
             })
