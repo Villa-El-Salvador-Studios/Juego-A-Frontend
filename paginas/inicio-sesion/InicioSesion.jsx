@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Toolbar from "../../componentes/toolbar/Toolbar" 
 import LlenarInformacion from "../../componentes/llenar-informacion/Llenar-informacion"
 import JugadorService from "../../services/jugador-service"
@@ -12,7 +12,7 @@ import './InicioSesion.css';
  const InicioSesion = () => {
     const [informacion, setInformacion] = useState({});
     const navegar = useNavigate(); // Variable para navegar entre rutas
-    const { audioIsPlaying } = useAudio();
+    const { audioIsPlaying, playAudio } = useAudio();
 
     const onInputChange = (campo, valor) => {
         setInformacion({
@@ -45,8 +45,6 @@ import './InicioSesion.css';
         }
     }
 
-    
-
     const enviarInformacion = () => {
         // Verificar si alguno de los campos está vacío
         if (!informacion.Usuario || !informacion.Contraseña) {
@@ -64,9 +62,9 @@ import './InicioSesion.css';
             .then(response => {
                 // Reproducir el audio si el inicio de sesión es exitoso
                 if (!audioIsPlaying) {
-                    window.playAudio(); // Utilizando la función expuesta en el objeto global
+                    playAudio(); // Utilizando la función expuesta en el objeto global
                 }
-                
+
                 // Redireccionar a la ruta /menu-principal
                 navegar('/menu-principal');
             })
