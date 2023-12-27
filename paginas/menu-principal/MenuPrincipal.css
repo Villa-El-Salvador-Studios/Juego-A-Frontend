@@ -20,7 +20,7 @@
     background-color: #998496;
     height: 10vh;
     width: 30vw;
-    font-size: 2vw;
+    font-size:4vmin;
     cursor: pointer;
 }
 .boton-menu:hover {
