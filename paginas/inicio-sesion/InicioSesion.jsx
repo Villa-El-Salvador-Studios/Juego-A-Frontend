@@ -4,7 +4,6 @@ import LlenarInformacion from "../../componentes/llenar-informacion/Llenar-infor
 import JugadorService from "../../services/jugador-service"
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useAudio } from '../../shared/AudioContext/AudioContext';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './InicioSesion.css';
@@ -66,9 +65,6 @@ import './InicioSesion.css';
                 // Mostrar notificación de error
                 toast.error('Error al iniciar sesión. La contrasenia o el usuario puede no ser el correcto.');
             });
-
-
-        console.log("enviarInformacion", informacion)
     }
 
     return (

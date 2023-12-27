@@ -1,8 +1,8 @@
 import AppRouter from '../routing/AppRouting'
 import { FullScreenProvider } from '../shared/full-screen/FullScreen'
 
+const App = () => {
 
-function App() {
   return (
     <FullScreenProvider>
       <AppRouter></AppRouter>

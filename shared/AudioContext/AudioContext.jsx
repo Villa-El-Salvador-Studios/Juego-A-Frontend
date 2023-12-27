@@ -34,9 +34,10 @@ export const AudioProvider = ({ children }) => {
   }, []);
 
   const playAudio = (index) => {
-    stopAudio();
-    const playPromise = backgroundMusicAudioElements[index].play();
-
+  
+    const audioElement = backgroundMusicAudioElements[index];
+    const playPromise = audioElement.play();
+  
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
@@ -46,7 +47,13 @@ export const AudioProvider = ({ children }) => {
           console.error('Error al reproducir el audio:', error);
         });
     }
-  };
+  
+    // Manejador de eventos onended
+    audioElement.onended = () => {
+      // Aquí puedes realizar acciones después de que la pista haya terminado
+      console.log('La pista ha terminado de reproducirse.');
+    };
+  };  
 
   const pauseAudio = () => {
     backgroundMusicAudioElements.forEach((audioElement) => {
@@ -57,11 +64,14 @@ export const AudioProvider = ({ children }) => {
 
   const stopAudio = () => {
     backgroundMusicAudioElements.forEach((audioElement) => {
-      audioElement.pause();
+      if (!audioElement.paused) {
+        audioElement.pause();
+        audioElement.onended = null; // Eliminamos el listener onended
+      }
       audioElement.currentTime = 0;
     });
     localStorage.setItem('audioIsPlaying', 'false');
-  };
+  };  
 
   const setVolumeForAll = (newVolume) => {
     backgroundMusicAudioElements.forEach((audioElement) => {
