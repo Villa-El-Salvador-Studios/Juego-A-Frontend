@@ -11,8 +11,12 @@ export const useAudio = () => {
 };
 
 export const AudioProvider = ({ children }) => {
-  const audioElement = useRef(null);
+  const audioElement = useRef(new Audio());
   const [volume, setVolume] = useState(1); // Inicializado en 1 (volumen completo)
+
+  useEffect(() => {
+    audioElement.current.volume = volume;
+  }, [volume]);
 
   // Lista de pistas de música de fondo
   const backgroundMusicAudioElements = [
@@ -23,15 +27,6 @@ export const AudioProvider = ({ children }) => {
     new Audio('../../src/assets/audios/Run-Amok.mp3'),
     new Audio('../../src/assets/audios/Sneaky-Snitch.mp3')
   ];
-  
-  // Establecer el volumen inicial
-  backgroundMusicAudioElements.forEach((audioElement) => {
-    audioElement.volume = volume;
-  });
-
-  useEffect(() => {
-    audioElement.current = new Audio('../../src/assets/audios/Beach-Sakura Girl.mp3');
-  }, []);
 
   const playAudio = (index) => {
   
@@ -74,10 +69,12 @@ export const AudioProvider = ({ children }) => {
   };  
 
   const setVolumeForAll = (newVolume) => {
-    backgroundMusicAudioElements.forEach((audioElement) => {
-      audioElement.volume = newVolume;
-    });
+    console.log('Volumen por parametro:', newVolume);
+    console.log('Volumen real antes del cambio:', audioElement.current.volume);
+    
     setVolume(newVolume);
+    console.log('Volumen por estado:', volume);
+    console.log('Volumen real después del cambio:', audioElement.current.volume);
   };
 
   return (
