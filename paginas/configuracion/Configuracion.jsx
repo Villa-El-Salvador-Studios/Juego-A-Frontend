@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import Slidebar from '../../componentes/slidebar/Slidebar';
 import './Configuracion.css';
 
-const Configuracion = ({ isOpen, onClose, onVolumeChange }) => {
+const Configuracion = ({ isOpen, onClose }) => {
     const [nivelSeleccionado, setNivelSeleccionado] = useState('Fácil');
 
     const iconoCerrar = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMjQgMjAuMTg4bC04LjMxNS04LjIwOSA4LjItOC4yODItMy42OTctMy42OTctOC4yMTIgOC4zMTgtOC4zMS04LjIwMy0zLjY2NiAzLjY2NiA4LjMyMSA4LjI0LTguMjA2IDguMzEzIDMuNjY2IDMuNjY2IDguMjM3LTguMzE4IDguMjg1IDguMjAzeiIvPjwvc3ZnPg=="
-
-    const handleVolumeChange = (newVolume) => {
-        onVolumeChange(newVolume);
-    };
 
     const handleDificultadChange = (event) => {
         const nuevoNivel = event.target.value;
@@ -20,9 +16,9 @@ const Configuracion = ({ isOpen, onClose, onVolumeChange }) => {
         <div className='configuracion'>
             <h1 className='titulo-configuracion'>Configuración</h1>
             <img className='boton-cerrar' src={iconoCerrar} alt="Botón cerrar" onClick={onClose} />
-            <Slidebar titulo="Sonido"/>
-            <Slidebar titulo="Música" onSlide={handleVolumeChange} isMusic />
-            <Slidebar titulo="Brillo"/>
+            <Slidebar titulo="Sonido" tipo='checkbox' cantidadElementos={3} cantidadCheckboxes={1}/>
+            <Slidebar titulo="Música" tipo='checkbox' cantidadElementos={3} cantidadCheckboxes={1}/>
+            <Slidebar titulo="Brillo" tipo='range'/>
             <h1 className='titulo-dificultad'>Dificultad</h1>
             <select className='dificultad' value={nivelSeleccionado} onChange={handleDificultadChange}>
                 <option>Fácil</option>

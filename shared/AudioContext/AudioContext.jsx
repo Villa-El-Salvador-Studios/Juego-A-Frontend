@@ -11,12 +11,8 @@ export const useAudio = () => {
 };
 
 export const AudioProvider = ({ children }) => {
-  const audioElement = useRef(new Audio());
-  const [volume, setVolume] = useState(1); // Inicializado en 1 (volumen completo)
-
-  useEffect(() => {
-    audioElement.current.volume = volume;
-  }, [volume]);
+  const [volume, setVolume] = useState(1);
+  let audioElement = new Audio('../../src/assets/audios/Beach-Sakura Girl.mp3');
 
   // Lista de pistas de música de fondo
   const backgroundMusicAudioElements = [
@@ -28,9 +24,12 @@ export const AudioProvider = ({ children }) => {
     new Audio('../../src/assets/audios/Sneaky-Snitch.mp3')
   ];
 
-  const playAudio = (index) => {
+  const playAudio = (index, volumen) => {
   
-    const audioElement = backgroundMusicAudioElements[index];
+    audioElement = backgroundMusicAudioElements[index];
+    
+    audioElement.volume = volumen;
+
     const playPromise = audioElement.play();
   
     if (playPromise !== undefined) {
@@ -42,7 +41,7 @@ export const AudioProvider = ({ children }) => {
           console.error('Error al reproducir el audio:', error);
         });
     }
-  
+
     // Manejador de eventos onended
     audioElement.onended = () => {
       // Aquí puedes realizar acciones después de que la pista haya terminado
@@ -68,17 +67,13 @@ export const AudioProvider = ({ children }) => {
     localStorage.setItem('audioIsPlaying', 'false');
   };  
 
+  // Utiliza el callback de setVolume para asegurarte de obtener el valor más reciente del estado
   const setVolumeForAll = (newVolume) => {
-    console.log('Volumen por parametro:', newVolume);
-    console.log('Volumen real antes del cambio:', audioElement.current.volume);
-    
     setVolume(newVolume);
-    console.log('Volumen por estado:', volume);
-    console.log('Volumen real después del cambio:', audioElement.current.volume);
   };
 
   return (
-    <AudioContext.Provider value={{ playAudio, pauseAudio, stopAudio, setVolumeForAll }}>
+    <AudioContext.Provider value={{ playAudio, pauseAudio, stopAudio, setVolumeForAll, volume }}>
       {children}
     </AudioContext.Provider>
   );

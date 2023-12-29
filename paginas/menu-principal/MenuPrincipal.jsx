@@ -9,8 +9,7 @@ const MenuPrincipal = () => {
     const navegar = useNavigate(); // Variable para navegar entre rutas
     const { isFullScreen, enterFullScreen, exitFullScreen } = useFullScreen();
     const [mostrarConfiguracion, setMostrarConfiguracion] = useState(false);
-    const { playAudio, pauseAudio, stopAudio, setVolumeForAll } = useAudio();
-    const [isAudioPlaying, setIsAudioPlaying] = useState(false)
+    const { stopAudio } = useAudio();
 
     const iconSources = ["data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMjQgMTMuNjE2di0zLjIzMmMtMS42NTEtLjU4Ny0yLjY5NC0uNzUyLTMuMjE5LTIuMDE5di0uMDAxYy0uNTI3LTEuMjcxLjEtMi4xMzQuODQ3LTMuNzA3bC0yLjI4NS0yLjI4NWMtMS41NjEuNzQyLTIuNDMzIDEuMzc1LTMuNzA3Ljg0N2gtLjAwMWMtMS4yNjktLjUyNi0xLjQzNS0xLjU3Ni0yLjAxOS0zLjIxOWgtMy4yMzJjLS41ODIgMS42MzUtLjc0OSAyLjY5Mi0yLjAxOSAzLjIxOWgtLjAwMWMtMS4yNzEuNTI4LTIuMTMyLS4wOTgtMy43MDctLjg0N2wtMi4yODUgMi4yODVjLjc0NSAxLjU2OCAxLjM3NSAyLjQzNC44NDcgMy43MDctLjUyNyAxLjI3MS0xLjU4NCAxLjQzOC0zLjIxOSAyLjAydjMuMjMyYzEuNjMyLjU4IDIuNjkyLjc0OSAzLjIxOSAyLjAxOS41MyAxLjI4Mi0uMTE0IDIuMTY2LS44NDcgMy43MDdsMi4yODUgMi4yODZjMS41NjItLjc0MyAyLjQzNC0xLjM3NSAzLjcwNy0uODQ3aC4wMDFjMS4yNy41MjYgMS40MzYgMS41NzkgMi4wMTkgMy4yMTloMy4yMzJjLjU4Mi0xLjYzNi43NS0yLjY5IDIuMDI3LTMuMjIyaC4wMDFjMS4yNjItLjUyNCAyLjEyLjEwMSAzLjY5OC44NTFsMi4yODUtMi4yODZjLS43NDQtMS41NjMtMS4zNzUtMi40MzMtLjg0OC0zLjcwNi41MjctMS4yNzEgMS41ODgtMS40NCAzLjIyMS0yLjAyMXptLTEyIDIuMzg0Yy0yLjIwOSAwLTQtMS43OTEtNC00czEuNzkxLTQgNC00IDQgMS43OTEgNCA0LTEuNzkxIDQtNCA0eiIvPjwvc3ZnPg==",
                          "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTkgNy4zNTh2MTUuNjQybC04LTV2LS43ODVsOC05Ljg1N3ptMy02LjA5NGwtMS41NDgtMS4yNjQtMy40NDYgNC4yNDctNi4wMDYgMy43NTN2My42NDZsLTIgMi40NjR2LTYuMTFoLTR2MTBoLjg0M2wtMy44NDMgNC43MzYgMS41NDggMS4yNjQgMTguNDUyLTIyLjczNnoiLz48L3N2Zz4=",
@@ -20,7 +19,6 @@ const MenuPrincipal = () => {
                          "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTYuNTg2IDE5LjQxNGwtMi41ODYgMi41ODZ2LThoOGwtMi41ODYgMi41ODYgNC41ODYgNC41ODYtMi44MjggMi44MjgtNC41ODYtNC41ODZ6bS0xMy43NTgtMTkuNDE0bC0yLjgyOCAyLjgyOCA0LjU4NiA0LjU4Ni0yLjU4NiAyLjU4Nmg4di04bC0yLjU4NiAyLjU4Ni00LjU4Ni00LjU4NnptMTYuNTg2IDcuNDE0bDIuNTg2IDIuNTg2aC04di04bDIuNTg2IDIuNTg2IDQuNTg2LTQuNTg2IDIuODI4IDIuODI4LTQuNTg2IDQuNTg2em0tMTkuNDE0IDEzLjc1OGwyLjgyOCAyLjgyOCA0LjU4Ni00LjU4NiAyLjU4NiAyLjU4NnYtOGgtOGwyLjU4NiAyLjU4Ni00LjU4NiA0LjU4NnoiLz48L3N2Zz4="]
 
     const fullScreenIconSrc = isFullScreen ? iconSources[5] : iconSources[4];
-    const volumeIconSrc = isAudioPlaying ? iconSources[1] : iconSources[2];
 
     const volverHome = () => {
         navegar('/home');
@@ -30,44 +28,8 @@ const MenuPrincipal = () => {
         setMostrarConfiguracion(!mostrarConfiguracion);
     };
 
-    const handleToggleAudio = (event) => {
-        event.stopPropagation();
-        setIsAudioPlaying((prevIsAudioPlaying) => {
-          const newIsAudioPlaying = !prevIsAudioPlaying;
-    
-          if (newIsAudioPlaying) {
-            playAudio(0);
-          } else {
-            pauseAudio();
-          }
-    
-          return newIsAudioPlaying;
-        });
-    };
-
-    const handleVolumeChange = (newVolume) => {
-        // Puedes usar la función setVolumeForAll del contexto de audio aquí
-        setVolumeForAll(newVolume);
-    };
-
-    useEffect(() => {
-        const handleClick = (event) => {
-            // Verificar si el clic fue en el ícono de activar/desactivar música
-            if (event.target.alt === "Activar_o_desactivar_musica") {
-                handleToggleAudio(event);
-            }
-        };
-    
-        document.addEventListener('click', handleClick);
-
-        return () => {
-            document.removeEventListener('click', handleClick);
-        };
-    }, []);
-
     // Detener la música cuando el componente se desmonta
     useEffect(() => {
-        console.log('Is audio playing:', isAudioPlaying);
         return () => {
             stopAudio();
         };
@@ -83,9 +45,9 @@ const MenuPrincipal = () => {
                 </button>
             </div>
             <div className='iconos'>
-                <Configuracion isOpen={mostrarConfiguracion} onClose={cerrarConfiguracion} onVolumeChange={handleVolumeChange}/>
+                <Configuracion isOpen={mostrarConfiguracion} onClose={cerrarConfiguracion}/>
                 <img className='icono-individual' src={iconSources[0]} alt="Configuración" onClick={cerrarConfiguracion}/>
-                <img className='icono-individual' src={volumeIconSrc} alt="Activar_o_desactivar_musica" onClick={handleToggleAudio}/>
+                
                 <img className='icono-individual' src={iconSources[3]} alt="Controles" />
                 <img
                     className='icono-individual'
