@@ -1,1 +1,14 @@
- 
+.boton-seleccionar-nivel {
+    min-width: 80vw;
+}
+.boton-seleccionar-nivel-button {
+    height: 20vmin;
+    width: 20vmin;
+    font-size: 10vmin;
+    text-align: center;
+}
+.fila-botones {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px; /* Espaciado entre filas, ajusta según tus preferencias */
+}
