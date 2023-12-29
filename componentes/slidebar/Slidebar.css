@@ -1,29 +1,23 @@
 .sliderbar {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+.sliderbar-item {
+    display: flex;
     align-items: center;
     flex-direction: column;
 }
 .titulo-sliderbar {
     font-size: 3vmin;
 }
-.div-sliderbar {
-    display: flex;
-    flex-direction: row;
-    align-items: center; /* Centra horizontalmente */
-    justify-content: center; /* Centra verticalmente */
-}
 .h4-sliderbar {
     font-size: 2vmin;
-    text-align: center;
-    margin-bottom: 30%; /* Agrega margen inferior para separar los elementos */
-}
-.slider {
-    width: 35vmin;
-    margin-bottom: 10%;
 }
 .slider-checkbox {
     width: 5vmin; /* Ajusta el ancho según tus preferencias */
     height: 5vmin; /* Ajusta la altura según tus preferencias */
-    margin-bottom: 10%;
+}
+.slider-slider {
+    width: 20vmin; /* Ajusta el ancho aquí tus preferencias */
 }

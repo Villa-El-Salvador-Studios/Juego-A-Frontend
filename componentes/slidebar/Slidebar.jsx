@@ -2,15 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useAudio } from '../../shared/AudioContext/AudioContext';
 import './Slidebar.css'; 
 
-const Slidebar = ({ titulo, tipo, cantidadCheckboxes, cantidadElementos }) => {
-   const tipoInput = tipo;
-   const arrayAuxiliar = Array.from({ length: cantidadCheckboxes }, (_, index) => index + 1);
+const Slidebar = ({ informacion }) => {
    const { playAudio, pauseAudio } = useAudio();
    const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
-   const inputsAlt = ['sonido', 'musica']
-
-   const handleToggleAudio = (event, alt) => {
+   const handleToggleAudio = (event) => {
       event.stopPropagation();
       setIsAudioPlaying((prevIsAudioPlaying) => {
         const newIsAudioPlaying = !prevIsAudioPlaying;
@@ -28,7 +24,7 @@ const Slidebar = ({ titulo, tipo, cantidadCheckboxes, cantidadElementos }) => {
   useEffect(() => {
       const handleClick = (event) => {
          // Verificar si el clic fue en el ícono de activar/desactivar música
-         if (event.target.alt === 'musica') {
+         if (event.target.alt === 'Musica') {
             handleToggleAudio(event);
          }
       };
@@ -40,29 +36,25 @@ const Slidebar = ({ titulo, tipo, cantidadCheckboxes, cantidadElementos }) => {
       };
    }, []);
 
-   return tipoInput === 'checkbox' ? (
+   return (
       <div className='sliderbar'>
-         <h1 className='titulo-sliderbar'>{titulo}</h1>
-         <div className='div-sliderbar' >
-            {arrayAuxiliar.map((index) => (
-               <div key={index}>
-                  <h4 className='h4-sliderbar'>Activo</h4>
-                  <p>{index}</p>
-                  <input
-                     className='slider-checkbox'
-                     type={tipoInput}
-                     alt={inputsAlt[index]}
-                     onClick={handleToggleAudio}
-                  />
-               </div>
-            ))}
-         </div>
-      </div>
-   ) : (
-      <div className='sliderbar'>
-         <h1 className='titulo-sliderbar'>{titulo}</h1>
-         <input className='slider' type={tipoInput} min="0" max="100"/>
-      </div>
+      {[...Array(informacion.iteraciones)].map((_, index) => (
+        <div className='sliderbar-item' key={index}>
+            <h1 className='titulo-sliderbar'>{informacion.titulos[index]}</h1>
+            {index < informacion.iteraciones - 1 && (
+               <>
+               <h4 className='h4-sliderbar'>Activo</h4>
+               </>
+            )}
+            <input
+               className={informacion.tiposDeElementos[index] === 'checkbox' ? 'slider-checkbox' : 'slider-slider'}
+               type={informacion.tiposDeElementos[index]}
+               alt={informacion.titulos[index]}
+               onClick={informacion.titulos[index] === 'Musica' ? handleToggleAudio : undefined}
+            />
+        </div>
+      ))}
+    </div>
    );
 }
 
