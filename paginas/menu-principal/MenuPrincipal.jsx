@@ -24,6 +24,10 @@ const MenuPrincipal = () => {
         navegar('/home');
     }
 
+    const irASelectorDeNiveles = () => {
+        navegar('/selector-niveles');
+    }
+
     const cerrarConfiguracion = () => {
         setMostrarConfiguracion(!mostrarConfiguracion);
     };
@@ -39,7 +43,7 @@ const MenuPrincipal = () => {
         <div className='menu-principal'>
             <h1 className='titulo'>Juego-A</h1>
             <div className="espacio-botones">
-                <button className='boton-menu'>Jugar</button>
+                <button className='boton-menu' onClick={irASelectorDeNiveles}>Jugar</button>
                 <button className='boton-menu' onClick={volverHome}>
                     Cerrar sesión
                 </button>
