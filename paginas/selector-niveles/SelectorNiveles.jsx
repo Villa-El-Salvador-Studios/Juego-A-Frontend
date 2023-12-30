@@ -14,7 +14,7 @@ const SelectorNiveles = () => {
     <div className="selector-niveles">
         <img className="selector-niveles-return" src={source} alt="volver al menú principal" onClick={volverMenuPrincipal} />
         <h1 className='selector-niveles-title'>Selector de niveles</h1>
-        <BotonSeleccionarNivel cantidad={100}/>
+        <BotonSeleccionarNivel cantidad={30}/>
         <p className='selector-niveles-text'>Creado por Erick Urbizagastegui y Salvador Torres.</p>
     </div>
     )

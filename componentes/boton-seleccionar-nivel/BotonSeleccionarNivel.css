@@ -6,6 +6,11 @@
     width: 20vmin;
     font-size: 10vmin;
     text-align: center;
+    background-color: #fee78a;
+}
+.boton-seleccionar-nivel-button:hover {
+    background-color: #fff7bc;
+    cursor: pointer;
 }
 .fila-botones {
     display: flex;
