@@ -21,3 +21,5 @@ class PersonajeService {
         return http.delete(`/personajes/${id}`)
     }
 }
+
+export default new PersonajeService()

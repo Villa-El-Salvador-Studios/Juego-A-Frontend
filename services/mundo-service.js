@@ -17,3 +17,5 @@ class MundoService {
         return http.delete(`/mundos/${id}`)
     }
 }
+
+export default new MundoService()
