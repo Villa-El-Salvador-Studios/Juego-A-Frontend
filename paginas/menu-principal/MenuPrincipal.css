@@ -22,6 +22,7 @@
     width: 30vw;
     font-size:4vmin;
     cursor: pointer;
+    transition: all .3s ease-in-out;
 }
 .boton-menu:hover {
     background-color: #79254a;
@@ -36,6 +37,7 @@
 .icono-individual {
     width: 8vw;
     height: 8vh;
+    transition: all .5s ease-in-out;
 }
 .icono-individual:hover {
     transform: scale(1.5);
