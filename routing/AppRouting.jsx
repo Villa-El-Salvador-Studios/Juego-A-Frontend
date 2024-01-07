@@ -5,6 +5,7 @@ import Registro from '../paginas/registro/Registro';
 import MenuPrincipal from '../paginas/menu-principal/MenuPrincipal';
 import Configuracion from '../paginas/configuracion/Configuracion';
 import SelectorNiveles from '../paginas/selector-niveles/SelectorNiveles';
+import Nivel from '../paginas/nivel/Nivel';
 
 const AppRouter = () => {
     return (
@@ -16,6 +17,7 @@ const AppRouter = () => {
                 <Route path='/menu-principal' element={<MenuPrincipal />}></Route>
                 <Route path="/configuracion" element={<Configuracion />}></Route>
                 <Route path="/selector-niveles" element={<SelectorNiveles />}></Route>
+                <Route path='/nivel' element={<Nivel />}></Route>
 
                 <Route path="*" element={<Navigate to="/home" />} />
             </Routes>
