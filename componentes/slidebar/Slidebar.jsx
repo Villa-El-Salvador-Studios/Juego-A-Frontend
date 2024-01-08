@@ -5,6 +5,7 @@ import './Slidebar.css';
 const Slidebar = ({ informacion }) => {
    const { playAudio, pauseAudio } = useAudio();
    const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+   const [useBrillo, setBrillo] = useState(100);
 
    const handleToggleAudio = (event) => {
       event.stopPropagation();
@@ -21,11 +22,23 @@ const Slidebar = ({ informacion }) => {
       });
   };
 
+  const handleSliderChange = (event) => {
+   const nuevoBrillo = event.target.value;
+   setBrillo(nuevoBrillo);
+   ajustarBrilloVentana(nuevoBrillo);
+ };
+
+ const ajustarBrilloVentana = (nuevoBrillo) => {
+   document.body.style.filter = `brightness(${nuevoBrillo}%)`;
+ };
+
   useEffect(() => {
       const handleClick = (event) => {
          // Verificar si el clic fue en el ícono de activar/desactivar música
          if (event.target.alt === 'Musica') {
             handleToggleAudio(event);
+         } else if (event.target.alt === 'Brillo') {
+            handleSliderChange(event);
          }
       };
 
@@ -50,6 +63,7 @@ const Slidebar = ({ informacion }) => {
                className={informacion.tiposDeElementos[index] === 'checkbox' ? 'slider-checkbox' : 'slider-slider'}
                type={informacion.tiposDeElementos[index]}
                alt={informacion.titulos[index]}
+               min="25"
                onClick={informacion.titulos[index] === 'Musica' ? handleToggleAudio : undefined}
             />
         </div>
