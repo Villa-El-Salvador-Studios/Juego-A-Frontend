@@ -5,6 +5,10 @@ class MundoService {
         return http.get('/mundos')
     }
 
+    GetById(id) {
+        return http.get(`/mundos/${id}`)
+    }
+
     Create(data) {
         return http.post('/mundos', data)
     }
