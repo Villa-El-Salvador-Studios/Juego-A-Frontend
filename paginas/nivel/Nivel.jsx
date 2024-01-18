@@ -27,8 +27,6 @@
         jugadorId: 0,
     });
 
-    
-
     useEffect(() => {
         fetchData();
     }, []);
