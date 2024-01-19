@@ -1,5 +1,5 @@
 .menu-principal {
-    background-color: #82bfa0;
+    background: linear-gradient(180deg, #82bfa0, #55939e);
     margin: 0; /* Elimina el margen predeterminado del cuerpo */
     display: flex;
     justify-content: space-between; /* Distribuir elementos verticalmente en el contenedor */
@@ -26,6 +26,7 @@
 }
 .boton-menu:hover {
     background-color: #79254a;
+    transform: scale(1.1);
     color: #998496;
 }
 .iconos {

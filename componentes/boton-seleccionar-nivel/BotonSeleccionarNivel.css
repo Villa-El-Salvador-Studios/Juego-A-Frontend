@@ -7,8 +7,10 @@
     font-size: 10vmin;
     text-align: center;
     background-color: #fee78a;
+    transition: all 0.3s ease-in-out;
 }
 .boton-seleccionar-nivel-button:hover {
+    transform: scale(1.1);
     background-color: #fff7bc;
     cursor: pointer;
 }
