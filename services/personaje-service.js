@@ -13,6 +13,11 @@ class PersonajeService {
         return http.get(`/personajes/${id}`)
     }
 
+    //COMPLETAR
+    GetByJugadorId(id) {
+        
+    }
+
     Update(id, data) {
         return http.put(`/personajes/${id}`, data)
     }

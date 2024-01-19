@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Toolbar from "../../componentes/toolbar/Toolbar"
 import LlenarInformacion from "../../componentes/llenar-informacion/Llenar-informacion"
 import JugadorService from "../../services/jugador-service"
+import JugadorHechizoService from "../../services/jugador-hechizo-service"
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./Registro.css"
@@ -72,6 +73,8 @@ const Registro = () => {
 
         JugadorService.Create(data)
             .then(response => {
+                JugadorHechizoService.Create({jugadorId: response.data.id, hechizoId: 1})
+                JugadorHechizoService.Create({jugadorId: response.data.id, hechizoId: 2})
                 // Mostrar notificación de éxito
                 toast.success('Cuenta creada exitosamente');
             })
@@ -79,7 +82,6 @@ const Registro = () => {
                 // Mostrar notificación de error genérica
                 toast.error('Error al crear la cuenta');
             });
-
 
         console.log("enviarInformacion", informacion)
     }

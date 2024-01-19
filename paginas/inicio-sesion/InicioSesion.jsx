@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Toolbar from "../../componentes/toolbar/Toolbar" 
 import LlenarInformacion from "../../componentes/llenar-informacion/Llenar-informacion"
 import JugadorService from "../../services/jugador-service"
+import PersonajeService from "../../services/personaje-service"
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -58,8 +59,14 @@ import './InicioSesion.css';
 
         JugadorService.Login(data)
             .then(response => {
-                // Redireccionar a la ruta /menu-principal
-                navegar('/menu-principal');
+                PersonajeService.GetByJugadorId(response.data.id)
+                    .then(response => {
+                        // Redireccionar a la ruta /menu-principal
+                        navegar('/menu-principal');
+                    })
+                    .catch(error => {
+                        navegar('/creacion-personaje');
+                    })
             })
             .catch(error => {
                 // Mostrar notificación de error

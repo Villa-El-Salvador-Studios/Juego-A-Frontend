@@ -37,7 +37,7 @@
             setInfoNivel(nivelResponse.data);
             localStorage.setItem('personajeId', nivelResponse.data.personaje_Id);
 
-            const personajeId = Number(localStorage.getItem('personajeId'));
+            let personajeId = Number(localStorage.getItem('personajeId'));
             const personajeResponse = await PersonajeService.GetById(personajeId);
             setInfoPersonaje(personajeResponse.data);
         } catch (error) {
@@ -57,6 +57,7 @@
         <div style={mundoBGStyle}>
             <div className='mundo-center'>
                 <h1 className='mundo-title'>{infoPersonaje.nombre}</h1>
+                <img className='mundo-boss' src={infoPersonaje.imagen} alt="Imagen del boss del nivel" />
             </div>            
         </div>
     )
