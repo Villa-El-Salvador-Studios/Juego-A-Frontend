@@ -12,14 +12,18 @@
     left: 0;
     height: 5vh;
     padding: 3vmin;
-    transition: all 0.3s ease-in-out;
+    background: rgb(240, 160, 134);
+    border-radius:0px 0px 10px 0px;
+    border: 1px solid black;
+    transition: all 0.2s ease-in-out;
 }
 .selector-niveles-return:hover {
-    transform: scale(1.3);
+    transform: scale(1.2);
+    background: rgb(247, 183, 162);
     cursor: pointer;
 }
 .selector-niveles-title {
-    font-size: 6vmin;
+    font-size: 8vmin;
 }
 .selector-niveles-text {
     font-size: 3vmin;

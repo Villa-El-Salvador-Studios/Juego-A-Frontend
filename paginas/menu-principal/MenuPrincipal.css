@@ -22,6 +22,7 @@
     width: 30vw;
     font-size:4vmin;
     cursor: pointer;
+    border-radius: 10px;
     transition: all .3s ease-in-out;
 }
 .boton-menu:hover {
@@ -38,10 +39,10 @@
 .icono-individual {
     width: 8vw;
     height: 8vh;
-    transition: all .5s ease-in-out;
+    transition: all .3s ease-in-out;
 }
 .icono-individual:hover {
-    transform: scale(1.5);
+    transform: scale(1.3);
     cursor: pointer;
 }
 ::backdrop {

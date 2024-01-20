@@ -4,6 +4,7 @@
 .boton-seleccionar-nivel-button {
     height: 20vmin;
     width: 20vmin;
+    border-radius: 20px;
     font-size: 10vmin;
     text-align: center;
     background-color: #fee78a;

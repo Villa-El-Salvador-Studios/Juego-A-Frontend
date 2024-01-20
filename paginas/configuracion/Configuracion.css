@@ -16,6 +16,7 @@
 .titulo-configuracion {
     font-size: 6vmin;
     text-align: center;
+    color: rgb(212, 139, 13);
 }
 .boton-cerrar {
     height: 8%;
@@ -23,7 +24,7 @@
     top: 0;
     right: 0;
     margin: 3%;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 .boton-cerrar:hover {
     transform: rotate(90deg);
