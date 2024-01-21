@@ -11,21 +11,23 @@
     flex-direction: column; /* Distribuir los elementos uno debajo de otro en el centro de la pantalla */
     background-color: #82bfa0;
     border: #5c7569 5px solid;
-    overflow:auto /* Para permitir el desplazamiento del scrollbar cuando los elementos se salgan de su contenedor */
+    overflow:auto; /* Para permitir el desplazamiento del scrollbar cuando los elementos se salgan de su contenedor */
 }
 .titulo-configuracion {
     font-size: 6vmin;
     text-align: center;
+    color: rgb(212, 139, 13);
 }
 .boton-cerrar {
-    height: 10%;
+    height: 8%;
     position: absolute;
     top: 0;
     right: 0;
-    margin: 2%;
+    margin: 3%;
+    transition: all 0.2s ease-in-out;
 }
 .boton-cerrar:hover {
-    transform: scale(1.5);
+    transform: rotate(90deg);
     cursor: pointer;
 }
 .titulo-dificultad {

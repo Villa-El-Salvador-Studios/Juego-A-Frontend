@@ -4,11 +4,14 @@
 .boton-seleccionar-nivel-button {
     height: 20vmin;
     width: 20vmin;
+    border-radius: 20px;
     font-size: 10vmin;
     text-align: center;
     background-color: #fee78a;
+    transition: all 0.3s ease-in-out;
 }
 .boton-seleccionar-nivel-button:hover {
+    transform: scale(1.1);
     background-color: #fff7bc;
     cursor: pointer;
 }
