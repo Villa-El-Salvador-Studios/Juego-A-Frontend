@@ -1,1 +1,12 @@
- 
+.creacion-personaje{
+    background: linear-gradient(#efe8b2, #82bfa0);
+    display: flex;
+    justify-content: space-between; /* Distribuir elementos verticalmente en el contenedor */
+    align-items: center; /* Alinear elementos en la parte superior del contenedor */
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 100vw;
+}
+.creacion-personaje-title{
+
+}

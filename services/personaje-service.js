@@ -13,9 +13,8 @@ class PersonajeService {
         return http.get(`/personajes/${id}`)
     }
 
-    //COMPLETAR
     GetByJugadorId(id) {
-        
+        return http.get(`/personajes/jugador/${id}`)
     }
 
     Update(id, data) {

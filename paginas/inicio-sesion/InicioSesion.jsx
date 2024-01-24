@@ -61,11 +61,19 @@ import './InicioSesion.css';
             .then(response => {
                 PersonajeService.GetByJugadorId(response.data.id)
                     .then(response => {
-                        // Redireccionar a la ruta /menu-principal
-                        navegar('/menu-principal');
+                        console.log("Longitud del response: ", response.data.length);
+
+                        if (response.data.length === 0) {
+                            // Redireccionar a la ruta /creacion-personaje
+                            navegar('/creacion-personaje');
+                        }
+                        else {
+                            // Redireccionar a la ruta /menu-principal
+                            navegar('/menu-principal');
+                        }
                     })
                     .catch(error => {
-                        navegar('/creacion-personaje');
+                        console.log("Ocurrió un error al iniciar sesión: ", error);
                     })
             })
             .catch(error => {

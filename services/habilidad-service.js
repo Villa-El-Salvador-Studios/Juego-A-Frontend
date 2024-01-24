@@ -8,10 +8,6 @@ class HabilidadService {
     GetByHabilidadId(id) {
         return http.get(`/habilidades/${id}`)
     }
-
-    Update(id, data) {
-        return http.put(`/habilidades/${id}`, data)
-    }
 }
 
 export default new HabilidadService()
