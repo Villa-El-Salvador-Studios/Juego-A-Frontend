@@ -1,1 +1,26 @@
- 
+.carousel{
+    position: relative;
+    display: flex;
+    justify-content: space-between; /* Distribuir elementos verticalmente en el contenedor */
+    align-items: center; /* Alinear elementos en la parte superior del contenedor */
+    flex-direction: column;
+    width: 300px;
+}
+.carousel-button{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+.carousel-button:first-child{
+    left: 1vmin;
+}
+.carousel-button:last-child{
+    right: 1vmin;
+}
+.carousel-image{
+    width: 40vmin;
+}

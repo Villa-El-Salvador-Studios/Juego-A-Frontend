@@ -8,5 +8,15 @@
     min-width: 100vw;
 }
 .creacion-personaje-title{
-
+    font-size: 5vmin;
+}
+.creacion-personaje-button{
+    background-color: #fdf2c5;
+    border-radius: 20px;
+    padding: 2vmin;
+    margin-bottom: 10vmin;
+}
+.creacion-personaje-button:hover{
+    background-color: #c6d1a6;
+    cursor: pointer;
 }

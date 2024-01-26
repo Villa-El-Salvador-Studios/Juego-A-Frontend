@@ -59,10 +59,10 @@ import './InicioSesion.css';
 
         JugadorService.Login(data)
             .then(response => {
+                localStorage.setItem("jugadorId", response.data.id);
+                
                 PersonajeService.GetByJugadorId(response.data.id)
                     .then(response => {
-                        console.log("Longitud del response: ", response.data.length);
-
                         if (response.data.length === 0) {
                             // Redireccionar a la ruta /creacion-personaje
                             navegar('/creacion-personaje');

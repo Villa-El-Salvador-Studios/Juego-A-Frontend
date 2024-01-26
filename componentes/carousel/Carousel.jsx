@@ -1,31 +1,34 @@
-import React from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import { useState } from 'react';
+import './Carousel.css';
 
-const Carousel = () => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
+const Carousel = ({images, onIndexChange}) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    let auxIndex = 1;
 
-  return (
-    <Slider {...settings}>
-      <div>
-        <img src="imagen1.jpg" alt="Slide 1" />
-      </div>
-      <div>
-        <img src="imagen2.jpg" alt="Slide 2" />
-      </div>
-      <div>
-        <img src="imagen3.jpg" alt="Slide 3" />
-      </div>
-      {/* Agrega más slides según sea necesario */}
-    </Slider>
-  );
-};
+    const goToPreviousSlide = () => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex === 0 ? images.imageList.length - 1 : prevIndex - 1
+        );
+        const updatedIndex = currentIndex === 0 ? images.imageList.length - 1 : currentIndex - 1;
+        onIndexChange(updatedIndex);
+    };
 
-export default Carousel;
+    const goToNextSlide = () => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex === images.imageList.length - 1 ? 0 : prevIndex + 1
+        );
+        const updatedIndex = currentIndex === images.imageList.length - 1 ? 0 : currentIndex + 1;
+        onIndexChange(updatedIndex);
+    };
+
+    return (
+        <div className="carousel">
+            <button className="carousel-button" onClick={goToPreviousSlide}>&lt;</button>
+            <h3>{images.names[currentIndex]}</h3>
+            <img className="carousel-image" src={images.imageList[currentIndex]} alt={`Slide ${currentIndex + 1}`} />
+            <button className="carousel-button" onClick={goToNextSlide}>&gt;</button>
+        </div>
+    );
+}
+
+export default Carousel
