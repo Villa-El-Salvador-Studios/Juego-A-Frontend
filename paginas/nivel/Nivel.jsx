@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import Personaje from "../../componentes/personaje/Personaje";
 import MundoService from "../../services/mundo-service";
 import PersonajeService from "../../services/personaje-service";
 import "./Nivel.css";
 
 const Nivel = () => {
   let mundoId = Number(localStorage.getItem("nivel"));
+
+  const [personajeActivo, setPersonajeActivo] = useState(1);
 
   const [loading, setLoading] = useState(true);
 
@@ -18,7 +21,7 @@ const Nivel = () => {
     personaje_Id: 0,
   });
 
-  const [infoPersonaje, setInfoPersonaje] = useState({
+  const [infoBoss, setInfoBoss] = useState({
     id: 0,
     vida: 0,
     nivel: 0,
@@ -29,25 +32,39 @@ const Nivel = () => {
     jugadorId: 0,
   });
 
+  const [infoPersonajes, setInfoPersonajes] = useState([])
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    mostrarPersonajes();
+  }, [infoPersonajes]);
 
   const fetchData = async () => {
     try {
       const nivelResponse = await MundoService.GetById(mundoId);
       setInfoNivel(nivelResponse.data);
-      localStorage.setItem("personajeId", nivelResponse.data.personaje_Id);
+      localStorage.setItem("bossId", nivelResponse.data.personaje_Id);
 
-      let personajeId = Number(localStorage.getItem("personajeId"));
-      const personajeResponse = await PersonajeService.GetById(personajeId);
-      setInfoPersonaje(personajeResponse.data);
+      let personajeId = localStorage.getItem("bossId");
+      const bossResponse = await PersonajeService.GetById(personajeId);
+      setInfoBoss(bossResponse.data);
+
+      const persojeResponse = await PersonajeService.GetByJugadorId(localStorage.getItem("jugadorId"));
+      setInfoPersonajes(persojeResponse.data);
+
     } catch (error) {
       console.error("Hubo un error al obtener la información.", error);
     } finally {
       setLoading(false);
     }
   };
+
+  const mostrarPersonajes = () => {
+    console.log("Personajes totales: ", infoPersonajes);
+  }
 
   const mundoBGStyle = {
     backgroundImage: `url(${infoNivel.imagenFondo})`,
@@ -68,12 +85,8 @@ const Nivel = () => {
         // Muestra el contenido cuando las llamadas a los servicios han terminado
         <div style={mundoBGStyle}>
           <div className="mundo-center">
-            <h1 className="mundo-title">{infoPersonaje.nombre}</h1>
-            <img
-              className="mundo-boss"
-              src={infoPersonaje.imagen}
-              alt="Imagen del boss del nivel"
-            />
+            <Personaje nombre={infoBoss.nombre} imagen={infoBoss.imagen} vida={infoBoss.vida} categoria={"boss"}/>
+            <Personaje nombre={infoPersonajes[personajeActivo].nombre} imagen={infoPersonajes[personajeActivo].imagen} vida={infoPersonajes[personajeActivo].vida} categoria={"personaje"}/>
           </div>
         </div>
       )}

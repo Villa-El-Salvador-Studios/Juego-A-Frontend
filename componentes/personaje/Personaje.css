@@ -1,0 +1,26 @@
+.personaje{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.contenedor-personaje {
+    position: relative;
+    display: inline-block;
+}
+.barra-vida {
+    position: absolute;
+    top: 0;
+    left: 20vmin;
+    width: 10px; /* Ancho de la barra de vida, puedes ajustar según tus necesidades */
+    max-height: 100%; /* Altura máxima igual al alto de la imagen del personaje */
+    background-color: green; /* Puedes cambiar el color según tus preferencias */
+}
+.mundo-title {
+    font-size: 6vmin;
+}
+.mundo-boss {
+    height: 30vmin;
+}
+.mundo-personaje{
+    height: 15vmin;
+}
