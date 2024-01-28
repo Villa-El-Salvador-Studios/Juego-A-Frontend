@@ -5,13 +5,16 @@
     width: 80vmin;
     height: 15vmin;
     padding: 2vmin;
+}
+.caja-acciones-grid {
     display: grid;
     grid-template-columns: auto auto;
-    gap: 10px;
+    gap: 1vmin;
 }
 
 .caja-acciones button {
     font-size: 3vmin;
+    height: 7vmin;
     background-color: #ffeec8;
 }
 .caja-acciones button:hover {
