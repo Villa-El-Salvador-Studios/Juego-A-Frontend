@@ -1,0 +1,39 @@
+.caja-acciones {
+    position: absolute;
+    background-color: #b8aa95;
+    bottom: 0;
+    width: 80vmin;
+    height: 15vmin;
+    padding: 2vmin;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px;
+}
+
+.caja-acciones button {
+    font-size: 3vmin;
+    background-color: #ffeec8;
+}
+.caja-acciones button:hover {
+    cursor: pointer;
+    background-color: #f3c6b9;
+}
+.caja-acciones button:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.caja-acciones button:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.caja-acciones button:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.caja-acciones button:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+}
