@@ -7,7 +7,7 @@ import "./Nivel.css";
 const Nivel = () => {
   let mundoId = Number(localStorage.getItem("nivel"));
 
-  const [personajeActivo, setPersonajeActivo] = useState(1);
+  const [personajeActivo, setPersonajeActivo] = useState(0);
 
   const [loading, setLoading] = useState(true);
 

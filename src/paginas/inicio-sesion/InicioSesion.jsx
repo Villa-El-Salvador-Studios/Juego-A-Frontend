@@ -5,7 +5,6 @@ import JugadorService from "../../services/jugador-service"
 import PersonajeService from "../../services/personaje-service"
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
 import 'react-toastify/dist/ReactToastify.css';
 import './InicioSesion.css';
 

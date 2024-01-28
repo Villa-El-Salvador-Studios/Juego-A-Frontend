@@ -1,5 +1,5 @@
-import AppRouter from '../routing/AppRouting'
-import { FullScreenProvider } from '../shared/full-screen/FullScreen'
+import AppRouter from './routing/AppRouting'
+import { FullScreenProvider } from './shared/full-screen/FullScreen'
 
 const App = () => {
 
