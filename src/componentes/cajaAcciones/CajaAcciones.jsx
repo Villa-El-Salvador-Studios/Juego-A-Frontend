@@ -1,56 +1,72 @@
 import { useState, useEffect } from "react";
-import Habilidades from "../habilidades/Habilidades";
+import Acciones from "../habilidades/Acciones";
 import './CajaAcciones.css';
 
-const CajaAcciones = ({textoList, personajeActivoId, infoPersonajes, funciones, nombreHabilidades}) => {
+const CajaAcciones = ({infoCajaAcciones}) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const informacionAccionesInicial = {
+    const [informacionAcciones, setInformacionAcciones] = useState({
         habilidades: {
-            nombres: nombreHabilidades[personajeActivoId],
-            funciones: funciones["habilidades"].funciones
+            nombres: [],
+            funciones: []
         },
         objetos: {
             nombres: [],
-            funciones: funciones["objetos"].funciones
+            funciones: []
         },
         personajes: {
             nombres: [],
-            funciones: funciones["personajes"].funciones
+            funciones: []
         },
         hechizos: {
             nombres: [],
-            funciones: funciones["hechizos"].funciones
+            funciones: []
         }
-    }
+    });
 
-    const [informacionAcciones, setInformacionAcciones] = useState(informacionAccionesInicial);
+    const obtenerNombresPersonajes = (jsonArray) => {
+        return jsonArray ? jsonArray.map(obj => obj.nombre) : [];
+    }
 
     const toggleHabilidades = () => {
         setIsOpen(!isOpen);
     }
 
     useEffect(() => {
-        // Actualizar el array nombres dentro del objeto personajes cuando infoPersonajes cambie
-        const nombresPersonajes = infoPersonajes.map(personaje => personaje.nombre);
+        // Actualizar datos de caja de acciones
         setInformacionAcciones(prevState => ({
             ...prevState,
+            habilidades: {
+                ...prevState.habilidades,
+                nombres: infoCajaAcciones.nombreHabilidades[infoCajaAcciones.personajeActivoId],
+                funciones: infoCajaAcciones.funciones["habilidades"]
+            },
+            objetos: {
+                ...prevState.objetos,
+                funciones: infoCajaAcciones.funciones["objetos"]  
+            },
             personajes: {
                 ...prevState.personajes,
-                nombres: nombresPersonajes
+                nombres: obtenerNombresPersonajes(infoCajaAcciones.infoPersonajes),
+                funciones: infoCajaAcciones.funciones["personajes"]
+            },
+            hechizos: {
+                ...prevState.hechizos,
+                funciones: infoCajaAcciones.funciones["hechizos"]
             }
         }));
 
-    }, [infoPersonajes]);
+        console.log("Informacion Acciones: ", informacionAcciones);
+    }, [infoCajaAcciones]);
 
     return (
         <div className="caja-acciones">
-            <Habilidades isOpen={isOpen} onClose={toggleHabilidades}/>
+            <Acciones isOpen={isOpen} onClose={toggleHabilidades} informacion={informacionAcciones} />
             <div className="caja-acciones-grid">
-                <button onClick={toggleHabilidades}>{textoList[0]}</button>
-                <button>{textoList[1]}</button>
-                <button>{textoList[2]}</button>
-                <button>{textoList[3]}</button>
+                <button onClick={toggleHabilidades}>{infoCajaAcciones.textoList[0]}</button>
+                <button>{infoCajaAcciones.textoList[1]}</button>
+                <button>{infoCajaAcciones.textoList[2]}</button>
+                <button>{infoCajaAcciones.textoList[3]}</button>
             </div>
         </div>
     )

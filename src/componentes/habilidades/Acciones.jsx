@@ -1,8 +1,8 @@
-import './Habilidades.css';
+import './Acciones.css';
 
 const Habilidades = ({isOpen, onClose, informacion}) => {
     return isOpen ? (
-        <div className="habilidades">
+        <div className="acciones">
             <h1>Habilidades</h1>
             <button onClick={onClose}>Cerrar</button>
         </div>

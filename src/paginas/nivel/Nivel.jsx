@@ -47,24 +47,22 @@ const Nivel = () => {
 
   const [personajeActivoId, setPersonajeActivoId] = useState(6);
 
+  const [infoCajaAcciones, setInfoCajaAcciones] = useState({
+    textoList: ["Habilidades", "Objetos", "Personajes", "Hechizos"],
+    personajeActivoId: 0,
+    infoPersonajes: [],
+    funciones: {
+      habilidades: [() => {console.log("Habilidad 1")}, () => {console.log("Habilidad 2")}, () => {console.log("Habilidad 3")}, () => {console.log("Habilidad 4")}],
+      objetos: [() => {console.log("Objeto 1")}, () => {console.log("Objeto 2")}, () => {console.log("Objeto 3")}, () => {console.log("Objeto 4"), console.log("Objeto 5")}, () => {console.log("Objeto 6")}],
+      personajes: [() => {console.log("Personaje 1")}, () => {console.log("Personaje 2")}, () => {console.log("Personaje 3")}, () => {console.log("Personaje 4")}],
+      hechizos: [() => {console.log("Hechizo 1")}, () => {console.log("Hechizo 2")}]
+    },
+    nombreHabilidades: {}
+  });
+
   const [vidaActualBoss, setVidaActualBoss] = useState(0);
 
   const [vidaActualPersonaje, setVidaActualPersonaje] = useState(0);
-
-  const funciones = {
-    habilidades: {
-      funciones: [() => {console.log("Habilidad 1")}, () => {console.log("Habilidad 2")}, () => {console.log("Habilidad 3")}, () => {console.log("Habilidad 4")}]
-    },
-    objetos: {
-      funciones: [() => {console.log("Objeto 1")}, () => {console.log("Objeto 2")}, () => {console.log("Objeto 3")}, () => {console.log("Objeto 4"), console.log("Objeto 5")}, () => {console.log("Objeto 6")}]
-    },
-    personajes: {
-      funciones: [() => {console.log("Personaje 1")}, () => {console.log("Personaje 2")}, () => {console.log("Personaje 3")}, () => {console.log("Personaje 4")}]
-    },
-    hechizos: {
-      funciones: [() => {console.log("Hechizo 1")}, () => {console.log("Hechizo 2")}]
-    }
-  }
 
   const cambiarNumerosPorNombres = (arrayDeNumeros, nombresDeHabilidades) => {
     return arrayDeNumeros.map((numero) => nombresDeHabilidades[numero]);
@@ -89,7 +87,11 @@ const Nivel = () => {
         objetoAux[personajeId] = cambiarNumerosPorNombres(habilidadesDePersonajes[personajeId], nombresHabilidades);
       }
 
-      setNombreHabilidades(objetoAux);
+      setInfoCajaAcciones(prevState => ({
+        ...prevState,
+        nombreHabilidades: objetoAux
+      }))
+
     } catch (error) {
       console.error('Error al obtener nombres de habilidades: ', error);
     }
@@ -126,7 +128,10 @@ const Nivel = () => {
       setVidaActualBoss(bossResponse.data.vida);
 
       const persojeResponse = await PersonajeService.GetByJugadorId(localStorage.getItem("jugadorId"));
-      setInfoPersonajes(persojeResponse.data);
+      setInfoCajaAcciones(prevState => ({
+        ...prevState,
+        infoPersonajes: persojeResponse.data
+      }))
       setVidaActualPersonaje(persojeResponse.data[0].vida);
 
       let personajesId = persojeResponse.data.map(personaje => personaje.id);
@@ -140,6 +145,20 @@ const Nivel = () => {
     }
   };
 
+  // Función para buscar la información de un personaje por su id
+  const findCharacterByPlayerId = (jsonArray, id, objetivo) => {
+    if (objetivo === "nombre") {
+      const character = jsonArray.find(obj => obj.id === id);
+      return character ? character.nombre : null; // Retorna null si no se encuentra el id
+    } else if (objetivo === "imagen") {
+      const character = jsonArray.find(obj => obj.id === id);
+      return character ? character.imagen : null; // Retorna null si no se encuentra el id
+    } else {
+      const character = jsonArray.find(obj => obj.id === id);
+      return character ? character.vida : null; // Retorna null si no se encuentra el id
+    }
+  };
+
   const mundoBGStyle = {
     backgroundImage: `url(${infoNivel.imagenFondo})`,
     backgroundSize: "100% 100%",
@@ -150,7 +169,11 @@ const Nivel = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+    setInfoCajaAcciones(prevState => ({
+      ...prevState,
+      personajeActivoId: 6
+    }))
+  }, [personajeActivoId]);
 
   return (
     <div>
@@ -164,8 +187,8 @@ const Nivel = () => {
         <div style={mundoBGStyle}>
           <div className="mundo-center">
             <Personaje nombre={infoBoss.nombre} imagen={infoBoss.imagen} vidaMaxima={infoBoss.vida} vidaActual={vidaActualBoss} categoria={"boss"}/>
-            <Personaje nombre={infoPersonajes[personajeActivo].nombre} imagen={infoPersonajes[personajeActivo].imagen} vidaMaxima={infoPersonajes[personajeActivo].vida} vidaActual={vidaActualPersonaje} categoria={"personaje"}/>
-            <CajaAcciones textoList={textoList} personajeActivoId={personajeActivoId} infoPersonajes={infoPersonajes} funciones={funciones} nombreHabilidades={nombreHabilidades} />
+            <Personaje nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")} imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")} vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")} vidaActual={vidaActualPersonaje} categoria={"personaje"}/>
+            <CajaAcciones infoCajaAcciones={infoCajaAcciones} />
           </div>
         </div>
       )}
