@@ -4,9 +4,10 @@
     align-items: center;
     text-align: center;
     background-color: #c6d1a6;
+    padding: 20px 15vw;
 }
 .centered-image {
     max-width: 20%;
     height: auto;
-    margin: 20px 0; /* Ajusta el margen según sea necesario */
+    margin: 80px 0 20px 0;
 }
