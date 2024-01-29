@@ -1,6 +1,6 @@
 import './Habilidades.css';
 
-const Habilidades = ({isOpen, onClose}) => {
+const Habilidades = ({isOpen, onClose, informacion}) => {
     return isOpen ? (
         <div className="habilidades">
             <h1>Habilidades</h1>
