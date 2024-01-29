@@ -4,6 +4,8 @@ import CajaAcciones from "../../componentes/cajaAcciones/CajaAcciones";
 import MundoService from "../../services/mundo-service";
 import PersonajeService from "../../services/personaje-service";
 import HabilidadService from "../../services/habilidad-service";
+import HechizoService from "../../services/hechizo-service";
+import ObjetoService from "../../services/objeto-service";
 import HabilidadPersonajeService from "../../services/habilidad-personaje-service";
 import "./Nivel.css";
 
@@ -48,16 +50,20 @@ const Nivel = () => {
   const [personajeActivoId, setPersonajeActivoId] = useState(6);
 
   const [infoCajaAcciones, setInfoCajaAcciones] = useState({
-    textoList: ["Habilidades", "Objetos", "Personajes", "Hechizos"],
-    personajeActivoId: 0,
     infoPersonajes: [],
+    descripcionHechizos: [],
+    descripcionObjetos: [],
     funciones: {
       habilidades: [() => {console.log("Habilidad 1")}, () => {console.log("Habilidad 2")}, () => {console.log("Habilidad 3")}, () => {console.log("Habilidad 4")}],
       objetos: [() => {console.log("Objeto 1")}, () => {console.log("Objeto 2")}, () => {console.log("Objeto 3")}, () => {console.log("Objeto 4"), console.log("Objeto 5")}, () => {console.log("Objeto 6")}],
       personajes: [() => {console.log("Personaje 1")}, () => {console.log("Personaje 2")}, () => {console.log("Personaje 3")}, () => {console.log("Personaje 4")}],
       hechizos: [() => {console.log("Hechizo 1")}, () => {console.log("Hechizo 2")}]
     },
-    nombreHabilidades: {}
+    nombreHabilidades: {},
+    nombreHechizos: [],
+    nombreObjetos: [],
+    personajeActivoId: 0,
+    textoList: ["Habilidades", "Objetos", "Personajes", "Hechizos"]
   });
 
   const [vidaActualBoss, setVidaActualBoss] = useState(0);
@@ -67,6 +73,14 @@ const Nivel = () => {
   const cambiarNumerosPorNombres = (arrayDeNumeros, nombresDeHabilidades) => {
     return arrayDeNumeros.map((numero) => nombresDeHabilidades[numero]);
   };
+
+  const obtenerNombres = (data) => {
+    return data.map(objeto => objeto.nombre);
+  }
+
+  const obtenerDescripciones = (data) => {
+    return data.map(objeto => objeto.descripcion);
+  }
 
   const obtenerNombresHabilidades = async (habilidadesDePersonajes) => {
     try {
@@ -137,6 +151,20 @@ const Nivel = () => {
       let personajesId = persojeResponse.data.map(personaje => personaje.id);
       obtenerHabilidades(personajesId);
       
+
+      const objetosResponse = await ObjetoService.GetAll();
+      setInfoCajaAcciones(prevState => ({
+        ...prevState,
+        nombreObjetos: obtenerNombres(objetosResponse.data),
+        descripcionObjetos: obtenerDescripciones(objetosResponse.data)
+      }))
+
+      const hechizosResponse = await HechizoService.GetAll();
+      setInfoCajaAcciones(prevState => ({
+        ...prevState,
+        nombreHechizos: obtenerNombres(hechizosResponse.data),
+        descripcionHechizos: obtenerDescripciones(hechizosResponse.data)
+      }))
 
     } catch (error) {
       console.error("Hubo un error al obtener la información.", error);

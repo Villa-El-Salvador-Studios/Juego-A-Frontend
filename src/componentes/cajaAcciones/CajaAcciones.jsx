@@ -7,20 +7,22 @@ const CajaAcciones = ({infoCajaAcciones}) => {
 
     const [informacionAcciones, setInformacionAcciones] = useState({
         habilidades: {
-            nombres: [],
-            funciones: []
-        },
-        objetos: {
-            nombres: [],
-            funciones: []
-        },
-        personajes: {
-            nombres: [],
-            funciones: []
+            funciones: [],
+            nombres: []
         },
         hechizos: {
-            nombres: [],
-            funciones: []
+            descripciones: [],
+            funciones: [],
+            nombres: []
+        },
+        objetos: {
+            descripciones: [],
+            funciones: [],
+            nombres: []
+        },
+        personajes: {
+            funciones: [],
+            nombres: []
         }
     });
 
@@ -43,6 +45,8 @@ const CajaAcciones = ({infoCajaAcciones}) => {
             },
             objetos: {
                 ...prevState.objetos,
+                nombres: infoCajaAcciones.nombreObjetos,
+                descripciones: infoCajaAcciones.descripcionObjetos,
                 funciones: infoCajaAcciones.funciones["objetos"]  
             },
             personajes: {
@@ -52,6 +56,8 @@ const CajaAcciones = ({infoCajaAcciones}) => {
             },
             hechizos: {
                 ...prevState.hechizos,
+                nombres: infoCajaAcciones.nombreHechizos,
+                descripciones: infoCajaAcciones.descripcionHechizos,
                 funciones: infoCajaAcciones.funciones["hechizos"]
             }
         }));
