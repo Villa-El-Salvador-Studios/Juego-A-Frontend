@@ -1,12 +1,12 @@
 body {
-    font-family: 'Silkscreen', sans-serif;
+    font-family: 'Pixelify Sans', sans-serif;
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* Para prevenir la barra de desplazamiento horizontal */
 }
   
 h1, h2, h3, button, p, input, select {
-    font-family: 'Silkscreen', sans-serif;
+    font-family: 'Pixelify Sans', sans-serif;
     /* Ajusta según sea necesario para diferentes elementos */
 }
 
