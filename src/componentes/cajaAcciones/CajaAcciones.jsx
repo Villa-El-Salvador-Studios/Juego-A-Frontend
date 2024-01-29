@@ -7,7 +7,7 @@ const CajaAcciones = ({textoList, personajeActivoId, infoPersonajes, funciones, 
 
     const informacionAccionesInicial = {
         habilidades: {
-            nombres: nombreHabilidades["6"],
+            nombres: nombreHabilidades[personajeActivoId],
             funciones: funciones["habilidades"].funciones
         },
         objetos: {
@@ -28,7 +28,6 @@ const CajaAcciones = ({textoList, personajeActivoId, infoPersonajes, funciones, 
 
     const toggleHabilidades = () => {
         setIsOpen(!isOpen);
-        console.log("Nombres de habildiades: ", informacionAcciones.habilidades.nombres);
     }
 
     useEffect(() => {

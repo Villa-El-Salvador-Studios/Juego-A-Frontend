@@ -8,31 +8,13 @@ import HabilidadPersonajeService from "../../services/habilidad-personaje-servic
 import "./Nivel.css";
 
 const Nivel = () => {
-  let mundoId = Number(localStorage.getItem("nivel"));
-  
-  const textoList = ["Habilidades", "Objetos", "Personajes", "Hechizos"];
-  
   let habilidadesDePersonajes = {}
+
+  let mundoId = Number(localStorage.getItem("nivel"));
 
   let objetoAux = {} //guarda los nombres de las habilidades asociadas a los IDs de lospersonajes
 
-  const [personajeActivo, setPersonajeActivo] = useState(0);
-
-  const [personajeActivoId, setPersonajeActivoId] = useState(6);
-
-  const [loading, setLoading] = useState(true);
-
-  const [infoNivel, setInfoNivel] = useState({
-    id: 0,
-    xp: 0,
-    estado: 0,
-    imagenFondo: "",
-    songId: 0,
-    nombre: "",
-    personaje_Id: 0,
-  });
-
-  const [vidaActualBoss, setVidaActualBoss] = useState(0);
+  const textoList = ["Habilidades", "Objetos", "Personajes", "Hechizos"];
 
   const [infoBoss, setInfoBoss] = useState({
     id: 0,
@@ -45,9 +27,29 @@ const Nivel = () => {
     jugadorId: 0,
   });
 
-  const [vidaActualPersonaje, setVidaActualPersonaje] = useState(0);
+  const [infoNivel, setInfoNivel] = useState({
+    id: 0,
+    xp: 0,
+    estado: 0,
+    imagenFondo: "",
+    songId: 0,
+    nombre: "",
+    personaje_Id: 0,
+  });
 
   const [infoPersonajes, setInfoPersonajes] = useState([])
+
+  const [loading, setLoading] = useState(true);
+
+  const [nombreHabilidades, setNombreHabilidades] = useState({});
+
+  const [personajeActivo, setPersonajeActivo] = useState(0);
+
+  const [personajeActivoId, setPersonajeActivoId] = useState(6);
+
+  const [vidaActualBoss, setVidaActualBoss] = useState(0);
+
+  const [vidaActualPersonaje, setVidaActualPersonaje] = useState(0);
 
   const funciones = {
     habilidades: {
@@ -87,6 +89,7 @@ const Nivel = () => {
         objetoAux[personajeId] = cambiarNumerosPorNombres(habilidadesDePersonajes[personajeId], nombresHabilidades);
       }
 
+      setNombreHabilidades(objetoAux);
     } catch (error) {
       console.error('Error al obtener nombres de habilidades: ', error);
     }
@@ -162,7 +165,7 @@ const Nivel = () => {
           <div className="mundo-center">
             <Personaje nombre={infoBoss.nombre} imagen={infoBoss.imagen} vidaMaxima={infoBoss.vida} vidaActual={vidaActualBoss} categoria={"boss"}/>
             <Personaje nombre={infoPersonajes[personajeActivo].nombre} imagen={infoPersonajes[personajeActivo].imagen} vidaMaxima={infoPersonajes[personajeActivo].vida} vidaActual={vidaActualPersonaje} categoria={"personaje"}/>
-            <CajaAcciones textoList={textoList} personajeActivoId={personajeActivoId} infoPersonajes={infoPersonajes} funciones={funciones} nombreHabilidades={objetoAux} />
+            <CajaAcciones textoList={textoList} personajeActivoId={personajeActivoId} infoPersonajes={infoPersonajes} funciones={funciones} nombreHabilidades={nombreHabilidades} />
           </div>
         </div>
       )}
