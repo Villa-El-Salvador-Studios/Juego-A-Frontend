@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Personaje from "../../componentes/personaje/Personaje";
+import BarraTurnos from "../../componentes/barraTurnos/BarraTurnos";
 import CajaAcciones from "../../componentes/cajaAcciones/CajaAcciones";
 import MundoService from "../../services/mundo-service";
 import PersonajeService from "../../services/personaje-service";
@@ -11,12 +13,12 @@ import "./Nivel.css";
 
 const Nivel = () => {
   let habilidadesDePersonajes = {}
-
   let mundoId = Number(localStorage.getItem("nivel"));
-
   let objetoAux = {} //guarda los nombres de las habilidades asociadas a los IDs de lospersonajes
 
-  const textoList = ["Habilidades", "Objetos", "Personajes", "Hechizos"];
+  const [arrayTurnos, setArrayTurnos] = useState(["Robotin", "URL", "Boss", "Robotin", "URL", "Boss", "Robotin", "URL", "Boss", "Robotin", "URL", "Boss",])
+  const iconoVolver = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTMuNDI3IDMuMDIxaC03LjQyN3YtMy4wMjFsLTYgNS4zOSA2IDUuNjF2LTNoNy40MjdjMy4wNzEgMCA1LjU2MSAyLjM1NiA1LjU2MSA1LjQyNyAwIDMuMDcxLTIuNDg5IDUuNTczLTUuNTYxIDUuNTczaC03LjQyN3Y1aDcuNDI3YzUuODQgMCAxMC41NzMtNC43MzQgMTAuNTczLTEwLjU3M3MtNC43MzMtMTAuNDA2LTEwLjU3My0xMC40MDZ6Ii8+PC9zdmc+"
+  const navegar = useNavigate();
 
   const [infoBoss, setInfoBoss] = useState({
     id: 0,
@@ -28,7 +30,6 @@ const Nivel = () => {
     imagen: "",
     jugadorId: 0,
   });
-
   const [infoNivel, setInfoNivel] = useState({
     id: 0,
     xp: 0,
@@ -38,17 +39,9 @@ const Nivel = () => {
     nombre: "",
     personaje_Id: 0,
   });
-
-  const [infoPersonajes, setInfoPersonajes] = useState([])
-
   const [loading, setLoading] = useState(true);
-
-  const [nombreHabilidades, setNombreHabilidades] = useState({});
-
-  const [personajeActivo, setPersonajeActivo] = useState(0);
-
-  const [personajeActivoId, setPersonajeActivoId] = useState(6);
-
+  const [personajeActivoId, setPersonajeActivoId] = useState(0);
+  const [personajes, setPersonajes] = useState([]);
   const [infoCajaAcciones, setInfoCajaAcciones] = useState({
     infoPersonajes: [],
     descripcionHechizos: [],
@@ -59,15 +52,16 @@ const Nivel = () => {
       personajes: [() => {console.log("Personaje 1")}, () => {console.log("Personaje 2")}, () => {console.log("Personaje 3")}, () => {console.log("Personaje 4")}],
       hechizos: [() => {console.log("Hechizo 1")}, () => {console.log("Hechizo 2")}]
     },
+    imagenesHechizos: [],
+    imagenesObjetos: [],
+    imagenesPersonajes: [],
     nombreHabilidades: {},
     nombreHechizos: [],
     nombreObjetos: [],
     personajeActivoId: 0,
     textoList: ["Habilidades", "Objetos", "Personajes", "Hechizos"]
   });
-
   const [vidaActualBoss, setVidaActualBoss] = useState(0);
-
   const [vidaActualPersonaje, setVidaActualPersonaje] = useState(0);
 
   const cambiarNumerosPorNombres = (arrayDeNumeros, nombresDeHabilidades) => {
@@ -80,6 +74,10 @@ const Nivel = () => {
 
   const obtenerDescripciones = (data) => {
     return data.map(objeto => objeto.descripcion);
+  }
+
+  const obtenerImagen = (data) => {
+    return data.map(objeto => objeto.imagen);
   }
 
   const obtenerNombresHabilidades = async (habilidadesDePersonajes) => {
@@ -130,6 +128,10 @@ const Nivel = () => {
     obtenerNombresHabilidades(habilidadesDePersonajes);
   };
 
+  const obtenerPersonajesIds = (jsonArray) => {
+    return jsonArray ? jsonArray.map(obj => obj.id) : [];
+  }
+
   const fetchData = async () => {
     try {
       const nivelResponse = await MundoService.GetById(mundoId);
@@ -144,8 +146,10 @@ const Nivel = () => {
       const persojeResponse = await PersonajeService.GetByJugadorId(localStorage.getItem("jugadorId"));
       setInfoCajaAcciones(prevState => ({
         ...prevState,
-        infoPersonajes: persojeResponse.data
+        infoPersonajes: persojeResponse.data,
+        imagenesPersonajes: obtenerImagen(persojeResponse.data)
       }))
+      setPersonajes(obtenerPersonajesIds(persojeResponse.data));
       setVidaActualPersonaje(persojeResponse.data[0].vida);
 
       let personajesId = persojeResponse.data.map(personaje => personaje.id);
@@ -156,14 +160,16 @@ const Nivel = () => {
       setInfoCajaAcciones(prevState => ({
         ...prevState,
         nombreObjetos: obtenerNombres(objetosResponse.data),
-        descripcionObjetos: obtenerDescripciones(objetosResponse.data)
+        descripcionObjetos: obtenerDescripciones(objetosResponse.data),
+        imagenesObjetos: obtenerImagen(objetosResponse.data)
       }))
 
       const hechizosResponse = await HechizoService.GetAll();
       setInfoCajaAcciones(prevState => ({
         ...prevState,
         nombreHechizos: obtenerNombres(hechizosResponse.data),
-        descripcionHechizos: obtenerDescripciones(hechizosResponse.data)
+        descripcionHechizos: obtenerDescripciones(hechizosResponse.data),
+        imagenesHechizos: obtenerImagen(hechizosResponse.data)
       }))
 
     } catch (error) {
@@ -187,6 +193,10 @@ const Nivel = () => {
     }
   };
 
+  const regresarMenu = () => {
+    navegar('/selector-niveles');
+  }
+
   const mundoBGStyle = {
     backgroundImage: `url(${infoNivel.imagenFondo})`,
     backgroundSize: "100% 100%",
@@ -203,6 +213,10 @@ const Nivel = () => {
     }))
   }, [personajeActivoId]);
 
+  useEffect(() => {
+    setPersonajeActivoId(personajes[0])
+  }, [personajes])
+
   return (
     <div>
       {loading ? (
@@ -213,6 +227,8 @@ const Nivel = () => {
       ) : (
         // Muestra el contenido cuando las llamadas a los servicios han terminado
         <div style={mundoBGStyle}>
+          <img className='boton-nivel-volver' src={iconoVolver} alt="Botón volver" onClick={regresarMenu} />
+          <BarraTurnos arrayTurnos={arrayTurnos} />
           <div className="mundo-center">
             <Personaje nombre={infoBoss.nombre} imagen={infoBoss.imagen} vidaMaxima={infoBoss.vida} vidaActual={vidaActualBoss} categoria={"boss"}/>
             <Personaje nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")} imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")} vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")} vidaActual={vidaActualPersonaje} categoria={"personaje"}/>

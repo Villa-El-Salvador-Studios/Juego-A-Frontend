@@ -1,3 +1,17 @@
+.boton-nivel-volver {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  width: 7vmin;
+  background-color: bisque;
+  border-radius: 0 0 0 10px;
+}
+.boton-nivel-volver:hover {
+  transform: scale(1.2);
+  opacity: 0.6;
+  cursor: pointer;
+}
 .mundo-center {
   display: flex;
   flex-direction: column;

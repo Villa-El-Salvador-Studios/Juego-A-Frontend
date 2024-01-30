@@ -11,26 +11,30 @@ h1, h2, h3, button, p, input, select {
 }
 
 /* Estilos para el scrollbar con un toque pixelado y color combinado */
-.configuracion::-webkit-scrollbar {
+body::-webkit-scrollbar, .barra-turnos::-webkit-scrollbar {
     width: 16px;
 }
 
-.configuracion::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb, .barra-turnos::-webkit-scrollbar-thumb {
     background-color: #bed6ab; /* Un verde azulado que combina con #82bfa0 */
     border: 3px solid #4d7258; /* Bordes sólidos oscuros para imitar píxeles */
-    border-radius: 4px; /* Borde redondeado del thumb */
+    border-radius: 10px; /* Borde redondeado del thumb */
 }
 
-.configuracion::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track {
     background-color: #4d7258; /* Fondo oscuro para el track */
 }
 
-.configuracion::-webkit-scrollbar-corner {
+.barra-turnos::-webkit-scrollbar-track {
+    background-color: transparent; /* Fondo oscuro para el track */
+}
+
+body::-webkit-scrollbar-corner, .barra-turnos::-webkit-scrollbar-corner {
     background-color: #4d7258; /* Color de la esquina del scrollbar */
 }
 
 /* Estilo adicional para el hover del thumb */
-.configuracion::-webkit-scrollbar-thumb:hover {
+body::-webkit-scrollbar-thumb:hover, .barra-turnos::-webkit-scrollbar-thumb:hover {
     background-color: #d6e4c3; /* Un verde azulado más claro al pasar el mouse sobre el thumb */
 }
 

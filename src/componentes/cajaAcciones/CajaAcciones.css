@@ -1,10 +1,11 @@
 .caja-acciones {
     position: absolute;
-    background-color: #b8aa95;
+    background-color: #b8aa956e;
     bottom: 0;
     width: 80vmin;
     height: 15vmin;
     padding: 2vmin;
+    border-radius: 10px 10px 0 0;
 }
 .caja-acciones-grid {
     display: grid;

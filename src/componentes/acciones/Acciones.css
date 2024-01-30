@@ -1,0 +1,44 @@
+.acciones {
+  background-color: #b8aa95;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  text-align: center;
+}
+.acciones-titulo {
+  font-size: 5vmin;
+}
+.acciones-botones {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+.boton-con-imagen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.imagen-boton {
+  height: 10vmin;
+  margin-bottom: 2vh;
+}
+.boton-con-ancho-fijo {
+  width: 20vw; /* Ajusta el ancho del botón según sea necesario */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.boton-con-ancho-fijo:hover {
+  max-width: none; /* Al pasar el mouse, permite que el botón tenga el ancho completo */
+  overflow: visible; /* Muestra el contenido completo al pasar el mouse */
+}
+.acciones-cerrar-button {
+  margin-top: 2vh;
+  font-size: 3vmin;
+  height: 7vmin;
+  background-color: #ffeec8;
+}

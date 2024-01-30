@@ -1,27 +1,31 @@
 import { useState, useEffect } from "react";
-import Acciones from "../habilidades/Acciones";
+import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
 const CajaAcciones = ({infoCajaAcciones}) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [tipoAccion, setTipoAccion] = useState(null);
 
     const [informacionAcciones, setInformacionAcciones] = useState({
-        habilidades: {
+        Habilidades: {
             funciones: [],
             nombres: []
         },
-        hechizos: {
+        Hechizos: {
             descripciones: [],
             funciones: [],
+            imagenes: [],
             nombres: []
         },
-        objetos: {
+        Objetos: {
             descripciones: [],
             funciones: [],
+            imagenes: [],
             nombres: []
         },
-        personajes: {
+        Personajes: {
             funciones: [],
+            imagenes: [],
             nombres: []
         }
     });
@@ -30,49 +34,51 @@ const CajaAcciones = ({infoCajaAcciones}) => {
         return jsonArray ? jsonArray.map(obj => obj.nombre) : [];
     }
 
-    const toggleHabilidades = () => {
+    const toggleAcciones = (tipo) => {
         setIsOpen(!isOpen);
+        setTipoAccion(tipo);
     }
 
     useEffect(() => {
         // Actualizar datos de caja de acciones
         setInformacionAcciones(prevState => ({
             ...prevState,
-            habilidades: {
+            Habilidades: {
                 ...prevState.habilidades,
                 nombres: infoCajaAcciones.nombreHabilidades[infoCajaAcciones.personajeActivoId],
                 funciones: infoCajaAcciones.funciones["habilidades"]
             },
-            objetos: {
+            Objetos: {
                 ...prevState.objetos,
                 nombres: infoCajaAcciones.nombreObjetos,
                 descripciones: infoCajaAcciones.descripcionObjetos,
-                funciones: infoCajaAcciones.funciones["objetos"]  
+                funciones: infoCajaAcciones.funciones["objetos"],
+                imagenes: infoCajaAcciones.imagenesObjetos
             },
-            personajes: {
+            Personajes: {
                 ...prevState.personajes,
                 nombres: obtenerNombresPersonajes(infoCajaAcciones.infoPersonajes),
-                funciones: infoCajaAcciones.funciones["personajes"]
+                funciones: infoCajaAcciones.funciones["personajes"],
+                imagenes: infoCajaAcciones.imagenesPersonajes
             },
-            hechizos: {
+            Hechizos: {
                 ...prevState.hechizos,
                 nombres: infoCajaAcciones.nombreHechizos,
                 descripciones: infoCajaAcciones.descripcionHechizos,
-                funciones: infoCajaAcciones.funciones["hechizos"]
+                funciones: infoCajaAcciones.funciones["hechizos"],
+                imagenes: infoCajaAcciones.imagenesHechizos
             }
         }));
-
-        console.log("Informacion Acciones: ", informacionAcciones);
     }, [infoCajaAcciones]);
 
     return (
         <div className="caja-acciones">
-            <Acciones isOpen={isOpen} onClose={toggleHabilidades} informacion={informacionAcciones} />
+            <Acciones isOpen={isOpen} onClose={toggleAcciones} tipo={tipoAccion} informacion={informacionAcciones[tipoAccion]} />
             <div className="caja-acciones-grid">
-                <button onClick={toggleHabilidades}>{infoCajaAcciones.textoList[0]}</button>
-                <button>{infoCajaAcciones.textoList[1]}</button>
-                <button>{infoCajaAcciones.textoList[2]}</button>
-                <button>{infoCajaAcciones.textoList[3]}</button>
+                <button onClick={() => toggleAcciones('Habilidades')}>{infoCajaAcciones.textoList[0]}</button>
+                <button onClick={() => toggleAcciones('Objetos')}>{infoCajaAcciones.textoList[1]}</button>
+                <button onClick={() => toggleAcciones('Personajes')}>{infoCajaAcciones.textoList[2]}</button>
+                <button onClick={() => toggleAcciones('Hechizos')}>{infoCajaAcciones.textoList[3]}</button>
             </div>
         </div>
     )
