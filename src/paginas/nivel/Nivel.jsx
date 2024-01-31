@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Personaje from "../../componentes/personaje/Personaje";
 import BarraTurnos from "../../componentes/barraTurnos/BarraTurnos";
 import CajaAcciones from "../../componentes/cajaAcciones/CajaAcciones";
+import NotificacionAccion from "../../componentes/notificacionAccion/NotificacionAccion";
 import MundoService from "../../services/mundo-service";
 import PersonajeService from "../../services/personaje-service";
 import HabilidadService from "../../services/habilidad-service";
@@ -42,14 +43,20 @@ const Nivel = () => {
   const [loading, setLoading] = useState(true);
   const [personajeActivoId, setPersonajeActivoId] = useState(0);
   const [personajes, setPersonajes] = useState([]);
+
+  const cambiarPersonajeActivo = (id) => {
+    setPersonajeActivoId(id);
+  }
+  
   const [infoCajaAcciones, setInfoCajaAcciones] = useState({
+    idsPersonajes: [],
     infoPersonajes: [],
     descripcionHechizos: [],
     descripcionObjetos: [],
     funciones: {
       habilidades: [() => {console.log("Habilidad 1")}, () => {console.log("Habilidad 2")}, () => {console.log("Habilidad 3")}, () => {console.log("Habilidad 4")}],
-      objetos: [() => {console.log("Objeto 1")}, () => {console.log("Objeto 2")}, () => {console.log("Objeto 3")}, () => {console.log("Objeto 4"), console.log("Objeto 5")}, () => {console.log("Objeto 6")}],
-      personajes: [() => {console.log("Personaje 1")}, () => {console.log("Personaje 2")}, () => {console.log("Personaje 3")}, () => {console.log("Personaje 4")}],
+      objetos: [() => {console.log("Objeto 1")}, () => {console.log("Objeto 2")}, () => {console.log("Objeto 3")}, () => {console.log("Objeto 4")}, () => {console.log("Objeto 5")}, () => {console.log("Objeto 6")}],
+      personajes: cambiarPersonajeActivo,
       hechizos: [() => {console.log("Hechizo 1")}, () => {console.log("Hechizo 2")}]
     },
     imagenesHechizos: [],
@@ -61,11 +68,36 @@ const Nivel = () => {
     personajeActivoId: 0,
     textoList: ["Habilidades", "Objetos", "Personajes", "Hechizos"]
   });
+  const [notificacionEleccion, setNotificacionEleccion] = useState('');
+  const [notificacionTipo, setNotificacionTipo] = useState('');
+  const [notificacionVisible, setNotificacionVisible] = useState(false);
   const [vidaActualBoss, setVidaActualBoss] = useState(0);
   const [vidaActualPersonaje, setVidaActualPersonaje] = useState(0);
 
   const cambiarNumerosPorNombres = (arrayDeNumeros, nombresDeHabilidades) => {
     return arrayDeNumeros.map((numero) => nombresDeHabilidades[numero]);
+  };
+
+  const mostrarNotificacion = (tipoAccion, eleccion) => {
+    setNotificacionTipo(tipoAccion);
+    setNotificacionEleccion(eleccion);
+
+    // Asegurarse de que la notificación solo se muestre si hay una acción específica
+    if (tipoAccion) {
+      setNotificacionVisible(true);
+
+      // Ocultar la notificación después de un tiempo (por ejemplo, 3 segundos)
+      setTimeout(() => {
+        setNotificacionVisible(false);
+      }, 3000);
+    }
+
+    // Restablecer la visibilidad después de 3 segundos (si la notificación está visible)
+    if (notificacionVisible) {
+      setTimeout(() => {
+        setNotificacionVisible(false);
+      }, 3000);
+    }
   };
 
   const obtenerNombres = (data) => {
@@ -207,14 +239,19 @@ const Nivel = () => {
 
   useEffect(() => {
     fetchData();
+  }, [])
+
+  useEffect(() => {
     setInfoCajaAcciones(prevState => ({
       ...prevState,
-      personajeActivoId: 6
+      idsPersonajes: personajes,
+      personajeActivoId: personajeActivoId
     }))
   }, [personajeActivoId]);
 
   useEffect(() => {
     setPersonajeActivoId(personajes[0])
+    console.log("CAMBIO DE PERSONAJE")
   }, [personajes])
 
   return (
@@ -232,7 +269,8 @@ const Nivel = () => {
           <div className="mundo-center">
             <Personaje nombre={infoBoss.nombre} imagen={infoBoss.imagen} vidaMaxima={infoBoss.vida} vidaActual={vidaActualBoss} categoria={"boss"}/>
             <Personaje nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")} imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")} vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")} vidaActual={vidaActualPersonaje} categoria={"personaje"}/>
-            <CajaAcciones infoCajaAcciones={infoCajaAcciones} />
+            <CajaAcciones infoCajaAcciones={infoCajaAcciones} mostrarNotificacion={mostrarNotificacion}/>
+            <NotificacionAccion tipoAccion={notificacionTipo} eleccion={notificacionEleccion} visible={notificacionVisible} />
           </div>
         </div>
       )}

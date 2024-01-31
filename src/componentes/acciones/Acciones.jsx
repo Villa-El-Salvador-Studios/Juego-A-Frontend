@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
 import './Acciones.css';
 
-const Acciones = ({isOpen, onClose, tipo, informacion}) => {
+const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion}) => {
     return isOpen ? (
         <div className="acciones">
             <h1 className='acciones-titulo'>{tipo}</h1>
@@ -15,7 +14,16 @@ const Acciones = ({isOpen, onClose, tipo, informacion}) => {
                             className="imagen-boton"
                         />
                         )}
-                        <button className="boton-con-ancho-fijo" onClick={informacion.funciones[index]}>{nombre}</button>
+                        <button
+                            className="boton-con-ancho-fijo"
+                            onClick={() => {
+                                informacion.funciones(informacion.ids[index]); //Cambio de personaje
+                                mostrarNotificacion(tipo.toLowerCase(), nombre);
+                                abrirYCerrarAcciones();
+                            }}
+                        >
+                            {nombre}
+                        </button>
                     </div>
                 ))}
             </div>

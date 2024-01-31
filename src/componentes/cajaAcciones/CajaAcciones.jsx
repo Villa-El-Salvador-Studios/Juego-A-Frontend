@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
-const CajaAcciones = ({infoCajaAcciones}) => {
+const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [tipoAccion, setTipoAccion] = useState(null);
 
@@ -24,7 +24,8 @@ const CajaAcciones = ({infoCajaAcciones}) => {
             nombres: []
         },
         Personajes: {
-            funciones: [],
+            funciones: () => {},
+            ids: [],
             imagenes: [],
             nombres: []
         }
@@ -34,8 +35,12 @@ const CajaAcciones = ({infoCajaAcciones}) => {
         return jsonArray ? jsonArray.map(obj => obj.nombre) : [];
     }
 
-    const toggleAcciones = (tipo) => {
+    const abrirYCerrarAcciones = () => {
         setIsOpen(!isOpen);
+    }
+
+    const toggleAcciones = (tipo) => {
+        abrirYCerrarAcciones();
         setTipoAccion(tipo);
     }
 
@@ -57,9 +62,10 @@ const CajaAcciones = ({infoCajaAcciones}) => {
             },
             Personajes: {
                 ...prevState.personajes,
+                ids: infoCajaAcciones.idsPersonajes,
+                imagenes: infoCajaAcciones.imagenesPersonajes,
                 nombres: obtenerNombresPersonajes(infoCajaAcciones.infoPersonajes),
-                funciones: infoCajaAcciones.funciones["personajes"],
-                imagenes: infoCajaAcciones.imagenesPersonajes
+                funciones: infoCajaAcciones.funciones["personajes"]
             },
             Hechizos: {
                 ...prevState.hechizos,
@@ -73,7 +79,7 @@ const CajaAcciones = ({infoCajaAcciones}) => {
 
     return (
         <div className="caja-acciones">
-            <Acciones isOpen={isOpen} onClose={toggleAcciones} tipo={tipoAccion} informacion={informacionAcciones[tipoAccion]} />
+            <Acciones isOpen={isOpen} onClose={toggleAcciones} tipo={tipoAccion} informacion={informacionAcciones[tipoAccion]} abrirYCerrarAcciones={abrirYCerrarAcciones} mostrarNotificacion={mostrarNotificacion}/>
             <div className="caja-acciones-grid">
                 <button onClick={() => toggleAcciones('Habilidades')}>{infoCajaAcciones.textoList[0]}</button>
                 <button onClick={() => toggleAcciones('Objetos')}>{infoCajaAcciones.textoList[1]}</button>
