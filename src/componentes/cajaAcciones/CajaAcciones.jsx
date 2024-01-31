@@ -50,7 +50,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion}) => {
             ...prevState,
             Habilidades: {
                 ...prevState.habilidades,
-                nombres: infoCajaAcciones.nombreHabilidades[infoCajaAcciones.personajeActivoId],
+                nombres: infoCajaAcciones.idsHabilidades[infoCajaAcciones.personajeActivoId],
                 funciones: infoCajaAcciones.funciones["habilidades"]
             },
             Objetos: {
