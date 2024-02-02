@@ -4,12 +4,37 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    background: linear-gradient(180deg, #fdf2c5, #82bfa0);
 }
 .finNivel-titulo {
-    font-size: 10vmin;
+    animation: animacion-prueba 1s ease-in-out;
+    font-size: 20vmin;
+    margin-top: 0;
+}
+@keyframes animacion-prueba {
+    0% {
+        scale: 0;
+    }
+    100% {
+        scale: 1;
+    }
 }
 .finNivel-botones {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 10vmin;
+}
+.finNivel-botones-accion {
+    background-color: #998496;
+    height: 10vh;
+    width: 20vw;
+    font-size:4vmin;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all .3s ease-in-out;
+}
+.finNivel-botones-accion:hover{
+    background-color: #79254a;
+    transform: scale(1.1);
+    color: #998496;
 }
