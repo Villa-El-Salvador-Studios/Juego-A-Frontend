@@ -1,0 +1,15 @@
+.finNivel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.finNivel-titulo {
+    font-size: 10vmin;
+}
+.finNivel-botones {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}

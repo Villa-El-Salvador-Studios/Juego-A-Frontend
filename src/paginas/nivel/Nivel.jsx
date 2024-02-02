@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Personaje from "../../componentes/personaje/Personaje";
 import BarraTurnos from "../../componentes/barraTurnos/BarraTurnos";
 import CajaAcciones from "../../componentes/cajaAcciones/CajaAcciones";
+import FinNivel from "../../componentes/fin-nivel/FinNivel";
 import NotificacionAccion from "../../componentes/notificacionAccion/NotificacionAccion";
 import MundoService from "../../services/mundo-service";
 import PersonajeService from "../../services/personaje-service";
@@ -16,7 +17,7 @@ const Nivel = () => {
   let habilidadesDePersonajes = {}
   let mundoId = Number(localStorage.getItem("nivel"));
   let objetoAux = {} //guarda los nombres de las habilidades asociadas a los IDs de lospersonajes
-
+  let nombresMultiplicadores = {}
   const [arrayTurnos, setArrayTurnos] = useState(["Robotin", "URL", "Boss", "Robotin", "URL", "Boss", "Robotin", "URL", "Boss", "Robotin", "URL", "Boss",])
   const iconoVolver = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTMuNDI3IDMuMDIxaC03LjQyN3YtMy4wMjFsLTYgNS4zOSA2IDUuNjF2LTNoNy40MjdjMy4wNzEgMCA1LjU2MSAyLjM1NiA1LjU2MSA1LjQyNyAwIDMuMDcxLTIuNDg5IDUuNTczLTUuNTYxIDUuNTczaC03LjQyN3Y1aDcuNDI3YzUuODQgMCAxMC41NzMtNC43MzQgMTAuNTczLTEwLjU3M3MtNC43MzMtMTAuNDA2LTEwLjU3My0xMC40MDZ6Ii8+PC9zdmc+"
   const navegar = useNavigate();
@@ -41,6 +42,7 @@ const Nivel = () => {
     personaje_Id: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [multiplicadoresHabilidades, setMultiplicadoresHabilidades] = useState({});
   const [personajeActivoId, setPersonajeActivoId] = useState(0);
   const [personajes, setPersonajes] = useState([]);
 
@@ -48,30 +50,39 @@ const Nivel = () => {
     setPersonajeActivoId(id);
   }
   
-  const ejecutarHabilidad = (id, tipo, nombre) => {
-    const cantidad = 0
+  const ejecutarHabilidad = (id, tipo, nombre, multiplicadores, infoPersonajes) => {
+    let cantidad = 0
+    let multiplicador = multiplicadores[nombre]
+
     if (tipo === "boss") {
       cantidad = infoBoss.ataque * multiplicador
       
       cambiarVidaPersonaje(id, tipo, cantidad);
-    } else {
-      cantidad = infoCajaAcciones.infoPersonajes.map(personaje => personaje.id === id ? personaje.ataque : null) * multiplicador
+    } else {  
+      cantidad = infoPersonajes
+        .filter((personaje) => personaje.id === id)
+        .map((personaje) => personaje.ataque * multiplicador)
+        .find((valor) => valor !== null);
+
+      console.log("CANTIDAD", cantidad)
+      console.log("BOSS ID: ", localStorage.getItem("bossId"))
 
       cambiarVidaPersonaje(localStorage.getItem("bossId"), tipo, cantidad)
     }
   }
 
   const cambiarVidaPersonaje = (id, tipo, cantidad) => { //FALTA TESTEAR
-    if (tipo === "boss") {
+    console.log("PARAMETROS CAMBIAR VIDA: ", id, tipo, cantidad)
 
+    if (tipo === "boss") {
       setInfoCajaAcciones({
         ...infoCajaAcciones,
         infoPersonajes: infoCajaAcciones.infoPersonajes.map(personaje => personaje.id === id ? {...personaje, vida: personaje.vida - cantidad} : personaje),
       })
 
       setVidaActualPersonaje(infoCajaAcciones.infoPersonajes.map(personaje => personaje.id === id ? personaje.vida - cantidad : personaje.vida));
-    } else if (tipo === "personaje") {
-      setVidaActualBoss(vidaActualBoss - cantidad);
+    } else {
+      setVidaActualBoss((prevState) => prevState - cantidad);
     }
   }
 
@@ -82,7 +93,7 @@ const Nivel = () => {
     descripcionHechizos: [],
     descripcionObjetos: [],
     funciones: {
-      habilidades: [() => {console.log("Habilidad 1")}, () => {console.log("Habilidad 2")}, () => {console.log("Habilidad 3")}, () => {console.log("Habilidad 4")}],
+      habilidades: ejecutarHabilidad,
       objetos: [() => {console.log("Objeto 1")}, () => {console.log("Objeto 2")}, () => {console.log("Objeto 3")}, () => {console.log("Objeto 4")}, () => {console.log("Objeto 5")}, () => {console.log("Objeto 6")}],
       personajes: cambiarPersonajeActivo,
       hechizos: [() => {console.log("Hechizo 1")}, () => {console.log("Hechizo 2")}]
@@ -167,9 +178,6 @@ const Nivel = () => {
         }))
       }
 
-      console.log("NOMBRES HABILIDADES", infoCajaAcciones.nombresHabilidades);
-      console.log("PERSONAJE ACTIVO ID: ", personajeActivoId);
-
       for (const personajeId in habilidadesDePersonajes) {
         objetoAux[personajeId] = cambiarNumerosPorNombres(habilidadesDePersonajes[personajeId], nombresHabilidades);
       }
@@ -250,7 +258,12 @@ const Nivel = () => {
         imagenesHechizos: obtenerImagen(hechizosResponse.data)
       }))
 
-      console.log("FINAL DEL TRY DE FETCHDATA.")
+      HabilidadService.GetAll().then((response) => {
+        setMultiplicadoresHabilidades(nombresMultiplicadores = response.data.reduce((obj, item) => {
+          obj[item.nombre] = item.multiplicador;
+          return obj;
+        }, {}))
+      })
 
     } catch (error) {
       console.error("Hubo un error al obtener la información.", error);
@@ -287,7 +300,6 @@ const Nivel = () => {
 
   useEffect(() => {
     fetchData()
-    
   }, [])
 
   useEffect(() => {
@@ -318,25 +330,29 @@ const Nivel = () => {
     }
   
   }, [infoCajaAcciones.infoPersonajes, personajeActivoId]);
-
+  
   return (
     <div>
       {loading ? (
-        // Muestra la pantalla de carga
         <div className="load-page">
           <div className="spinner"></div>
         </div>
       ) : (
-        // Muestra el contenido cuando las llamadas a los servicios han terminado
-        <div style={mundoBGStyle}>
-          <img className='boton-nivel-volver' src={iconoVolver} alt="Botón volver" onClick={regresarMenu} />
-          <BarraTurnos arrayTurnos={arrayTurnos} />
-          <div className="mundo-center">
-            <Personaje nombre={infoBoss.nombre} imagen={infoBoss.imagen} vidaMaxima={infoBoss.vida} vidaActual={vidaActualBoss} categoria={"boss"}/>
-            <Personaje nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")} imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")} vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")} vidaActual={vidaActualPersonaje} categoria={"personaje"}/>
-            <CajaAcciones infoCajaAcciones={infoCajaAcciones} mostrarNotificacion={mostrarNotificacion}/>
-            <NotificacionAccion tipoAccion={notificacionTipo} eleccion={notificacionEleccion} visible={notificacionVisible} />
-          </div>
+        <div>
+          {vidaActualBoss <= 0 ? (
+            <FinNivel resultado={"victoria"} />
+          ) : (
+            <div style={mundoBGStyle}>
+              <img className='boton-nivel-volver' src={iconoVolver} alt="Botón volver" onClick={regresarMenu} />
+              <BarraTurnos arrayTurnos={arrayTurnos} />
+              <div className="mundo-center">
+                <Personaje nombre={infoBoss.nombre} imagen={infoBoss.imagen} vidaMaxima={infoBoss.vida} vidaActual={vidaActualBoss} categoria={"boss"}/>
+                <Personaje nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")} imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")} vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")} vidaActual={vidaActualPersonaje} categoria={"personaje"}/>
+                <CajaAcciones infoCajaAcciones={infoCajaAcciones} mostrarNotificacion={mostrarNotificacion} personajeActivoId={personajeActivoId} multiplicadores={multiplicadoresHabilidades}/>
+                <NotificacionAccion tipoAccion={notificacionTipo} eleccion={notificacionEleccion} visible={notificacionVisible} />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

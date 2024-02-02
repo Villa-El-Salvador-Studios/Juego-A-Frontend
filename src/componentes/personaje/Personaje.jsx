@@ -8,18 +8,13 @@ const Personaje = ({nombre, imagen, vidaMaxima, vidaActual, categoria}) => {
     return (
         <div className="personaje">
             <h1 className='mundo-title'>{nombre}</h1>
+            <progress className='mundo-vida-progress' value={vidaActual} max={vidaMaxima}></progress>
             <div className="contenedor-personaje">
                 <img
                 className={categoria === 'boss' ? 'mundo-boss' : 'mundo-personaje'}
                 src={imagen}
                 alt={`Imagen de ${nombre}`}
                 />
-                <div style={{
-                                height: alturaBarraVidaCSS, // Establece la altura de la barra de vida proporcional al valor de vida
-                                backgroundColor: 'green', // Color verde para la barra de vida
-                                width: '10px', // Ancho de la barra de vida
-                                marginLeft: '10px', // Espacio entre la imagen y la barra de vida
-                            }}></div>
             </div>
         </div>
     )

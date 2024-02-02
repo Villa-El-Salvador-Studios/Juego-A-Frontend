@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
-const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion}) => {
+const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [tipoAccion, setTipoAccion] = useState(null);
 
@@ -79,7 +79,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion}) => {
 
     return (
         <div className="caja-acciones">
-            <Acciones isOpen={isOpen} onClose={toggleAcciones} tipo={tipoAccion} informacion={informacionAcciones[tipoAccion]} abrirYCerrarAcciones={abrirYCerrarAcciones} mostrarNotificacion={mostrarNotificacion}/>
+            <Acciones isOpen={isOpen} onClose={toggleAcciones} tipo={tipoAccion} informacion={informacionAcciones[tipoAccion]} infoPersonajes={infoCajaAcciones.infoPersonajes} abrirYCerrarAcciones={abrirYCerrarAcciones} mostrarNotificacion={mostrarNotificacion} personajeActivoId={personajeActivoId} multiplicadores={multiplicadores}/>
             <div className="caja-acciones-grid">
                 <button onClick={() => toggleAcciones('Habilidades')}>{infoCajaAcciones.textoList[0]}</button>
                 <button onClick={() => toggleAcciones('Objetos')}>{infoCajaAcciones.textoList[1]}</button>
