@@ -6,7 +6,8 @@ const BotonSeleccionarNivel = ({cantidad}) => {
 
     const entrarANivel = (nivel) => {
         localStorage.setItem('nivel', nivel);
-        navegar('/nivel')
+
+        navegar('/nivel');
     }
 
     const botones = [...Array(cantidad)].map((_, index) => (

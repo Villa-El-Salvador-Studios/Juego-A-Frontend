@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Personaje from "../../componentes/personaje/Personaje";
 import BarraTurnos from "../../componentes/barraTurnos/BarraTurnos";
 import CajaAcciones from "../../componentes/cajaAcciones/CajaAcciones";
-import FinNivel from "../../componentes/fin-nivel/FinNivel";
 import NotificacionAccion from "../../componentes/notificacionAccion/NotificacionAccion";
 import MundoService from "../../services/mundo-service";
 import PersonajeService from "../../services/personaje-service";
@@ -17,7 +16,6 @@ const Nivel = () => {
   let habilidadesDePersonajes = {}
   let mundoId = Number(localStorage.getItem("nivel"));
   let objetoAux = {} //guarda los nombres de las habilidades asociadas a los IDs de lospersonajes
-  let nombresMultiplicadores = {}
   const [arrayTurnos, setArrayTurnos] = useState(["Robotin", "URL", "Boss", "Robotin", "URL", "Boss", "Robotin", "URL", "Boss", "Robotin", "URL", "Boss",])
   const iconoVolver = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTMuNDI3IDMuMDIxaC03LjQyN3YtMy4wMjFsLTYgNS4zOSA2IDUuNjF2LTNoNy40MjdjMy4wNzEgMCA1LjU2MSAyLjM1NiA1LjU2MSA1LjQyNyAwIDMuMDcxLTIuNDg5IDUuNTczLTUuNTYxIDUuNTczaC03LjQyN3Y1aDcuNDI3YzUuODQgMCAxMC41NzMtNC43MzQgMTAuNTczLTEwLjU3M3MtNC43MzMtMTAuNDA2LTEwLjU3My0xMC40MDZ6Ii8+PC9zdmc+"
   const navegar = useNavigate();
@@ -110,7 +108,7 @@ const Nivel = () => {
   const [notificacionEleccion, setNotificacionEleccion] = useState('');
   const [notificacionTipo, setNotificacionTipo] = useState('');
   const [notificacionVisible, setNotificacionVisible] = useState(false);
-  const [vidaActualBoss, setVidaActualBoss] = useState(0);
+  const [vidaActualBoss, setVidaActualBoss] = useState(1);
   const [vidaActualPersonaje, setVidaActualPersonaje] = useState(0);
 
   const cambiarNumerosPorNombres = (arrayDeNumeros, nombresDeHabilidades) => {
@@ -222,8 +220,9 @@ const Nivel = () => {
       localStorage.setItem("bossId", nivelResponse.data.personaje_Id);
 
       let personajeId = localStorage.getItem("bossId");
-      const bossResponse = await PersonajeService.GetById(personajeId);
-      setInfoBoss(bossResponse.data);
+      PersonajeService.GetById(personajeId).then((response) => {
+        setInfoBoss(response.data);
+      })
 
       const persojeResponse = await PersonajeService.GetByJugadorId(localStorage.getItem("jugadorId"))
 
@@ -257,6 +256,8 @@ const Nivel = () => {
         descripcionHechizos: obtenerDescripciones(hechizosResponse.data),
         imagenesHechizos: obtenerImagen(hechizosResponse.data)
       }))
+      
+      let nombresMultiplicadores = {};
 
       HabilidadService.GetAll().then((response) => {
         setMultiplicadoresHabilidades(nombresMultiplicadores = response.data.reduce((obj, item) => {
@@ -307,7 +308,7 @@ const Nivel = () => {
   }, [personajes])
   
   useEffect(() => {
-    setVidaActualBoss(infoBoss.vida);
+      setVidaActualBoss(infoBoss.vida);
   }, [infoBoss])
 
   useEffect(() => {
@@ -330,7 +331,15 @@ const Nivel = () => {
     }
   
   }, [infoCajaAcciones.infoPersonajes, personajeActivoId]);
-  
+
+  useEffect(() => {
+    console.log("VIDA ACTUAL BOSS 1: ", vidaActualBoss)
+    if (vidaActualBoss <= 0 && loading === false) {
+      console.log("VIDA ACTUAL BOSS 2: ", vidaActualBoss)
+      navegar('/finNivel/victoria');
+    }
+  }, [vidaActualBoss])
+
   return (
     <div>
       {loading ? (
@@ -338,10 +347,6 @@ const Nivel = () => {
           <div className="spinner"></div>
         </div>
       ) : (
-        <div>
-          {vidaActualBoss <= 0 ? (
-            <FinNivel resultado={"victoria"} />
-          ) : (
             <div style={mundoBGStyle}>
               <img className='boton-nivel-volver' src={iconoVolver} alt="Botón volver" onClick={regresarMenu} />
               <BarraTurnos arrayTurnos={arrayTurnos} />
@@ -353,8 +358,6 @@ const Nivel = () => {
               </div>
             </div>
           )}
-        </div>
-      )}
     </div>
   );
 };

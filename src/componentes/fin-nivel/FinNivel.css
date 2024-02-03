@@ -4,12 +4,12 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: linear-gradient(180deg, #fdf2c5, #82bfa0);
 }
 .finNivel-titulo {
     animation: animacion-prueba 1s ease-in-out;
-    font-size: 20vmin;
+    font-size: 18vmin;
     margin-top: 0;
+    text-align: center;
 }
 @keyframes animacion-prueba {
     0% {
