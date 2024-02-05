@@ -8,6 +8,7 @@ import SelectorNiveles from '../paginas/selector-niveles/SelectorNiveles';
 import CreacionPersonaje from '../paginas/creacionPersonaje/creacion-personaje';
 import Nivel from '../paginas/nivel/Nivel';
 import FinNivel from '../componentes/fin-nivel/FinNivel';
+import SeleccionarNuevoPersonaje from '../paginas/seleccionar-nuevo-personaje/seleccionarNuevoPersonaje';
 
 const AppRouter = () => {
     return (
@@ -22,6 +23,7 @@ const AppRouter = () => {
                 <Route path='/nivel' element={<Nivel />}></Route>
                 <Route path='/creacion-personaje' element={<CreacionPersonaje />}></Route>
                 <Route path='/finNivel/:resultado' element={<FinNivel />}></Route>
+                <Route path='/seleccionar-nuevo-personaje' element={<SeleccionarNuevoPersonaje />}></Route>
 
                 <Route path="*" element={<Navigate to="/home" />} />
             </Routes>

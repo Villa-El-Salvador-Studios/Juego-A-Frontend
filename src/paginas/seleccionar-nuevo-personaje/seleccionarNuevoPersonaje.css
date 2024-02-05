@@ -1,31 +1,22 @@
-.finNivel {
+.SNP {
     display: flex;
+    background: linear-gradient(180deg, #fdf2c5, #82bfa0);
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     height: 100vh;
 }
-.finNivel-titulo {
-    animation: animacion-prueba 1s ease-in-out;
-    font-size: 18vmin;
+.SNP-titulo {
+    font-size: 8vmin;
     margin-top: 0;
     margin-bottom: 0;
-    text-align: center;
 }
-@keyframes animacion-prueba {
-    0% {
-        scale: 0;
-    }
-    100% {
-        scale: 1;
-    }
-}
-.finNivel-botones {
+.SNP-botones {
     display: flex;
     justify-content: center;
     gap: 10vmin;
 }
-.finNivel-botones-accion {
+.SNP-boton {
     background-color: #998496;
     height: 10vh;
     width: 20vw;
@@ -34,13 +25,8 @@
     border-radius: 10px;
     transition: all .3s ease-in-out;
 }
-.finNivel-botones-accion:hover{
+.SNP-boton:hover{
     background-color: #79254a;
     transform: scale(1.1);
     color: #998496;
-}
-.finNivel-subtitulo {
-    animation: animacion-prueba 1s ease-in-out;
-    font-size: 7vmin;
-    text-align: center;
 }

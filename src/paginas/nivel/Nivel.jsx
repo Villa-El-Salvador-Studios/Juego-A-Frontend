@@ -350,6 +350,10 @@ const Nivel = () => {
             <div style={mundoBGStyle}>
               <img className='boton-nivel-volver' src={iconoVolver} alt="Botón volver" onClick={regresarMenu} />
               <BarraTurnos arrayTurnos={arrayTurnos} />
+
+              {/*BORRAR BOTON ELIMNAR BOSS*/}
+              <button onClick={() => setVidaActualBoss(0)}>Eliminar boss</button>
+              
               <div className="mundo-center">
                 <Personaje nombre={infoBoss.nombre} imagen={infoBoss.imagen} vidaMaxima={infoBoss.vida} vidaActual={vidaActualBoss} categoria={"boss"}/>
                 <Personaje nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")} imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")} vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")} vidaActual={vidaActualPersonaje} categoria={"personaje"}/>

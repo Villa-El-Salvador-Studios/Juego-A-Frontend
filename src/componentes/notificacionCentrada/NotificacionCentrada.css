@@ -1,0 +1,32 @@
+.notificacion-centrada {
+    background-color: #82bfa167;
+    backdrop-filter: blur(10px);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    text-align: center;
+}
+.notificacion-centrada-titulo {
+    font-size: 4vmin;
+}
+.notificacion-centrada-botones {
+    display: flex;
+    justify-content: center;
+    gap: 10vmin;
+}
+.notificacion-centrada-boton {
+    background-color: #998496;
+    height: 5vh;
+    width: 10vw;
+    font-size:3vmin;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all .3s ease-in-out;
+}
+.notificacion-centrada-boton:hover{
+    background-color: #79254a;
+    transform: scale(1.1);
+    color: #998496;
+}

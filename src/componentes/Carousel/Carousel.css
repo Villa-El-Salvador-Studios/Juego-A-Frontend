@@ -23,4 +23,6 @@
 }
 .carousel-image{
     width: 40vmin;
+}.no-elements {
+    font-size: 5vmin;
 }

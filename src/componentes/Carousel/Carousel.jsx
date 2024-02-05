@@ -3,7 +3,6 @@ import './Carousel.css';
 
 const Carousel = ({images, onIndexChange}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    let auxIndex = 1;
 
     const goToPreviousSlide = () => {
         setCurrentIndex((prevIndex) =>
@@ -21,7 +20,13 @@ const Carousel = ({images, onIndexChange}) => {
         onIndexChange(updatedIndex);
     };
 
-    return (
+    return images.names.length === 0 ? (
+        <div>
+            <h1 className="no-elements">No hay elementos para mostrar</h1>
+        </div>
+    )
+    :
+    (
         <div className="carousel">
             <button className="carousel-button" onClick={goToPreviousSlide}>&lt;</button>
             <h3>{images.names[currentIndex]}</h3>
