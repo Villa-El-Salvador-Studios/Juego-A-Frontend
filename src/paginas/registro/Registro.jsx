@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Toolbar from "../../componentes/toolbar/Toolbar"
 import LlenarInformacion from "../../componentes/llenar-informacion/Llenar-informacion"
 import JugadorService from "../../services/jugador-service"
@@ -10,6 +11,7 @@ import "./Registro.css"
 
 const Registro = () => {
     const [informacion, setInformacion] = useState({});
+    const navegar = useNavigate();
 
     const onInputChange = (campo, valor) => {
         setInformacion({
@@ -60,7 +62,7 @@ const Registro = () => {
             "usuario": informacion.Usuario.toLowerCase(),
             "contrasenia": informacion.Contraseña.toLowerCase(),
             "fotoPerfil": "string",
-            "mundoMaximo": 0
+            "mundoMaximo": 1
         }
 
         const usuario = {
@@ -106,6 +108,8 @@ const Registro = () => {
 
                 // Mostrar notificación de éxito
                 toast.success('Cuenta creada exitosamente');
+
+                navegar('/inicio-sesion');
             })
             .catch(error => {
                 // Mostrar notificación de error genérica
