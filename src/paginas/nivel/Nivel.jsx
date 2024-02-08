@@ -17,6 +17,10 @@ const Nivel = () => {
   let habilidadesDePersonajes = {}
   let mundoId = Number(localStorage.getItem("nivel"));
   let objetoAux = {} //guarda los nombres de las habilidades asociadas a los IDs de lospersonajes
+  let arrayNombresHabilidades = []
+  let objetoMultiplicadoresHabilidades = {}
+  let objetoInfoBoss = {}
+  let variablePersonajeActivoId = 0
 
   const iconoVolver = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTMuNDI3IDMuMDIxaC03LjQyN3YtMy4wMjFsLTYgNS4zOSA2IDUuNjF2LTNoNy40MjdjMy4wNzEgMCA1LjU2MSAyLjM1NiA1LjU2MSA1LjQyNyAwIDMuMDcxLTIuNDg5IDUuNTczLTUuNTYxIDUuNTczaC03LjQyN3Y1aDcuNDI3YzUuODQgMCAxMC41NzMtNC43MzQgMTAuNTczLTEwLjU3M3MtNC43MzMtMTAuNDA2LTEwLjU3My0xMC40MDZ6Ii8+PC9zdmc+"
   const navegar = useNavigate();
@@ -48,29 +52,33 @@ const Nivel = () => {
 
   const cambiarPersonajeActivo = (id) => {
     setPersonajeActivoId(id);
+    variablePersonajeActivoId = id
   }
   
-  const ejecutarHabilidad = (id, tipo, nombreHabilidad, multiplicadores, infoPersonajes) => {
+  const ejecutarHabilidad = (id, tipo, nombreHabilidad, multiplicadores, infoPersonajes, infoBoss) => {
     let cantidad = 0
     let multiplicador = multiplicadores[nombreHabilidad]
 
+    console.log("PERSONAJE ACTIVO ID: ", id)
     console.log("MULTIPLICADORES: ", multiplicadores)
-    console.log("NOMBRE HABILIDAD", nombreHabilidad)
+    console.log("NOMBRE HABILIDAD: ", nombreHabilidad)
     console.log("MULTIPLICADOR: ", multiplicador)
 
     if (tipo === "boss") {
       console.log("ATAQUE BOSS: ", infoBoss.ataque)
-      cantidad = infoBoss.ataque * multiplicador
+      cantidad = Math.round(infoBoss.ataque * multiplicador)
       console.log("CANTIDAD: ", cantidad)
       
-      cambiarVidaPersonaje(id, tipo, cantidad);
-    } else {  
+      cambiarVidaPersonaje(id, tipo, cantidad)
+    } else {
       cantidad = infoPersonajes
         .filter((personaje) => personaje.id === id)
         .map((personaje) => personaje.ataque * multiplicador)
         .find((valor) => valor !== null);
 
       cambiarVidaPersonaje(localStorage.getItem("bossId"), tipo, cantidad)
+
+      setTurnoJugador(false)
     }
   }
 
@@ -78,12 +86,13 @@ const Nivel = () => {
     console.log("PARAMETROS CAMBIAR VIDA: ", id, tipo, cantidad)
 
     if (tipo === "boss") {
-      setInfoCajaAcciones({
-        ...infoCajaAcciones,
-        infoPersonajes: infoCajaAcciones.infoPersonajes.map(personaje => personaje.id === id ? {...personaje, vida: personaje.vida - cantidad} : personaje),
-      })
-
-      setVidaActualPersonaje(infoCajaAcciones.infoPersonajes.map(personaje => personaje.id === id ? personaje.vida - cantidad : personaje.vida));
+      // Actualizar el estado de vidaActualPersonajeActivo para restar cantidad al valor asociado a id
+      setVidaActualPersonajeActivo(prevState => {
+        return {
+          ...prevState, // Copiar el estado anterior
+          [id]: prevState[id] - cantidad // Restar cantidad al valor asociado a id
+        };
+      });
     } else {
       setVidaActualBoss((prevState) => prevState - cantidad);
     }
@@ -115,7 +124,7 @@ const Nivel = () => {
   const [notificacionVisible, setNotificacionVisible] = useState(false);
   const [turnoJugador, setTurnoJugador] = useState(false);
   const [vidaActualBoss, setVidaActualBoss] = useState(1);
-  const [vidaActualPersonaje, setVidaActualPersonaje] = useState(0);
+  const [vidaActualPersonajeActivo, setVidaActualPersonajeActivo] = useState({});
 
   const cambiarNumerosPorNombres = (arrayDeNumeros, nombresDeHabilidades) => {
     return arrayDeNumeros.map((numero) => nombresDeHabilidades[numero]);
@@ -219,73 +228,113 @@ const Nivel = () => {
     return jsonArray ? jsonArray.map(obj => obj.id) : [];
   }
 
+  let iteracionFetchData = 1
+
   const fetchData = async () => {
     try {
-      MundoService.GetById(mundoId)
-        .then((response) => {
-          setInfoNivel(response.data);
-          localStorage.setItem("bossId", response.data.personaje_Id);
+      //JALA LA INFORMACION DEL MUNDO
+      const mundoResponse = await MundoService.GetById(mundoId);
+      const response = mundoResponse.data;
 
-          let personajeId = localStorage.getItem("bossId");
-          PersonajeService.GetById(personajeId).then((response) => {
-            setInfoBoss(response.data);
+      setInfoNivel(response);
 
-            const nuevoArray = [...arrayTurnos];
+      localStorage.setItem("bossId", response.personaje_Id);
 
-            nuevoArray.push(response.data.nombre);
+      let bossId = localStorage.getItem("bossId");
+      const bossResponse = await PersonajeService.GetById(bossId);
+      const bossData = bossResponse.data;
 
-            setArrayTurnos(nuevoArray);
-          })
-      })      
+      setInfoBoss(bossData)
+      objetoInfoBoss = bossData
 
-      const persojeResponse = await PersonajeService.GetByJugadorId(localStorage.getItem("jugadorId"))
+      //SETEAR EL ARRAY DE TURNOS
+      const nuevoArray = [...arrayTurnos];
+      nuevoArray.push(bossData.nombre);
+      setArrayTurnos(nuevoArray);
 
-      PersonajeService.GetByJugadorId(localStorage.getItem("jugadorId"))
-        .then((response) => {
-          setPersonajes(obtenerPersonajesIds(response.data))
-        })
+      //JALAR LA INFORMACIÓN DEL BOSS
+      const habilidadPersonajeResponse = await HabilidadPersonajeService.GetByPersonajeId(bossId);
+      const habilidadPersonajeData = habilidadPersonajeResponse.data;
+
+      setBossHabilidadIds(habilidadPersonajeData.map(habilidadPersonaje => habilidadPersonaje.habilidadId));
+
+      const arrayBossHIDs = habilidadPersonajeData.map(habilidadPersonaje => habilidadPersonaje.habilidadId);
+
+      for (let i = 0; i < arrayBossHIDs.length; i++) {
+        const habilidadResponse = await HabilidadService.GetByHabilidadId(arrayBossHIDs[i]);
+
+        const nombreHabilidad = habilidadResponse.data.nombre;
+
+        // Verificar si el nombre de la habilidad ya está en el arreglo
+        if (!arrayNombresHabilidades.includes(nombreHabilidad)) {
+            arrayNombresHabilidades.push(nombreHabilidad);
+        }
+      }
+
+      setBossNombresHabilidades(arrayNombresHabilidades)
+
+      //JALAR LA INFORMACION DEL JUGADOR
+      const personajeResponse = await PersonajeService.GetByJugadorId(localStorage.getItem("jugadorId"));
+      setPersonajes(obtenerPersonajesIds(personajeResponse.data));
+      variablePersonajeActivoId = personajeResponse.data[0].id
 
       setInfoCajaAcciones(prevState => ({
         ...prevState,
-        infoPersonajes: persojeResponse.data,
-        imagenesPersonajes: obtenerImagen(persojeResponse.data)
-      }))
+        infoPersonajes: personajeResponse.data,
+        imagenesPersonajes: obtenerImagen(personajeResponse.data)
+      }));
 
-      let personajesId = persojeResponse.data.map(personaje => personaje.id);
+      // Creamos un objeto para almacenar las vidas actuales de los personajes activos
+      const vidaActual = {};
+      // Iteramos sobre cada objeto en personajeResponse y extraemos id y vida
+      personajeResponse.data.forEach(personaje => {
+        vidaActual[personaje.id] = personaje.vida;
+      });
+      // Actualizamos el estado con las vidas actuales
+      setVidaActualPersonajeActivo(vidaActual);
+
+      let personajesId = personajeResponse.data.map(personaje => personaje.id);
       obtenerHabilidades(personajesId);
-      
 
+      //JALAR LA INFORMACION DE LOS OBJETOS
       const objetosResponse = await ObjetoService.GetAll();
       setInfoCajaAcciones(prevState => ({
         ...prevState,
         nombreObjetos: obtenerNombres(objetosResponse.data),
         descripcionObjetos: obtenerDescripciones(objetosResponse.data),
         imagenesObjetos: obtenerImagen(objetosResponse.data)
-      }))
+      }));
 
+      //JALAR LA INFORMACION DE LOS HECHIZOS
       const hechizosResponse = await HechizoService.GetAll();
       setInfoCajaAcciones(prevState => ({
         ...prevState,
         nombreHechizos: obtenerNombres(hechizosResponse.data),
         descripcionHechizos: obtenerDescripciones(hechizosResponse.data),
         imagenesHechizos: obtenerImagen(hechizosResponse.data)
-      }))
-      
-      let nombresMultiplicadores = {};
+      }));
 
-      HabilidadService.GetAll().then((response) => {
-        setMultiplicadoresHabilidades(nombresMultiplicadores = response.data.reduce((obj, item) => {
-          obj[item.nombre] = item.multiplicador;
-          return obj;
-        }, {}))
-      })
+      //JALAR LA INFORMACION DE LAS HABILIDADES
+      const habilidadesResponse = await HabilidadService.GetAll();
+      setMultiplicadoresHabilidades(habilidadesResponse.data.reduce((obj, item) => {
+        obj[item.nombre] = item.multiplicador;
+        return obj;
+      }, {}));
 
+      objetoMultiplicadoresHabilidades = habilidadesResponse.data.reduce((obj, item) => {
+        obj[item.nombre] = item.multiplicador;
+        return obj;
+      }, {})
+
+      // Al final de fetchData, retorna una promesa resuelta
+      return Promise.resolve();
     } catch (error) {
       console.error("Hubo un error al obtener la información.", error);
     } finally {
       setLoading(false);
     }
   }
+
 
   // Función para buscar la información de un personaje por su id
   const findCharacterByPlayerId = (jsonArray, id, objetivo) => {
@@ -328,35 +377,26 @@ const Nivel = () => {
   const [bossHabilidadIds, setBossHabilidadIds] = useState([]);
   const [bossNombresHabilidades, setBossNombresHabilidades] = useState([]);
 
+  let iteracion = 1
+  
+  const ejecutarTurno = (tiempo) => {
+    if (iteracion % 2 !== 0) {
+      if (turnoJugador === true) {
 
-  const comenzarJuego = () => {
-    if (turnoJugador === true) {
-
-    } else {
-      HabilidadPersonajeService.GetByPersonajeId(localStorage.getItem("bossId"))
-        .then((response) => {
-          // Obtener solo los "habilidadId" del response
-          setBossHabilidadIds(response.data.map((habilidad) => habilidad.habilidadId))
-        })
-        .then(() => {
-          console.log("BOSS HABILIDAD IDS: ", bossHabilidadIds)
-          for (let i = 0; i < bossHabilidadIds.length; i++) {
-            HabilidadService.GetByHabilidadId(bossHabilidadIds[i])
-              .then((response) => {
-                setBossNombresHabilidades(prevState => [...prevState, response.data.nombre])
-              })
-          }
-        })
-        .then(() => {
-          // Generar un índice aleatorio basado en la longitud del array
-          const indiceAleatorio = Math.floor(Math.random() * bossNombresHabilidades.length);
-          
-          // Obtener el nombre de habilidad correspondiente al índice aleatorio
-          const nombreAleatorio = bossNombresHabilidades[indiceAleatorio];
-
-          ejecutarHabilidad(personajeActivoId, "boss", nombreAleatorio, multiplicadoresHabilidades, infoCajaAcciones.infoPersonajes)
-        })
+      } else {
+        const indice = Math.floor(Math.random() * arrayNombresHabilidades.length);
+  
+        const habilidadElegida = arrayNombresHabilidades[indice];
+  
+        // Llamar a ejecutarHabilidad después de 2 segundos
+        setTimeout(() => {
+          ejecutarHabilidad(variablePersonajeActivoId, "boss", habilidadElegida, objetoMultiplicadoresHabilidades, {}, objetoInfoBoss);
+          setTurnoJugador(true);
+        }, tiempo); // El tiempo se especifica en milisegundos, por lo que 2000 ms equivalen a 2 segundos
+      }
     }
+    
+    iteracion++
   }
 
   const mundoBGStyle = {
@@ -368,8 +408,17 @@ const Nivel = () => {
   };
 
   useEffect(() => {
+    const startTime = performance.now();
+
     fetchData()
-  }, [])
+      .then(() => {
+        const endTime = performance.now(); // Registro del tiempo de finalización de fetchData
+        const tiempoTranscurrido = endTime - startTime; // Calculo del tiempo transcurrido
+        console.log(`fetchData terminado en ${tiempoTranscurrido} milisegundos.`);
+
+        ejecutarTurno(tiempoTranscurrido + 1000);
+      });
+  }, [turnoJugador]);
 
   useEffect(() => {
     setPersonajeActivoId(personajes[0])
@@ -380,10 +429,6 @@ const Nivel = () => {
   }, [infoBoss])
 
   useEffect(() => {
-    setVidaActualPersonaje(infoCajaAcciones.infoPersonajes[0]?.vida);
-  }, [])
-
-  useEffect(() => {
     setInfoCajaAcciones(prevState => ({
       ...prevState,
       idsPersonajes: personajes,
@@ -392,24 +437,11 @@ const Nivel = () => {
   }, [personajeActivoId, personajes]);
 
   useEffect(() => {
-    // Este efecto se ejecutará cada vez que infoCajaAcciones.infoPersonajes cambie
-    if (infoCajaAcciones.infoPersonajes.length > 0) {
-      const vidaActual = obtenerPersonajePorId(infoCajaAcciones.infoPersonajes, personajeActivoId)?.vida;
-      setVidaActualPersonaje(vidaActual);
-    }
-  
-  }, [infoCajaAcciones.infoPersonajes, personajeActivoId]);
-
-  useEffect(() => {
     if (vidaActualBoss <= 0 && loading === false) {
       actualizarMundoMaximo()
       navegar('/finNivel/victoria');
     }
   }, [vidaActualBoss])
-
-  useEffect(() => {
-    comenzarJuego()
-  }, [turnoJugador, infoBoss])
 
   return (
     <div>
@@ -427,8 +459,8 @@ const Nivel = () => {
               
               <div className="mundo-center">
                 <Personaje nombre={infoBoss.nombre} imagen={infoBoss.imagen} vidaMaxima={infoBoss.vida} vidaActual={vidaActualBoss} categoria={"boss"}/>
-                <Personaje nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")} imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")} vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")} vidaActual={vidaActualPersonaje} categoria={"personaje"}/>
-                <CajaAcciones infoCajaAcciones={infoCajaAcciones} mostrarNotificacion={mostrarNotificacion} personajeActivoId={personajeActivoId} multiplicadores={multiplicadoresHabilidades}/>
+                <Personaje nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")} imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")} vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")} vidaActual={vidaActualPersonajeActivo[personajeActivoId]} categoria={"personaje"}/>
+                <CajaAcciones infoCajaAcciones={infoCajaAcciones} mostrarNotificacion={mostrarNotificacion} personajeActivoId={personajeActivoId} multiplicadores={multiplicadoresHabilidades} isTurnoJugador={turnoJugador} />
                 <NotificacionAccion tipoAccion={notificacionTipo} eleccion={notificacionEleccion} visible={notificacionVisible} />
               </div>
             </div>

@@ -6,6 +6,7 @@
     height: 15vmin;
     padding: 2vmin;
     border-radius: 10px 10px 0 0;
+    text-align: center;
 }
 .caja-acciones-grid {
     display: grid;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
-const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores}) => {
+const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [tipoAccion, setTipoAccion] = useState(null);
 
@@ -77,7 +77,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
         }));
     }, [infoCajaAcciones]);
 
-    return (
+    return isTurnoJugador ? (
         <div className="caja-acciones">
             <Acciones isOpen={isOpen} onClose={toggleAcciones} tipo={tipoAccion} informacion={informacionAcciones[tipoAccion]} infoPersonajes={infoCajaAcciones.infoPersonajes} abrirYCerrarAcciones={abrirYCerrarAcciones} mostrarNotificacion={mostrarNotificacion} personajeActivoId={personajeActivoId} multiplicadores={multiplicadores}/>
             <div className="caja-acciones-grid">
@@ -86,6 +86,10 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
                 <button onClick={() => toggleAcciones('Personajes')}>{infoCajaAcciones.textoList[2]}</button>
                 <button onClick={() => toggleAcciones('Hechizos')}>{infoCajaAcciones.textoList[3]}</button>
             </div>
+        </div>
+    ) : (
+        <div className="caja-acciones">
+            <h1>Es el turno del boss.</h1>
         </div>
     )
 }

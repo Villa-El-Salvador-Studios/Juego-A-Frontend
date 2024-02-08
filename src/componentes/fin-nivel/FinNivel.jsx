@@ -12,6 +12,11 @@ const FinNivel = () => {
         let nivelActual = Number(localStorage.getItem('nivel'))
         localStorage.setItem('nivel', (nivelActual + 1));
 
+        let bossActual = Number(localStorage.getItem('boss'))
+        localStorage.setItem('boss', (bossActual + 1));
+
+        console.log("BOSS ID: ", localStorage.getItem('boss'))
+
         navigate('/nivel');
     }
 
