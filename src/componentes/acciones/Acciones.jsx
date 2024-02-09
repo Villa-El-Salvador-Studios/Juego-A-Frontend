@@ -1,9 +1,10 @@
+import { useEffect } from 'react';
 import './Acciones.css';
 
-const Acciones = ({isOpen, onClose, tipo, informacion, infoPersonajes, abrirYCerrarAcciones, mostrarNotificacion, personajeActivoId, multiplicadores}) => {
+const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion, ejecutarHabilidad}) => {
     const handleClick = (nombre, index) => {
         if (tipo === "Habilidades") {
-            informacion.funciones(personajeActivoId, "personaje", nombre, multiplicadores, infoPersonajes);
+            ejecutarHabilidad("personaje", nombre);
         } else if (tipo === "Personajes") {
             informacion.funciones(informacion.ids[index]);
         }
@@ -11,7 +12,7 @@ const Acciones = ({isOpen, onClose, tipo, informacion, infoPersonajes, abrirYCer
         mostrarNotificacion(tipo.toLowerCase(), nombre);
         abrirYCerrarAcciones();
     };
-    
+
     return isOpen ? (
         <div className="acciones">
             <h1 className='acciones-titulo'>{tipo}</h1>

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
-const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador}) => {
+const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [tipoAccion, setTipoAccion] = useState(null);
 
@@ -44,6 +44,47 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
         setTipoAccion(tipo);
     }
 
+    const ejecutarHabilidad = (tipo, nombreHabilidad) => {
+        let cantidad = 0
+        let multiplicador = multiplicadores[nombreHabilidad]
+
+        console.log("PERSONAJE ACTIVO ID: ", personajeActivoId)
+        console.log("MULTIPLICADORES: ", multiplicadores)
+        console.log("NOMBRE HABILIDAD: ", nombreHabilidad)
+        console.log("MULTIPLICADOR: ", multiplicador)
+
+        if (tipo === "boss") {
+            console.log("ATAQUE BOSS: ", infoBoss.ataque)
+            cantidad = Math.round(infoBoss.ataque * multiplicador)
+            console.log("CANTIDAD: ", cantidad)
+            
+            cambiarVida(personajeActivoId, tipo, cantidad)
+
+            cambiarTurno(true)
+        } else {
+            cantidad = infoCajaAcciones.infoPersonajes
+            .filter((personaje) => personaje.id === personajeActivoId)
+            .map((personaje) => personaje.ataque * multiplicador)
+            .find((valor) => valor !== null);
+
+            cambiarVida(localStorage.getItem("bossId"), tipo, cantidad)
+
+            cambiarTurno(false)
+        }
+    }
+
+    const cambiarVida = (id, tipo, cantidad) => { //FALTA TESTEAR
+        console.log("PARAMETROS CAMBIAR VIDA: ", id, tipo, cantidad)
+    
+        if (tipo === "boss") {
+            const nuevaVidaPersonaje = vidaActualPersonajeActivo - cantidad
+            cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
+        } else {
+            const nuevaVidaBoss = vidaActualBoss - cantidad
+            cambiarVidaBoss(nuevaVidaBoss)
+        }
+    }
+
     useEffect(() => {
         // Actualizar datos de caja de acciones
         setInformacionAcciones(prevState => ({
@@ -77,9 +118,33 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
         }));
     }, [infoCajaAcciones]);
 
+    useEffect(() => {
+        console.log("EJECUTANDO TURNO: ", isTurnoJugador)
+
+        if (isTurnoJugador === false) {
+            let habilidadElegida = ""
+
+            const indice = Math.floor(Math.random() * bossNombresHabilidades.length);
+    
+            habilidadElegida = bossNombresHabilidades[indice];
+
+            ejecutarHabilidad("boss", habilidadElegida)
+        }
+    }, [isTurnoJugador])
+
     return isTurnoJugador ? (
         <div className="caja-acciones">
-            <Acciones isOpen={isOpen} onClose={toggleAcciones} tipo={tipoAccion} informacion={informacionAcciones[tipoAccion]} infoPersonajes={infoCajaAcciones.infoPersonajes} abrirYCerrarAcciones={abrirYCerrarAcciones} mostrarNotificacion={mostrarNotificacion} personajeActivoId={personajeActivoId} multiplicadores={multiplicadores}/>
+
+            <Acciones
+                isOpen={isOpen}
+                onClose={toggleAcciones}
+                tipo={tipoAccion}
+                informacion={informacionAcciones[tipoAccion]}
+                abrirYCerrarAcciones={abrirYCerrarAcciones}
+                mostrarNotificacion={mostrarNotificacion}
+                ejecutarHabilidad={ejecutarHabilidad}
+            />
+
             <div className="caja-acciones-grid">
                 <button onClick={() => toggleAcciones('Habilidades')}>{infoCajaAcciones.textoList[0]}</button>
                 <button onClick={() => toggleAcciones('Objetos')}>{infoCajaAcciones.textoList[1]}</button>

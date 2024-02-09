@@ -55,47 +55,21 @@ const Nivel = () => {
     variablePersonajeActivoId = id
   }
   
-  const ejecutarHabilidad = (id, tipo, nombreHabilidad, multiplicadores, infoPersonajes, infoBoss) => {
-    let cantidad = 0
-    let multiplicador = multiplicadores[nombreHabilidad]
-
-    console.log("PERSONAJE ACTIVO ID: ", id)
-    console.log("MULTIPLICADORES: ", multiplicadores)
-    console.log("NOMBRE HABILIDAD: ", nombreHabilidad)
-    console.log("MULTIPLICADOR: ", multiplicador)
-
-    if (tipo === "boss") {
-      console.log("ATAQUE BOSS: ", infoBoss.ataque)
-      cantidad = Math.round(infoBoss.ataque * multiplicador)
-      console.log("CANTIDAD: ", cantidad)
-      
-      cambiarVidaPersonaje(id, tipo, cantidad)
-    } else {
-      cantidad = infoPersonajes
-        .filter((personaje) => personaje.id === id)
-        .map((personaje) => personaje.ataque * multiplicador)
-        .find((valor) => valor !== null);
-
-      cambiarVidaPersonaje(localStorage.getItem("bossId"), tipo, cantidad)
-
-      setTurnoJugador(false)
-    }
+  const cambiarVidaBoss = (vida) => {
+    setVidaActualBoss(vida)
   }
 
-  const cambiarVidaPersonaje = (id, tipo, cantidad) => { //FALTA TESTEAR
-    console.log("PARAMETROS CAMBIAR VIDA: ", id, tipo, cantidad)
+  const cambiarVidaPersonajeActivo = (id, vida) => {
+    setVidaActualPersonajeActivo((prevState) => {
+      return {
+        ...prevState,
+        [id]: vida,
+      }
+    })
+  }
 
-    if (tipo === "boss") {
-      // Actualizar el estado de vidaActualPersonajeActivo para restar cantidad al valor asociado a id
-      setVidaActualPersonajeActivo(prevState => {
-        return {
-          ...prevState, // Copiar el estado anterior
-          [id]: prevState[id] - cantidad // Restar cantidad al valor asociado a id
-        };
-      });
-    } else {
-      setVidaActualBoss((prevState) => prevState - cantidad);
-    }
+  const cambiarTurno = (estado) => {
+    setTurnoJugador(estado)
   }
 
   const [infoCajaAcciones, setInfoCajaAcciones] = useState({
@@ -105,7 +79,7 @@ const Nivel = () => {
     descripcionHechizos: [],
     descripcionObjetos: [],
     funciones: {
-      habilidades: ejecutarHabilidad,
+      habilidades: () => {console.log("Habilidad 1")},
       objetos: [() => {console.log("Objeto 1")}, () => {console.log("Objeto 2")}, () => {console.log("Objeto 3")}, () => {console.log("Objeto 4")}, () => {console.log("Objeto 5")}, () => {console.log("Objeto 6")}],
       personajes: cambiarPersonajeActivo,
       hechizos: [() => {console.log("Hechizo 1")}, () => {console.log("Hechizo 2")}]
@@ -151,10 +125,6 @@ const Nivel = () => {
       }, 3000);
     }
   };
-
-  const obtenerPersonajePorId = (jsonArray, id) => {
-    return jsonArray.find(obj => obj.id === id);
-  }
 
   const obtenerNombres = (data) => {
     return data.map(objeto => objeto.nombre);
@@ -325,9 +295,6 @@ const Nivel = () => {
         obj[item.nombre] = item.multiplicador;
         return obj;
       }, {})
-
-      // Al final de fetchData, retorna una promesa resuelta
-      return Promise.resolve();
     } catch (error) {
       console.error("Hubo un error al obtener la información.", error);
     } finally {
@@ -377,28 +344,6 @@ const Nivel = () => {
   const [bossHabilidadIds, setBossHabilidadIds] = useState([]);
   const [bossNombresHabilidades, setBossNombresHabilidades] = useState([]);
 
-  let iteracion = 1
-  
-  const ejecutarTurno = (tiempo) => {
-    if (iteracion % 2 !== 0) {
-      if (turnoJugador === true) {
-
-      } else {
-        const indice = Math.floor(Math.random() * arrayNombresHabilidades.length);
-  
-        const habilidadElegida = arrayNombresHabilidades[indice];
-  
-        // Llamar a ejecutarHabilidad después de 2 segundos
-        setTimeout(() => {
-          ejecutarHabilidad(variablePersonajeActivoId, "boss", habilidadElegida, objetoMultiplicadoresHabilidades, {}, objetoInfoBoss);
-          setTurnoJugador(true);
-        }, tiempo); // El tiempo se especifica en milisegundos, por lo que 2000 ms equivalen a 2 segundos
-      }
-    }
-    
-    iteracion++
-  }
-
   const mundoBGStyle = {
     backgroundImage: `url(${infoNivel.imagenFondo})`,
     backgroundSize: "100% 100%",
@@ -408,17 +353,8 @@ const Nivel = () => {
   };
 
   useEffect(() => {
-    const startTime = performance.now();
-
     fetchData()
-      .then(() => {
-        const endTime = performance.now(); // Registro del tiempo de finalización de fetchData
-        const tiempoTranscurrido = endTime - startTime; // Calculo del tiempo transcurrido
-        console.log(`fetchData terminado en ${tiempoTranscurrido} milisegundos.`);
-
-        ejecutarTurno(tiempoTranscurrido + 1000);
-      });
-  }, [turnoJugador]);
+  }, []);
 
   useEffect(() => {
     setPersonajeActivoId(personajes[0])
@@ -458,10 +394,38 @@ const Nivel = () => {
               <button onClick={() => setVidaActualBoss(0)}>Eliminar boss</button>
               
               <div className="mundo-center">
-                <Personaje nombre={infoBoss.nombre} imagen={infoBoss.imagen} vidaMaxima={infoBoss.vida} vidaActual={vidaActualBoss} categoria={"boss"}/>
-                <Personaje nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")} imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")} vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")} vidaActual={vidaActualPersonajeActivo[personajeActivoId]} categoria={"personaje"}/>
-                <CajaAcciones infoCajaAcciones={infoCajaAcciones} mostrarNotificacion={mostrarNotificacion} personajeActivoId={personajeActivoId} multiplicadores={multiplicadoresHabilidades} isTurnoJugador={turnoJugador} />
-                <NotificacionAccion tipoAccion={notificacionTipo} eleccion={notificacionEleccion} visible={notificacionVisible} />
+                <Personaje
+                  nombre={infoBoss.nombre}
+                  imagen={infoBoss.imagen}
+                  vidaMaxima={infoBoss.vida}
+                  vidaActual={vidaActualBoss}
+                  categoria={"boss"}
+                />
+                <Personaje
+                  nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
+                  imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")}
+                  vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")}
+                  vidaActual={vidaActualPersonajeActivo[personajeActivoId]} categoria={"personaje"}
+                />
+                <CajaAcciones
+                  infoCajaAcciones={infoCajaAcciones}
+                  mostrarNotificacion={mostrarNotificacion}
+                  personajeActivoId={personajeActivoId}
+                  multiplicadores={multiplicadoresHabilidades}
+                  isTurnoJugador={turnoJugador}
+                  cambiarVidaBoss={cambiarVidaBoss}
+                  cambiarVidaPersonaje={cambiarVidaPersonajeActivo}
+                  cambiarTurno={cambiarTurno}
+                  infoBoss={infoBoss}
+                  bossNombresHabilidades={bossNombresHabilidades}
+                  vidaActualBoss={vidaActualBoss}
+                  vidaActualPersonajeActivo={vidaActualPersonajeActivo[personajeActivoId]}
+                />
+                <NotificacionAccion
+                  tipoAccion={notificacionTipo}
+                  eleccion={notificacionEleccion}
+                  visible={notificacionVisible}
+                />
               </div>
             </div>
           )}
