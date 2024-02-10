@@ -4,6 +4,7 @@ import './CajaAcciones.css';
 
 const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo}) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpenMuerte, setIsOpenMuerte] = useState(true);
     const [tipoAccion, setTipoAccion] = useState(null);
 
     const [informacionAcciones, setInformacionAcciones] = useState({
@@ -42,6 +43,10 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
     const toggleAcciones = (tipo) => {
         abrirYCerrarAcciones();
         setTipoAccion(tipo);
+    }
+
+    const cerrarAccionesMuerte = () => {
+        setIsOpenMuerte(!isOpenMuerte);
     }
 
     const ejecutarHabilidad = (tipo, nombreHabilidad) => {
@@ -128,35 +133,52 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
     
             habilidadElegida = bossNombresHabilidades[indice];
 
-            ejecutarHabilidad("boss", habilidadElegida)
+            setTimeout(() => {
+                ejecutarHabilidad("boss", habilidadElegida)
+            }, 1500); // 3000 milisegundos = 3 segundos
         }
     }, [isTurnoJugador])
 
-    return isTurnoJugador ? (
+    return (
         <div className="caja-acciones">
+            {vidaActualPersonajeActivo <= 0 && (
+                <Acciones
+                    isOpen={isOpenMuerte}
+                    onClose={cerrarAccionesMuerte}
+                    tipo="Personajes"
+                    informacion={informacionAcciones["Personajes"]}
+                    abrirYCerrarAcciones={abrirYCerrarAcciones}
+                    mostrarNotificacion={mostrarNotificacion}
+                    ejecutarHabilidad={ejecutarHabilidad}
+                />
+            )}
 
-            <Acciones
-                isOpen={isOpen}
-                onClose={toggleAcciones}
-                tipo={tipoAccion}
-                informacion={informacionAcciones[tipoAccion]}
-                abrirYCerrarAcciones={abrirYCerrarAcciones}
-                mostrarNotificacion={mostrarNotificacion}
-                ejecutarHabilidad={ejecutarHabilidad}
-            />
+            {isTurnoJugador ? (
+                <>
+                    <Acciones
+                        isOpen={isOpen}
+                        onClose={toggleAcciones}
+                        tipo={tipoAccion}
+                        informacion={informacionAcciones[tipoAccion]}
+                        abrirYCerrarAcciones={abrirYCerrarAcciones}
+                        mostrarNotificacion={mostrarNotificacion}
+                        ejecutarHabilidad={ejecutarHabilidad}
+                    />
 
-            <div className="caja-acciones-grid">
-                <button onClick={() => toggleAcciones('Habilidades')}>{infoCajaAcciones.textoList[0]}</button>
-                <button onClick={() => toggleAcciones('Objetos')}>{infoCajaAcciones.textoList[1]}</button>
-                <button onClick={() => toggleAcciones('Personajes')}>{infoCajaAcciones.textoList[2]}</button>
-                <button onClick={() => toggleAcciones('Hechizos')}>{infoCajaAcciones.textoList[3]}</button>
-            </div>
+                    <div className="caja-acciones-grid">
+                        <button onClick={() => toggleAcciones('Habilidades')}>{infoCajaAcciones.textoList[0]}</button>
+                        <button onClick={() => toggleAcciones('Objetos')}>{infoCajaAcciones.textoList[1]}</button>
+                        <button onClick={() => toggleAcciones('Personajes')}>{infoCajaAcciones.textoList[2]}</button>
+                        <button onClick={() => toggleAcciones('Hechizos')}>{infoCajaAcciones.textoList[3]}</button>
+                    </div>
+                </>
+            ) : (
+                <div className="caja-acciones">
+                    <h1>Es el turno del boss.</h1>
+                </div>
+            )}
         </div>
-    ) : (
-        <div className="caja-acciones">
-            <h1>Es el turno del boss.</h1>
-        </div>
-    )
+    );
 }
 
 export default CajaAcciones

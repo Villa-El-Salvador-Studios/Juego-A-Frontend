@@ -115,7 +115,7 @@ const Nivel = () => {
       // Ocultar la notificación después de un tiempo (por ejemplo, 3 segundos)
       setTimeout(() => {
         setNotificacionVisible(false);
-      }, 3000);
+      }, 1000);
     }
 
     // Restablecer la visibilidad después de 3 segundos (si la notificación está visible)
@@ -373,11 +373,15 @@ const Nivel = () => {
   }, [personajeActivoId, personajes]);
 
   useEffect(() => {
+    const todasLasVidasMenorOIgualACero = Object.values(vidaActualPersonajeActivo).every(vida => vida <= 0);
+
     if (vidaActualBoss <= 0 && loading === false) {
       actualizarMundoMaximo()
       navegar('/finNivel/victoria');
+    } else if (todasLasVidasMenorOIgualACero === true && loading === false) {
+      navegar('/finNivel/derrota');
     }
-  }, [vidaActualBoss])
+  }, [vidaActualBoss, vidaActualPersonajeActivo, loading])
 
   return (
     <div>
