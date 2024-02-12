@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
-const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo}) => {
+const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo, nombrePersonajeActivo, nombreBoss}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenMuerte, setIsOpenMuerte] = useState(true);
     const [tipoAccion, setTipoAccion] = useState(null);
@@ -135,9 +135,15 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
 
             setTimeout(() => {
                 ejecutarHabilidad("boss", habilidadElegida)
-            }, 1500); // 3000 milisegundos = 3 segundos
+            }, 1500); // 1500 milisegundos = 1.5 segundos
         }
     }, [isTurnoJugador])
+
+    useEffect(() => {
+        if (vidaActualPersonajeActivo <= 0) {
+            mostrarNotificacion("muerte", nombrePersonajeActivo)
+        }
+    }, [vidaActualPersonajeActivo])
 
     return (
         <div className="caja-acciones">

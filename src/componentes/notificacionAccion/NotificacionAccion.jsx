@@ -7,13 +7,16 @@ const NotificacionAccion = ({tipoAccion, eleccion, visible}) => {
         case 'habilidades':
         case 'objetos':
         case 'hechizos':
-        mensaje = `El jugador ha usado ${eleccion}`;
-        break;
+            mensaje = `El jugador ha usado ${eleccion}`;
+            break;
         case 'personajes':
-        mensaje = `El jugador ha llamado a ${eleccion}`;
-        break;
+            mensaje = `El jugador ha llamado a ${eleccion}`;
+            break;
+        case 'muerte':
+            mensaje = `${eleccion} ha muerto`;
+            break;
         default:
-        mensaje = 'Acción realizada';
+            mensaje = 'Acción realizada';
     }
 
     return visible ? (

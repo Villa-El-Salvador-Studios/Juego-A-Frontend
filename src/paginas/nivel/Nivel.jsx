@@ -198,8 +198,6 @@ const Nivel = () => {
     return jsonArray ? jsonArray.map(obj => obj.id) : [];
   }
 
-  let iteracionFetchData = 1
-
   const fetchData = async () => {
     try {
       //JALA LA INFORMACION DEL MUNDO
@@ -424,6 +422,8 @@ const Nivel = () => {
                   bossNombresHabilidades={bossNombresHabilidades}
                   vidaActualBoss={vidaActualBoss}
                   vidaActualPersonajeActivo={vidaActualPersonajeActivo[personajeActivoId]}
+                  nombrePersonajeActivo={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
+                  nombreBoss={infoBoss.nombre}
                 />
                 <NotificacionAccion
                   tipoAccion={notificacionTipo}
