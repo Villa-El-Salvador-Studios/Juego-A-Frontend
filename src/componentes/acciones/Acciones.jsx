@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import './Acciones.css';
 
-const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion, ejecutarHabilidad}) => {
+const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion, ejecutarHabilidad, funcionesObjetos}) => {
     const handleClick = (nombre, index) => {
         if (tipo === "Habilidades") {
             ejecutarHabilidad("personaje", nombre);
         } else if (tipo === "Personajes") {
             informacion.funciones(informacion.ids[index]);
+        } else if (tipo === "Objetos") {
+            funcionesObjetos[index]();
         }
 
         mostrarNotificacion(tipo.toLowerCase(), nombre);

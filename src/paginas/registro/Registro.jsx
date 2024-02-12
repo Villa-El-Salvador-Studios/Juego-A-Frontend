@@ -97,7 +97,7 @@ const Registro = () => {
                 }
 
                 // Crear registro de jugadorObjeto
-                for (let i = 1; i < 7; i++) {
+                for (let i = 1; i < 6; i++) {
                     jugadorObjetoData.jugadorId = response.data.id
                     jugadorObjetoData.objetoId = i
 

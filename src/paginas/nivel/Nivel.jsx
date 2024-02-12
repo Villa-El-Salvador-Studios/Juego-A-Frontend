@@ -72,6 +72,9 @@ const Nivel = () => {
     setTurnoJugador(estado)
   }
 
+  const [vidaActualBoss, setVidaActualBoss] = useState(1);
+  const [vidaActualPersonajeActivo, setVidaActualPersonajeActivo] = useState({});
+
   const [infoCajaAcciones, setInfoCajaAcciones] = useState({
     idsPersonajes: [],
     idsHabilidades: {},
@@ -97,8 +100,6 @@ const Nivel = () => {
   const [notificacionTipo, setNotificacionTipo] = useState('');
   const [notificacionVisible, setNotificacionVisible] = useState(false);
   const [turnoJugador, setTurnoJugador] = useState(false);
-  const [vidaActualBoss, setVidaActualBoss] = useState(1);
-  const [vidaActualPersonajeActivo, setVidaActualPersonajeActivo] = useState({});
 
   const cambiarNumerosPorNombres = (arrayDeNumeros, nombresDeHabilidades) => {
     return arrayDeNumeros.map((numero) => nombresDeHabilidades[numero]);

@@ -6,6 +6,8 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenMuerte, setIsOpenMuerte] = useState(true);
     const [tipoAccion, setTipoAccion] = useState(null);
+    const [bonusAtaque, setBonusAtaque] = useState(false);
+    const [isVeneno, setIsVeneno] = useState(false);
 
     const [informacionAcciones, setInformacionAcciones] = useState({
         Habilidades: {
@@ -53,15 +55,8 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
         let cantidad = 0
         let multiplicador = multiplicadores[nombreHabilidad]
 
-        console.log("PERSONAJE ACTIVO ID: ", personajeActivoId)
-        console.log("MULTIPLICADORES: ", multiplicadores)
-        console.log("NOMBRE HABILIDAD: ", nombreHabilidad)
-        console.log("MULTIPLICADOR: ", multiplicador)
-
         if (tipo === "boss") {
-            console.log("ATAQUE BOSS: ", infoBoss.ataque)
             cantidad = Math.round(infoBoss.ataque * multiplicador)
-            console.log("CANTIDAD: ", cantidad)
             
             cambiarVida(personajeActivoId, tipo, cantidad)
 
@@ -72,15 +67,20 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             .map((personaje) => personaje.ataque * multiplicador)
             .find((valor) => valor !== null);
 
+            console.log("CANTIDAD: ", cantidad)
+
+            if (bonusAtaque) {
+                cantidad += 200
+                console.log("CANTIDAD + 200: ", cantidad)
+            }
+
             cambiarVida(localStorage.getItem("bossId"), tipo, cantidad)
 
             cambiarTurno(false)
         }
     }
 
-    const cambiarVida = (id, tipo, cantidad) => { //FALTA TESTEAR
-        console.log("PARAMETROS CAMBIAR VIDA: ", id, tipo, cantidad)
-    
+    const cambiarVida = (id, tipo, cantidad) => { //FALTA TESTEAR    
         if (tipo === "boss") {
             const nuevaVidaPersonaje = vidaActualPersonajeActivo - cantidad
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
@@ -89,6 +89,29 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             cambiarVidaBoss(nuevaVidaBoss)
         }
     }
+
+    const funcionesObjetos = [
+        () => {
+            const nuevaVidaPersonaje = vidaActualPersonajeActivo + 200
+            cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
+        },
+        () => {
+            const nuevaVidaPersonaje = vidaActualPersonajeActivo + 400
+            cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
+        },
+        () => {
+            const nuevaVidaPersonaje = vidaActualPersonajeActivo + 600
+            cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
+        },
+        () => {
+            console.log("Objeto 4")
+            setBonusAtaque(true)
+        },
+        () => {
+            console.log("Objeto 5")
+            setIsVeneno(true)
+        }
+    ]
 
     useEffect(() => {
         // Actualizar datos de caja de acciones
@@ -123,10 +146,23 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
         }));
     }, [infoCajaAcciones]);
 
-    useEffect(() => {
-        console.log("EJECUTANDO TURNO: ", isTurnoJugador)
+    const [contadorVeneno, setContadorVeneno] = useState(0)
 
+    useEffect(() => {
         if (isTurnoJugador === false) {
+            if (isVeneno && contadorVeneno < 3) {
+                setTimeout(() => {
+                    cambiarVidaBoss(vidaActualBoss - 100)
+                }, 1000)
+
+                console.log("VENENO", contadorVeneno)
+
+                setContadorVeneno(prevState => prevState + 1)
+            } else {
+                setIsVeneno(false)
+                setContadorVeneno(0)
+            }
+
             let habilidadElegida = ""
 
             const indice = Math.floor(Math.random() * bossNombresHabilidades.length);
@@ -135,6 +171,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
 
             setTimeout(() => {
                 ejecutarHabilidad("boss", habilidadElegida)
+                setBonusAtaque(false)
             }, 1500); // 1500 milisegundos = 1.5 segundos
         }
     }, [isTurnoJugador])
@@ -169,6 +206,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
                         abrirYCerrarAcciones={abrirYCerrarAcciones}
                         mostrarNotificacion={mostrarNotificacion}
                         ejecutarHabilidad={ejecutarHabilidad}
+                        funcionesObjetos={funcionesObjetos}
                     />
 
                     <div className="caja-acciones-grid">
