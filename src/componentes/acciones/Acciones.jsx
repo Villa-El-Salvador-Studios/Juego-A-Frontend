@@ -4,7 +4,9 @@ import './Acciones.css';
 const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion, ejecutarHabilidad, funcionesObjetos}) => {
     const handleClick = (nombre, index) => {
         if (tipo === "Habilidades") {
-            ejecutarHabilidad("personaje", nombre);
+            setTimeout(() => {
+                ejecutarHabilidad("personaje", nombre);
+            }, 500)
         } else if (tipo === "Personajes") {
             informacion.funciones(informacion.ids[index]);
         } else if (tipo === "Objetos") {

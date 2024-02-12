@@ -12,11 +12,11 @@ const CreacionPersonaje = () => {
 
     const images = {
         names: ["Robotin", "URL", "Mage", "Dambeldor", "Pedrito"],
-        imageList: ["../../src/assets/images/characters/bombolbi.png",
-                    "../../src/assets/images/characters/enlace.png",
-                    "../../src/assets/images/characters/mago.png",
-                    "../../src/assets/images/characters/magoAnemico.png",
-                    "../../src/assets/images/characters/ven10.png",],
+        imageList: ["../../src/assets/images/characters/bombolbi.webp",
+                    "../../src/assets/images/characters/enlace.webp",
+                    "../../src/assets/images/characters/mago.webp",
+                    "../../src/assets/images/characters/magoAnemico.webp",
+                    "../../src/assets/images/characters/ven10.webp",],
     }
 
     const handleIndexChange = (index) => {

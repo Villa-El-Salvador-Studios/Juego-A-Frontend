@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Carousel from '../../componentes/carousel/Carousel';
+import Carousel from '../../componentes/Carousel/Carousel';
 import NotificacionCentrada from '../../componentes/notificacionCentrada/NotificacionCentrada';
 import PersonajeService from '../../services/personaje-service';
 import HabilidadPersonajeService from '../../services/habilidad-personaje-service';
@@ -13,13 +13,14 @@ const SeleccionarNuevoPersonaje = () => {
 
     const [selectedCharacterIndex, setSelectedCharacterIndex] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
+    const [isPersonajeSeleccionado, setIsPersonajeSeleccionado] = useState(false);
     const [images, setImages] = useState({
         names: ["Robotin", "URL", "Mage", "Dambeldor", "Pedrito"],
-        imageList: ["../../src/assets/images/characters/bombolbi.png",
-                "../../src/assets/images/characters/enlace.png",
-                "../../src/assets/images/characters/mago.png",
-                "../../src/assets/images/characters/magoAnemico.png",
-                "../../src/assets/images/characters/ven10.png",]
+        imageList: ["../../src/assets/images/characters/bombolbi.webp",
+                "../../src/assets/images/characters/enlace.webp",
+                "../../src/assets/images/characters/mago.webp",
+                "../../src/assets/images/characters/magoAnemico.webp",
+                "../../src/assets/images/characters/ven10.webp",]
     });
 
     const mensaje = '¿Estás seguro de tu elección? Esta acción no se puede revertir.'
@@ -60,6 +61,8 @@ const SeleccionarNuevoPersonaje = () => {
                         })
                 }
                 toast.success('Personaje creado exitosamente.');
+
+                setIsPersonajeSeleccionado(true)
             })
             .catch(error => {
                 // Mostrar notificación de error
@@ -122,7 +125,7 @@ const SeleccionarNuevoPersonaje = () => {
             <Carousel images={images} onIndexChange={handleIndexChange}/>
             <NotificacionCentrada isOpen={isOpen} mensaje={mensaje} opciones={opciones}/>
             <div className='SNP-botones'>
-                <button className='SNP-boton' onClick={abrirConfirmacionEleccion}>Seleccionar personaje</button>
+                <button className='SNP-boton' onClick={abrirConfirmacionEleccion} disabled={isPersonajeSeleccionado}>Seleccionar personaje</button>
                 <button className='SNP-boton' onClick={entrarSiguienteNivel}>Siguiente nivel</button>
                 <button className='SNP-boton' onClick={seleccionarNivel}>Seleccionar nivel</button>
             </div>

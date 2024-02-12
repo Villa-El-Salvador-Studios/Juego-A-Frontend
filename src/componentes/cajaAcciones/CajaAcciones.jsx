@@ -76,7 +76,9 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
 
             cambiarVida(localStorage.getItem("bossId"), tipo, cantidad)
 
-            cambiarTurno(false)
+            setTimeout(() => {
+                cambiarTurno(false)
+            }, 1000)
         }
     }
 
@@ -153,7 +155,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             if (isVeneno && contadorVeneno < 3) {
                 setTimeout(() => {
                     cambiarVidaBoss(vidaActualBoss - 100)
-                }, 1000)
+                }, 500)
 
                 console.log("VENENO", contadorVeneno)
 
@@ -172,7 +174,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             setTimeout(() => {
                 ejecutarHabilidad("boss", habilidadElegida)
                 setBonusAtaque(false)
-            }, 1500); // 1500 milisegundos = 1.5 segundos
+            }, 1000); // 1000 milisegundos = 1 segundo
         }
     }, [isTurnoJugador])
 
