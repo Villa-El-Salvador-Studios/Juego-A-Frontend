@@ -5,7 +5,7 @@ import './BotonSeleccionarNivel.css'
 
 const BotonSeleccionarNivel = ({cantidad}) => {
     const navegar = useNavigate();
-    const [mundoMaximo, setMundoMaximo] = useState(1);
+    const [mundoMaximo, setMundoMaximo] = useState(0);
     
     const entrarANivel = (nivel) => {
         localStorage.setItem('nivel', nivel);
