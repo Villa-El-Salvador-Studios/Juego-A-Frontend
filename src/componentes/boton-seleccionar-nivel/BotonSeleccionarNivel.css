@@ -1,22 +1,36 @@
+.botonGeneral {
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    border-radius: 20px;
+    background-color: #fee78a;
+}
+.boton-seleccionar-nivel-svg {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
 .boton-seleccionar-nivel {
     min-width: 80vw;
 }
 .boton-seleccionar-nivel-button {
-    height: 20vmin;
-    width: 20vmin;
-    border-radius: 20px;
+    height: 120px;
+    width: 120px;
     font-size: 10vmin;
-    text-align: center;
-    background-color: #fee78a;
-    transition: all 0.3s ease-in-out;
+    text-align: center;    
+    border-radius: 20px;
+    background-color: #fee78a00;
+
 }
-.boton-seleccionar-nivel-button:hover {
-    transform: scale(1.1);
-    background-color: #fff7bc;
+.botonGeneral:hover {
+    scale: 1.1;
+    background-color: #ffef62;
     cursor: pointer;
 }
+
 .fila-botones {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 10px; /* Espaciado entre filas, ajusta según tus preferencias */
 }
