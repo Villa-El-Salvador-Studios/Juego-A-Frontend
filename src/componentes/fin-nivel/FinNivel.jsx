@@ -28,6 +28,10 @@ const FinNivel = () => {
         navigate('/selector-niveles')
     }
 
+    const reintentarNivel = () => {
+        navigate('/nivel')
+    }
+
     useEffect(() => {
         if (Number(localStorage.getItem('nivel')) === 5){
             setEndGame(true);
@@ -48,7 +52,7 @@ const FinNivel = () => {
         <div className="finNivel" style={{background: "linear-gradient(180deg, #e15244, #7a6f5d)"}}>
             <h1 className='finNivel-titulo'>Derrota</h1>
             <div className='finNivel-botones'>
-                <button className='finNivel-botones-accion'>Reintentar</button>
+                <button className='finNivel-botones-accion' onClick={reintentarNivel}>Reintentar</button>
                 <button className='finNivel-botones-accion' onClick={volverSelectorNiveles}>Seleccionar nivel</button>
             </div>
         </div>
