@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import './Acciones.css';
 
-const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion, ejecutarHabilidad, funcionesObjetos}) => {
+const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion, ejecutarHabilidad, funcionesObjetos, cantidadObjetos}) => {
     const handleClick = (nombre, index) => {
         if (tipo === "Habilidades") {
             setTimeout(() => {
@@ -30,12 +30,26 @@ const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mos
                             className="imagen-boton"
                         />
                         )}
-                        <button
-                            className="boton-con-ancho-fijo"
-                            onClick={() => handleClick(nombre, index)}
-                        >
-                            {nombre}
-                        </button>
+                        {tipo !== "Objetos" && (
+                            <button
+                                className="boton-con-ancho-fijo"
+                                onClick={() => handleClick(nombre, index)}
+                            >
+                                {nombre}
+                            </button>
+                        )}
+                        {tipo === "Objetos" && (
+                            <h1 className='acciones-contador-objetos'>{cantidadObjetos[index + 1]}</h1>
+                        )}
+                        {tipo === "Objetos" && (
+                            <button
+                                className="boton-con-ancho-fijo"
+                                onClick={() => handleClick(nombre, index)}
+                                disabled={cantidadObjetos[index + 1] < 1}
+                            >
+                                {nombre}
+                            </button>  
+                        )}               
                     </div>
                 ))}
             </div>

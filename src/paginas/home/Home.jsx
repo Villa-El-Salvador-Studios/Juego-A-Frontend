@@ -2,6 +2,7 @@ import Toolbar from "../../componentes/toolbar/Toolbar";
 import Nosotros from "../../componentes/componenteNosotros/Nosotros";
 import Footer from "../../componentes/footer/Footer";
 import "./Home.css";
+import { useEffect } from "react";
 
 const Home = () => {
     const informacion = ["Misión",
@@ -40,6 +41,11 @@ const Home = () => {
             ruta: "/registro"
         }
     }
+
+    useEffect(() => {
+        localStorage.setItem('sfx', 'false');
+        console.log(localStorage.getItem('sfx'))
+    }, [])
 
     return (
         <div>

@@ -5,7 +5,7 @@
 }
 .mundo-title {
     font-size: 6vmin;
-    margin: 2vmin;
+    margin: 0;
 }
 .contenedor-personaje {
     display: flex; /* Utiliza flexbox para colocar los elementos en la misma fila */
@@ -18,5 +18,10 @@
     height: 15vmin;
 }
 .mundo-vida-progress {
-    margin-bottom: 3vmin;
+    margin-top: 1vh;
+    margin-bottom: 3vh;
+}
+.mundo-subtitle {
+    font-size: 4vmin;
+    margin: 0;
 }

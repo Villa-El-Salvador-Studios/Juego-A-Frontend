@@ -11,6 +11,7 @@ import HabilidadService from "../../services/habilidad-service";
 import HechizoService from "../../services/hechizo-service";
 import ObjetoService from "../../services/objeto-service";
 import HabilidadPersonajeService from "../../services/habilidad-personaje-service";
+import JugadorObjetoService from "../../services/jugador-objeto-service";
 import "./Nivel.css";
 
 const Nivel = () => {
@@ -49,6 +50,9 @@ const Nivel = () => {
   const [multiplicadoresHabilidades, setMultiplicadoresHabilidades] = useState({});
   const [personajeActivoId, setPersonajeActivoId] = useState(0);
   const [personajes, setPersonajes] = useState([]);
+  const [cantidadObjetos, setCantidadObjetos] = useState({});
+  const [isVeneno, setIsVeneno] = useState(false);
+  const [turnosVeneno, setTurnosVeneno] = useState(3);
 
   const cambiarPersonajeActivo = (id) => {
     setPersonajeActivoId(id);
@@ -70,6 +74,18 @@ const Nivel = () => {
 
   const cambiarTurno = (estado) => {
     setTurnoJugador(estado)
+  }
+
+  const cambiarTurnosVeneno = (turnos) => {
+    setTurnosVeneno(turnos)
+  }
+
+  const toggleVeneno = (estado) => {
+    if (estado === "activo") {
+      setIsVeneno(true)
+    } else {
+      setIsVeneno(false)
+    }
   }
 
   const [vidaActualBoss, setVidaActualBoss] = useState(1);
@@ -294,6 +310,15 @@ const Nivel = () => {
         obj[item.nombre] = item.multiplicador;
         return obj;
       }, {})
+
+      let objetoCantidadObjetos = {}
+
+      for (let i = 1; i < 6; i++) {
+        const cantidadObjetosResponse = await JugadorObjetoService.GetByJugadorIdAndObjetoId(localStorage.getItem("jugadorId"), i);
+        objetoCantidadObjetos[i] = cantidadObjetosResponse.data.cantidad
+      }
+
+      setCantidadObjetos(objetoCantidadObjetos)
     } catch (error) {
       console.error("Hubo un error al obtener la información.", error);
     } finally {
@@ -392,7 +417,7 @@ const Nivel = () => {
             <div style={mundoBGStyle}>
               <img className='boton-nivel-volver' src={iconoVolver} alt="Botón volver" onClick={regresarMenu} />
               <BarraTurnos arrayTurnos={arrayTurnos} />
-
+              
               {/*BORRAR BOTON ELIMNAR BOSS*/}
               <button onClick={() => setVidaActualBoss(0)}>Eliminar boss</button>
               
@@ -403,6 +428,8 @@ const Nivel = () => {
                   vidaMaxima={infoBoss.vida}
                   vidaActual={vidaActualBoss}
                   categoria={"boss"}
+                  isVeneno={isVeneno}
+                  turnosVeneno={turnosVeneno}
                 />
                 <Personaje
                   nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
@@ -424,7 +451,9 @@ const Nivel = () => {
                   vidaActualBoss={vidaActualBoss}
                   vidaActualPersonajeActivo={vidaActualPersonajeActivo[personajeActivoId]}
                   nombrePersonajeActivo={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
-                  nombreBoss={infoBoss.nombre}
+                  cantidadObjetos={cantidadObjetos}
+                  cambiarTurnosVeneno={cambiarTurnosVeneno}
+                  toggleVeneno={toggleVeneno}
                 />
                 <NotificacionAccion
                   tipoAccion={notificacionTipo}

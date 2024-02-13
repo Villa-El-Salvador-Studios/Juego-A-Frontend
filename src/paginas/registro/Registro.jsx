@@ -75,7 +75,7 @@ const Registro = () => {
         }
 
         const jugadorObjetoData = {
-            cantidad: 0,
+            cantidad: 5,
             jugadorId: 0,
             objetoId: 0
         }

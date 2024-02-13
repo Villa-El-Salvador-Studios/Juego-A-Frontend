@@ -10,17 +10,33 @@ const Slidebar = ({ informacion }) => {
    const handleToggleAudio = (event) => {
       event.stopPropagation();
       setIsAudioPlaying((prevIsAudioPlaying) => {
-        const newIsAudioPlaying = !prevIsAudioPlaying;
-  
-        if (newIsAudioPlaying) {
-          playAudio(0, 0.1);
-        } else {
-          pauseAudio();
-        }
-  
-        return newIsAudioPlaying;
+         const newIsAudioPlaying = !prevIsAudioPlaying;
+
+         if (newIsAudioPlaying) {
+            playAudio(0, 0.1);
+         } else {
+            pauseAudio();
+         }
+
+         return newIsAudioPlaying;
       });
-  };
+   };
+
+   const handleToggleSFX = () => {
+      // Obtener el primer checkbox del array de checkboxes
+      const checkbox = document.querySelector('.slider-checkbox');
+
+      // Verificar si el checkbox está marcado
+      const isChecked = checkbox.checked;
+
+      // Determinar el valor a almacenar en el localStorage
+      const sfxValue = isChecked ? 'true' : 'false';
+
+      // Guardar el valor en el localStorage
+      localStorage.setItem('sfx', sfxValue);
+
+      console.log('SFX:', localStorage.getItem('sfx'));
+   }
 
   const handleSliderChange = (event) => {
    const nuevoBrillo = event.target.value;
@@ -64,7 +80,7 @@ const Slidebar = ({ informacion }) => {
                type={informacion.tiposDeElementos[index]}
                alt={informacion.titulos[index]}
                min="25"
-               onClick={informacion.titulos[index] === 'Musica' ? handleToggleAudio : undefined}
+               onClick={informacion.titulos[index] === 'Musica' ? handleToggleAudio : handleToggleSFX}
             />
         </div>
       ))}

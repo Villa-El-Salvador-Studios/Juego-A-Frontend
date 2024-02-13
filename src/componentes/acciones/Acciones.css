@@ -9,11 +9,12 @@
 }
 .acciones-titulo {
   font-size: 5vmin;
+  margin-top: 0;
 }
 .acciones-botones {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 0.5vmin;
   margin-top: 20px;
 }
 .boton-con-imagen {
@@ -41,4 +42,9 @@
   font-size: 3vmin;
   height: 7vmin;
   background-color: #ffeec8;
+}
+.acciones-contador-objetos {
+  font-size: 3vmin;
+  margin-top: 0;
+  margin-bottom: 1vh;
 }

@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
-const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo, nombrePersonajeActivo, nombreBoss}) => {
+const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo, nombrePersonajeActivo, cantidadObjetos, cambiarTurnosVeneno, toggleVeneno}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenMuerte, setIsOpenMuerte] = useState(true);
     const [tipoAccion, setTipoAccion] = useState(null);
     const [bonusAtaque, setBonusAtaque] = useState(false);
     const [isVeneno, setIsVeneno] = useState(false);
+    const [cantidadObjetosPersonaje, setCantidadObjetosPersonaje] = useState({});
+    const [contadorVeneno, setContadorVeneno] = useState(3)
 
     const [informacionAcciones, setInformacionAcciones] = useState({
         Habilidades: {
@@ -96,22 +98,43 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
         () => {
             const nuevaVidaPersonaje = vidaActualPersonajeActivo + 200
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
+            setCantidadObjetosPersonaje(prevState => ({
+                ...prevState,
+                1: prevState[1] - 1
+            }))
         },
         () => {
             const nuevaVidaPersonaje = vidaActualPersonajeActivo + 400
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
+            setCantidadObjetosPersonaje(prevState => ({
+                ...prevState,
+                2: prevState[2] - 1
+            }))
         },
         () => {
             const nuevaVidaPersonaje = vidaActualPersonajeActivo + 600
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
+            setCantidadObjetosPersonaje(prevState => ({
+                ...prevState,
+                3: prevState[3] - 1
+            }))
         },
         () => {
-            console.log("Objeto 4")
             setBonusAtaque(true)
+            setCantidadObjetosPersonaje(prevState => ({
+                ...prevState,
+                4: prevState[4] - 1
+            }))
         },
         () => {
-            console.log("Objeto 5")
             setIsVeneno(true)
+            cambiarTurnosVeneno(3)
+            setContadorVeneno(3)
+            toggleVeneno("activo")
+            setCantidadObjetosPersonaje(prevState => ({
+                ...prevState,
+                5: prevState[5] - 1
+            }))
         }
     ]
 
@@ -148,21 +171,22 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
         }));
     }, [infoCajaAcciones]);
 
-    const [contadorVeneno, setContadorVeneno] = useState(0)
-
     useEffect(() => {
         if (isTurnoJugador === false) {
-            if (isVeneno && contadorVeneno < 3) {
+            if (isVeneno && contadorVeneno > 0) {
                 setTimeout(() => {
-                    cambiarVidaBoss(vidaActualBoss - 100)
+                    cambiarVidaBoss(vidaActualBoss - ((10/100)*vidaActualBoss))
                 }, 500)
+                const nuevoContador = contadorVeneno - 1
+                setContadorVeneno(prevState => prevState - 1)
+                cambiarTurnosVeneno(nuevoContador)
 
-                console.log("VENENO", contadorVeneno)
-
-                setContadorVeneno(prevState => prevState + 1)
+                if (contadorVeneno == 1) {
+                    setIsVeneno(false)
+                    toggleVeneno("inactivo")
+                }
             } else {
-                setIsVeneno(false)
-                setContadorVeneno(0)
+                setContadorVeneno(3)
             }
 
             let habilidadElegida = ""
@@ -183,6 +207,10 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             mostrarNotificacion("muerte", nombrePersonajeActivo)
         }
     }, [vidaActualPersonajeActivo])
+
+    useEffect(() => {
+        setCantidadObjetosPersonaje(cantidadObjetos)
+    }, [])
 
     return (
         <div className="caja-acciones">
@@ -209,6 +237,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
                         mostrarNotificacion={mostrarNotificacion}
                         ejecutarHabilidad={ejecutarHabilidad}
                         funcionesObjetos={funcionesObjetos}
+                        cantidadObjetos={cantidadObjetosPersonaje}
                     />
 
                     <div className="caja-acciones-grid">
