@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
-const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo, nombrePersonajeActivo, cantidadObjetos, cambiarTurnosVeneno, toggleVeneno}) => {
+const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo, nombrePersonajeActivo, cantidadObjetos, cambiarTurnosVeneno, toggleVeneno, cambiarVidaAnterior}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenMuerte, setIsOpenMuerte] = useState(true);
     const [tipoAccion, setTipoAccion] = useState(null);
@@ -87,6 +87,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
     const cambiarVida = (id, tipo, cantidad) => { //FALTA TESTEAR    
         if (tipo === "boss") {
             const nuevaVidaPersonaje = vidaActualPersonajeActivo - cantidad
+            cambiarVidaAnterior(vidaActualPersonajeActivo)
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
         } else {
             const nuevaVidaBoss = vidaActualBoss - cantidad
@@ -96,6 +97,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
 
     const funcionesObjetos = [
         () => {
+            cambiarVidaAnterior(vidaActualPersonajeActivo)
             const nuevaVidaPersonaje = vidaActualPersonajeActivo + 200
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
             setCantidadObjetosPersonaje(prevState => ({
@@ -104,6 +106,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             }))
         },
         () => {
+            cambiarVidaAnterior(vidaActualPersonajeActivo);
             const nuevaVidaPersonaje = vidaActualPersonajeActivo + 400
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
             setCantidadObjetosPersonaje(prevState => ({
@@ -112,6 +115,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             }))
         },
         () => {
+            cambiarVidaAnterior(vidaActualPersonajeActivo);
             const nuevaVidaPersonaje = vidaActualPersonajeActivo + 600
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
             setCantidadObjetosPersonaje(prevState => ({

@@ -18,6 +18,7 @@
     font-size: 3vmin;
     height: 7vmin;
     background-color: #ffeec8;
+    border-radius: 20px;
 }
 .caja-acciones button:hover {
     cursor: pointer;

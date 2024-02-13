@@ -1,11 +1,13 @@
 .acciones {
-  background-color: #b8aa95;
+  background-color: #b8aa9581;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
   text-align: center;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
 }
 .acciones-titulo {
   font-size: 5vmin;
@@ -41,7 +43,7 @@
   margin-top: 2vh;
   font-size: 3vmin;
   height: 7vmin;
-  background-color: #ffeec8;
+  background-color: #c31a1a;
 }
 .acciones-contador-objetos {
   font-size: 3vmin;

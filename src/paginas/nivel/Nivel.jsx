@@ -53,6 +53,11 @@ const Nivel = () => {
   const [cantidadObjetos, setCantidadObjetos] = useState({});
   const [isVeneno, setIsVeneno] = useState(false);
   const [turnosVeneno, setTurnosVeneno] = useState(3);
+  const [vidaAnteriorPersonaje, setVidaAnteriorPersonaje] = useState(0);
+
+  const cambiarVidaAnterior = (vida) => {
+    setVidaAnteriorPersonaje(vida)
+  }
 
   const cambiarPersonajeActivo = (id) => {
     setPersonajeActivoId(id);
@@ -369,7 +374,7 @@ const Nivel = () => {
   const [bossNombresHabilidades, setBossNombresHabilidades] = useState([]);
 
   const mundoBGStyle = {
-    backgroundImage: `url(${infoNivel.imagenFondo})`,
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${infoNivel.imagenFondo})`,
     backgroundSize: "100% 100%",
     backgroundRepeat: "no-repeat",
     height: "100vh", // Ajusta la altura según tus necesidades
@@ -427,6 +432,7 @@ const Nivel = () => {
                   imagen={infoBoss.imagen}
                   vidaMaxima={infoBoss.vida}
                   vidaActual={vidaActualBoss}
+                  vidaAnterior={infoBoss.vida}
                   categoria={"boss"}
                   isVeneno={isVeneno}
                   turnosVeneno={turnosVeneno}
@@ -435,6 +441,7 @@ const Nivel = () => {
                   nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
                   imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")}
                   vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")}
+                  vidaAnterior={vidaAnteriorPersonaje}
                   vidaActual={vidaActualPersonajeActivo[personajeActivoId]} categoria={"personaje"}
                 />
                 <CajaAcciones
@@ -450,6 +457,7 @@ const Nivel = () => {
                   bossNombresHabilidades={bossNombresHabilidades}
                   vidaActualBoss={vidaActualBoss}
                   vidaActualPersonajeActivo={vidaActualPersonajeActivo[personajeActivoId]}
+                  cambiarVidaAnterior={cambiarVidaAnterior}
                   nombrePersonajeActivo={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
                   cantidadObjetos={cantidadObjetos}
                   cambiarTurnosVeneno={cambiarTurnosVeneno}
