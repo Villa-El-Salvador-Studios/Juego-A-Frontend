@@ -11,13 +11,13 @@
 }
 .acciones-titulo {
   font-size: 5vmin;
-  margin-top: 0;
+  margin: 0;
 }
 .acciones-botones {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5vmin;
-  margin-top: 20px;
+  margin: 0;
 }
 .boton-con-imagen {
   display: flex;
@@ -49,4 +49,8 @@
   font-size: 3vmin;
   margin-top: 0;
   margin-bottom: 1vh;
+}
+.acciones-vida-actual {
+  font-size: 3vmin;
+  margin: 0;
 }

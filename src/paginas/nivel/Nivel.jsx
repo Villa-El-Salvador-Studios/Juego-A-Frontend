@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import Personaje from "../../componentes/personaje/Personaje";
-import BarraTurnos from "../../componentes/barraTurnos/BarraTurnos";
 import CajaAcciones from "../../componentes/cajaAcciones/CajaAcciones";
 import NotificacionAccion from "../../componentes/notificacionAccion/NotificacionAccion";
 import JugadorService from "../../services/jugador-service";
@@ -421,7 +420,6 @@ const Nivel = () => {
       ) : (
             <div style={mundoBGStyle}>
               <img className='boton-nivel-volver' src={iconoVolver} alt="Botón volver" onClick={regresarMenu} />
-              <BarraTurnos arrayTurnos={arrayTurnos} />
               
               {/*BORRAR BOTON ELIMNAR BOSS*/}
               <button onClick={() => setVidaActualBoss(0)}>Eliminar boss</button>
@@ -456,7 +454,7 @@ const Nivel = () => {
                   infoBoss={infoBoss}
                   bossNombresHabilidades={bossNombresHabilidades}
                   vidaActualBoss={vidaActualBoss}
-                  vidaActualPersonajeActivo={vidaActualPersonajeActivo[personajeActivoId]}
+                  vidaActualPersonajeActivo={vidaActualPersonajeActivo}
                   cambiarVidaAnterior={cambiarVidaAnterior}
                   nombrePersonajeActivo={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
                   cantidadObjetos={cantidadObjetos}

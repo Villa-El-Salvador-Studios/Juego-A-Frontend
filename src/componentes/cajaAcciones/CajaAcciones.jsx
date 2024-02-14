@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import { useAudio } from '../../shared/AudioContext/AudioContext';
 import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
 const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo, nombrePersonajeActivo, cantidadObjetos, cambiarTurnosVeneno, toggleVeneno, cambiarVidaAnterior}) => {
+    const { playHabilitySFX, obtenerLongitudAudio } = useAudio();
+
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenMuerte, setIsOpenMuerte] = useState(true);
     const [tipoAccion, setTipoAccion] = useState(null);
@@ -69,11 +72,8 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             .map((personaje) => personaje.ataque * multiplicador)
             .find((valor) => valor !== null);
 
-            console.log("CANTIDAD: ", cantidad)
-
             if (bonusAtaque) {
                 cantidad += 200
-                console.log("CANTIDAD + 200: ", cantidad)
             }
 
             cambiarVida(localStorage.getItem("bossId"), tipo, cantidad)
@@ -86,8 +86,8 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
 
     const cambiarVida = (id, tipo, cantidad) => { //FALTA TESTEAR    
         if (tipo === "boss") {
-            const nuevaVidaPersonaje = vidaActualPersonajeActivo - cantidad
-            cambiarVidaAnterior(vidaActualPersonajeActivo)
+            const nuevaVidaPersonaje = vidaActualPersonajeActivo[personajeActivoId] - cantidad
+            cambiarVidaAnterior(vidaActualPersonajeActivo[personajeActivoId])
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
         } else {
             const nuevaVidaBoss = vidaActualBoss - cantidad
@@ -97,8 +97,8 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
 
     const funcionesObjetos = [
         () => {
-            cambiarVidaAnterior(vidaActualPersonajeActivo)
-            const nuevaVidaPersonaje = vidaActualPersonajeActivo + 200
+            cambiarVidaAnterior(vidaActualPersonajeActivo[personajeActivoId])
+            const nuevaVidaPersonaje = vidaActualPersonajeActivo[personajeActivoId] + 200
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
             setCantidadObjetosPersonaje(prevState => ({
                 ...prevState,
@@ -106,8 +106,8 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             }))
         },
         () => {
-            cambiarVidaAnterior(vidaActualPersonajeActivo);
-            const nuevaVidaPersonaje = vidaActualPersonajeActivo + 400
+            cambiarVidaAnterior(vidaActualPersonajeActivo[personajeActivoId]);
+            const nuevaVidaPersonaje = vidaActualPersonajeActivo[personajeActivoId] + 400
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
             setCantidadObjetosPersonaje(prevState => ({
                 ...prevState,
@@ -115,8 +115,8 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             }))
         },
         () => {
-            cambiarVidaAnterior(vidaActualPersonajeActivo);
-            const nuevaVidaPersonaje = vidaActualPersonajeActivo + 600
+            cambiarVidaAnterior(vidaActualPersonajeActivo[personajeActivoId]);
+            const nuevaVidaPersonaje = vidaActualPersonajeActivo[personajeActivoId] + 600
             cambiarVidaPersonaje(personajeActivoId, nuevaVidaPersonaje)
             setCantidadObjetosPersonaje(prevState => ({
                 ...prevState,
@@ -199,15 +199,18 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
     
             habilidadElegida = bossNombresHabilidades[indice];
 
-            setTimeout(() => {
-                ejecutarHabilidad("boss", habilidadElegida)
-                setBonusAtaque(false)
-            }, 1000); // 1000 milisegundos = 1 segundo
+            obtenerLongitudAudio(habilidadElegida).then((duracion) => {
+                setTimeout(() => {
+                    ejecutarHabilidad("boss", habilidadElegida);
+                    playHabilitySFX(habilidadElegida);
+                    setBonusAtaque(false);
+                }, duracion * 1000);
+            });
         }
     }, [isTurnoJugador])
 
     useEffect(() => {
-        if (vidaActualPersonajeActivo <= 0) {
+        if (vidaActualPersonajeActivo[personajeActivoId] <= 0) {
             mostrarNotificacion("muerte", nombrePersonajeActivo)
         }
     }, [vidaActualPersonajeActivo])
@@ -218,7 +221,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
 
     return (
         <div className="caja-acciones">
-            {vidaActualPersonajeActivo <= 0 && (
+            {vidaActualPersonajeActivo[personajeActivoId] <= 0 && (
                 <Acciones
                     isOpen={isOpenMuerte}
                     onClose={cerrarAccionesMuerte}
@@ -227,6 +230,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
                     abrirYCerrarAcciones={abrirYCerrarAcciones}
                     mostrarNotificacion={mostrarNotificacion}
                     ejecutarHabilidad={ejecutarHabilidad}
+                    vidaActualPersonajeActivo={vidaActualPersonajeActivo}
                 />
             )}
 
@@ -242,13 +246,13 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
                         ejecutarHabilidad={ejecutarHabilidad}
                         funcionesObjetos={funcionesObjetos}
                         cantidadObjetos={cantidadObjetosPersonaje}
+                        vidaActualPersonajeActivo={vidaActualPersonajeActivo}
                     />
 
                     <div className="caja-acciones-grid">
                         <button onClick={() => toggleAcciones('Habilidades')}>{infoCajaAcciones.textoList[0]}</button>
                         <button onClick={() => toggleAcciones('Objetos')}>{infoCajaAcciones.textoList[1]}</button>
                         <button onClick={() => toggleAcciones('Personajes')}>{infoCajaAcciones.textoList[2]}</button>
-                        <button onClick={() => toggleAcciones('Hechizos')}>{infoCajaAcciones.textoList[3]}</button>
                     </div>
                 </>
             ) : (

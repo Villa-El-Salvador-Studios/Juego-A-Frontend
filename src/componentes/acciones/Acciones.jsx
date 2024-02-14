@@ -1,11 +1,14 @@
-import { useEffect } from 'react';
+import { useAudio } from '../../shared/AudioContext/AudioContext';
 import './Acciones.css';
 
-const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion, ejecutarHabilidad, funcionesObjetos, cantidadObjetos}) => {
+const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion, ejecutarHabilidad, funcionesObjetos, cantidadObjetos, vidaActualPersonajeActivo}) => {
+    const { playHabilitySFX } = useAudio();
+
     const handleClick = (nombre, index) => {
         if (tipo === "Habilidades") {
             setTimeout(() => {
                 ejecutarHabilidad("personaje", nombre);
+                playHabilitySFX(nombre);
             }, 500)
         } else if (tipo === "Personajes") {
             informacion.funciones(informacion.ids[index]);
@@ -23,6 +26,9 @@ const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mos
             <div className="acciones-botones">
                 {informacion.nombres.map((nombre, index) => (
                     <div key={index} className="boton-con-imagen">
+                        {tipo === "Personajes" && (
+                            <h1 className='acciones-vida-actual'>{`${vidaActualPersonajeActivo[informacion.ids[index]]}/2000`}</h1>
+                        )}
                         {tipo !== "Habilidades" && (
                         <img
                             src={informacion.imagenes[index]}

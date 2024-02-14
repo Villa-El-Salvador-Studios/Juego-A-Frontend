@@ -35,11 +35,6 @@
 }
 
 .caja-acciones button:nth-child(3) {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-.caja-acciones button:nth-child(4) {
-    grid-column: 2;
+    grid-column: span 2; /* Establece que el botón ocupará dos columnas */
     grid-row: 2;
 }

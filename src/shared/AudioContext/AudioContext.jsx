@@ -72,8 +72,35 @@ export const AudioProvider = ({ children }) => {
     setVolume(newVolume);
   };
 
+  const playHabilitySFX = (nombre) => {
+    audioElement = new Audio(`../../src/assets/audios/HbtSFX/${nombre}.mp3`)
+    
+    audioElement.volume = 0.1;
+
+    audioElement.addEventListener('canplaythrough', () => {
+      // El evento 'canplaythrough' se dispara cuando el navegador ha cargado
+      // lo suficiente para reproducir el audio sin interrupciones
+      audioElement.play().catch(error => {
+        console.error('Error al reproducir el audio:', error);
+      });
+    });
+
+    audioElement.addEventListener('error', (error) => {
+        console.error('Error al cargar el audio:', error);
+    });
+  }
+
+  const obtenerLongitudAudio = (nombre) => {
+    return new Promise((resolve, reject) => {
+      const audioElement = new Audio(`../../src/assets/audios/HbtSFX/${nombre}.mp3`);
+      audioElement.addEventListener('loadedmetadata', () => {
+          resolve(audioElement.duration);
+      });
+    });
+  }
+
   return (
-    <AudioContext.Provider value={{ playAudio, pauseAudio, stopAudio, setVolumeForAll, volume }}>
+    <AudioContext.Provider value={{ playAudio, pauseAudio, stopAudio, setVolumeForAll, volume, playHabilitySFX, obtenerLongitudAudio }}>
       {children}
     </AudioContext.Provider>
   );
