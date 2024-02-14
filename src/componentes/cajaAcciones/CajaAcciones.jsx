@@ -4,7 +4,7 @@ import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
 const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo, nombrePersonajeActivo, cantidadObjetos, cambiarTurnosVeneno, toggleVeneno, cambiarVidaAnterior}) => {
-    const { playHabilitySFX, obtenerLongitudAudio } = useAudio();
+    const { playHabilitySFX, obtenerLongitudAudio, playSituationAudio } = useAudio();
 
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenMuerte, setIsOpenMuerte] = useState(true);
@@ -13,7 +13,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
     const [isVeneno, setIsVeneno] = useState(false);
     const [cantidadObjetosPersonaje, setCantidadObjetosPersonaje] = useState({});
     const [contadorVeneno, setContadorVeneno] = useState(3)
-
+    const [habilidadElegidaPersonaje, setHabilidadElegida] = useState(null)
     const [informacionAcciones, setInformacionAcciones] = useState({
         Habilidades: {
             funciones: [],
@@ -39,6 +39,10 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
         }
     });
 
+    const cambiarHabilidadElegidaPersonaje = (habilidad) => {
+        setHabilidadElegida(habilidad)
+    }
+
     const obtenerNombresPersonajes = (jsonArray) => {
         return jsonArray ? jsonArray.map(obj => obj.nombre) : [];
     }
@@ -56,7 +60,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
         setIsOpenMuerte(!isOpenMuerte);
     }
 
-    const ejecutarHabilidad = (tipo, nombreHabilidad) => {
+    const ejecutarHabilidad = (tipo, nombreHabilidad, duracion) => {
         let cantidad = 0
         let multiplicador = multiplicadores[nombreHabilidad]
 
@@ -65,7 +69,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             
             cambiarVida(personajeActivoId, tipo, cantidad)
 
-            cambiarTurno(true)
+            
         } else {
             cantidad = infoCajaAcciones.infoPersonajes
             .filter((personaje) => personaje.id === personajeActivoId)
@@ -80,7 +84,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
 
             setTimeout(() => {
                 cambiarTurno(false)
-            }, 1000)
+            }, duracion * 1000)
         }
     }
 
@@ -175,6 +179,10 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
         }));
     }, [infoCajaAcciones]);
 
+    const [contadorTurnos, setContadorTurnos] = useState(1);
+    const [contadorVidaBajaBoss, setContadorVidaBajaBoss] = useState(1);
+    const [contadorVidaBajaPersonaje, setContadorVidaBajaPersonaje] = useState(1);
+
     useEffect(() => {
         if (isTurnoJugador === false) {
             if (isVeneno && contadorVeneno > 0) {
@@ -199,13 +207,32 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
     
             habilidadElegida = bossNombresHabilidades[indice];
 
-            obtenerLongitudAudio(habilidadElegida).then((duracion) => {
+            if (contadorTurnos > 1) {
                 setTimeout(() => {
-                    ejecutarHabilidad("boss", habilidadElegida);
+                    ejecutarHabilidad("boss", habilidadElegida, 0);
                     playHabilitySFX(habilidadElegida);
                     setBonusAtaque(false);
-                }, duracion * 1000);
-            });
+                }, 1000);
+
+                obtenerLongitudAudio(habilidadElegida).then((duracion) => {
+                    setTimeout(() => {
+                        cambiarTurno(true)
+                    }, duracion * 1000);
+                })
+            } else {
+                ejecutarHabilidad("boss", habilidadElegida, 0);
+                playHabilitySFX(habilidadElegida);
+                setBonusAtaque(false);
+                obtenerLongitudAudio(habilidadElegida).then((duracion) => {
+                    setTimeout(() => {
+                        cambiarTurno(true)
+                    }, duracion * 1000);
+                })
+            }
+
+            const nuevoContador = contadorTurnos + 1
+            setContadorTurnos(nuevoContador)
+            
         }
     }, [isTurnoJugador])
 
@@ -218,6 +245,21 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
     useEffect(() => {
         setCantidadObjetosPersonaje(cantidadObjetos)
     }, [])
+
+    useEffect(() => {
+        if (vidaActualBoss <= (infoBoss.vida * 33/100) && isTurnoJugador === false && contadorVidaBajaBoss === 1) {
+            playSituationAudio("vidaBajaBoss")
+
+            const nuevoContador = contadorVidaBajaBoss + 1
+            setContadorVidaBajaBoss(nuevoContador)
+        }
+    }, [vidaActualBoss, isTurnoJugador])
+
+    useEffect(() => {
+        if (vidaActualPersonajeActivo[personajeActivoId] <= (2000 * 33/100) && isTurnoJugador === true && contadorVidaBajaPersonaje === 1) {
+            playSituationAudio("vidaBajaPersonaje")
+        }
+    }, [vidaActualPersonajeActivo[personajeActivoId], isTurnoJugador])
 
     return (
         <div className="caja-acciones">
@@ -247,6 +289,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
                         funcionesObjetos={funcionesObjetos}
                         cantidadObjetos={cantidadObjetosPersonaje}
                         vidaActualPersonajeActivo={vidaActualPersonajeActivo}
+                        setHabilidadElegida={cambiarHabilidadElegidaPersonaje}
                     />
 
                     <div className="caja-acciones-grid">

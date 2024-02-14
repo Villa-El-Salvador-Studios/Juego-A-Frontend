@@ -25,6 +25,7 @@ const Nivel = () => {
   const iconoVolver = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTMuNDI3IDMuMDIxaC03LjQyN3YtMy4wMjFsLTYgNS4zOSA2IDUuNjF2LTNoNy40MjdjMy4wNzEgMCA1LjU2MSAyLjM1NiA1LjU2MSA1LjQyNyAwIDMuMDcxLTIuNDg5IDUuNTczLTUuNTYxIDUuNTczaC03LjQyN3Y1aDcuNDI3YzUuODQgMCAxMC41NzMtNC43MzQgMTAuNTczLTEwLjU3M3MtNC43MzMtMTAuNDA2LTEwLjU3My0xMC40MDZ6Ii8+PC9zdmc+"
   const navegar = useNavigate();
 
+  const [nivelSinIniciar, setNivelSinIniciar] = useState(true);
   const [infoBoss, setInfoBoss] = useState({
     id: 0,
     vida: 0,
@@ -381,8 +382,10 @@ const Nivel = () => {
   };
 
   useEffect(() => {
-    fetchData()
-  }, []);
+    if (nivelSinIniciar !== true) {
+      fetchData();
+    }
+  }, [nivelSinIniciar]);
 
   useEffect(() => {
     setPersonajeActivoId(personajes[0])
@@ -413,7 +416,11 @@ const Nivel = () => {
 
   return (
     <div>
-      {loading ? (
+      {nivelSinIniciar ? (
+        <div className="iniciar-nivel">
+          <button className="boton-iniciar-nivel" onClick={() => setNivelSinIniciar(false)}>Iniciar nivel</button>
+        </div>
+      ) : loading ? (
         <div className="load-page">
           <div className="spinner"></div>
         </div>

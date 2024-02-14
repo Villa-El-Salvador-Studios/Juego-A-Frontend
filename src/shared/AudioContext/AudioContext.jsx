@@ -99,8 +99,71 @@ export const AudioProvider = ({ children }) => {
     });
   }
 
+  const playAccionesAudio = (tipo) => {
+    if (tipo === "personajes") {
+      audioElement = new Audio(`../../src/assets/audios/ActSFX/apartaHijoDePuta.mp3`)
+    } else if (tipo === "objetos") {
+      audioElement = new Audio(`../../src/assets/audios/ObjSFX/minecraftPotion.mp3`)
+    }
+
+    audioElement.volume = 0.1;
+
+    audioElement.addEventListener('canplaythrough', () => {
+      // El evento 'canplaythrough' se dispara cuando el navegador ha cargado
+      // lo suficiente para reproducir el audio sin interrupciones
+      audioElement.play().catch(error => {
+        console.error('Error al reproducir el audio:', error);
+      });
+    });
+
+    audioElement.addEventListener('error', (error) => {
+        console.error('Error al cargar el audio:', error);
+    });
+  }
+
+  const lowHealthBossSFX = [
+    'meVanAMatar',
+    'vasACaerChupetin',
+    'omaeWaMouShindeiru'
+  ];
+
+  const lowHealthPersonajeSFX = [
+    'fuckingBitch',
+    'ayuda',
+    'guyStaring'
+  ];
+
+  const playSituationAudio = (situation) => {
+    let audioElement;
+
+    if (situation === "vidaBajaBoss") {
+      const randomIndex = Math.floor(Math.random() * lowHealthBossSFX.length);
+
+      audioElement = new Audio(`../../src/assets/audios/StSFX/${lowHealthBossSFX[randomIndex]}.mp3`)
+
+    } else if (situation === "vidaBajaPersonaje") {
+      const randomIndex = Math.floor(Math.random() * lowHealthPersonajeSFX.length);
+
+      audioElement = new Audio(`../../src/assets/audios/StSFX/${lowHealthPersonajeSFX[randomIndex]}.mp3`)
+    }
+
+    audioElement.volume = 0.5;
+
+    audioElement.addEventListener('canplaythrough', () => {
+      // El evento 'canplaythrough' se dispara cuando el navegador ha cargado
+      // lo suficiente para reproducir el audio sin interrupciones
+      audioElement.play().catch(error => {
+        console.error('Error al reproducir el audio:', error);
+      });
+    });
+
+    audioElement.addEventListener('error', (error) => {
+        console.error('Error al cargar el audio:', error);
+    });
+  }
+
   return (
-    <AudioContext.Provider value={{ playAudio, pauseAudio, stopAudio, setVolumeForAll, volume, playHabilitySFX, obtenerLongitudAudio }}>
+    <AudioContext.Provider value={{ playAudio, pauseAudio, stopAudio, setVolumeForAll, volume, playHabilitySFX, obtenerLongitudAudio, playAccionesAudio, playSituationAudio }}>
       {children}
     </AudioContext.Provider>
   );

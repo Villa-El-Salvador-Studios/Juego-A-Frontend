@@ -8,20 +8,15 @@ const Personaje = ({nombre, imagen, vidaMaxima, vidaActual, categoria, isVeneno,
   useEffect(() => {
       if (vidaActual < vidaAnterior) {
           setIsTakingDamage(true);
-          const timeout = setTimeout(() => {
-              setIsTakingDamage(false);
+          setTimeout(() => {
+            setIsTakingDamage(false);
           }, 500);
-
-          return () => clearTimeout(timeout);
       } else if (vidaActual > vidaAnterior) {
           setIsHealing(true);
-          const timeout = setTimeout(() => {
+          setTimeout(() => {
               setIsHealing(false);
           }, 500);
-
-          return () => clearTimeout(timeout);
       }
-
   }, [vidaActual, vidaAnterior]);
 
   return (
@@ -47,6 +42,13 @@ const Personaje = ({nombre, imagen, vidaMaxima, vidaActual, categoria, isVeneno,
               isHealing ? "grayscale(100%) brightness(70%) sepia(50%) hue-rotate(75deg) saturate(500%)"
               :
               "hue-rotate(0deg)",
+            transform:
+              isTakingDamage ? "rotate(-10deg)"
+              : null,
+            scale:
+              isHealing ? "1.2"
+              :
+              "1"
           }}
         />
       </div>

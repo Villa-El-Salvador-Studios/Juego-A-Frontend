@@ -1,19 +1,22 @@
 import { useAudio } from '../../shared/AudioContext/AudioContext';
 import './Acciones.css';
 
-const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion, ejecutarHabilidad, funcionesObjetos, cantidadObjetos, vidaActualPersonajeActivo}) => {
-    const { playHabilitySFX } = useAudio();
+const Acciones = ({isOpen, onClose, tipo, informacion, abrirYCerrarAcciones, mostrarNotificacion, ejecutarHabilidad, funcionesObjetos, cantidadObjetos, vidaActualPersonajeActivo, setHabilidadElegida}) => {
+    const { playHabilitySFX, obtenerLongitudAudio, playAccionesAudio } = useAudio();
 
     const handleClick = (nombre, index) => {
         if (tipo === "Habilidades") {
-            setTimeout(() => {
-                ejecutarHabilidad("personaje", nombre);
+            obtenerLongitudAudio(nombre).then((duracion) => {
+                ejecutarHabilidad("personaje", nombre, duracion);
                 playHabilitySFX(nombre);
-            }, 500)
+                setHabilidadElegida(nombre)
+            })
         } else if (tipo === "Personajes") {
             informacion.funciones(informacion.ids[index]);
+            playAccionesAudio("personajes");
         } else if (tipo === "Objetos") {
             funcionesObjetos[index]();
+            playAccionesAudio("objetos");
         }
 
         mostrarNotificacion(tipo.toLowerCase(), nombre);
