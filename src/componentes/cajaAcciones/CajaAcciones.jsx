@@ -3,7 +3,7 @@ import { useAudio } from '../../shared/AudioContext/AudioContext';
 import Acciones from "../acciones/Acciones";
 import './CajaAcciones.css';
 
-const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo, nombrePersonajeActivo, cantidadObjetos, cambiarTurnosVeneno, toggleVeneno, cambiarVidaAnterior}) => {
+const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId, multiplicadores, isTurnoJugador, cambiarVidaBoss, cambiarVidaPersonaje, cambiarTurno, infoBoss, bossNombresHabilidades, vidaActualBoss, vidaActualPersonajeActivo, nombrePersonajeActivo, cantidadObjetos, cambiarTurnosVeneno, toggleVeneno, cambiarVidaAnterior, cambiarHabilidadElegidaBoss}) => {
     const { playHabilitySFX, obtenerLongitudAudio, playSituationAudio } = useAudio();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -182,6 +182,7 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
     const [contadorTurnos, setContadorTurnos] = useState(1);
     const [contadorVidaBajaBoss, setContadorVidaBajaBoss] = useState(1);
     const [contadorVidaBajaPersonaje, setContadorVidaBajaPersonaje] = useState(1);
+    const [habilidadElegidaBoss, setHabilidadElegidaBoss] = useState("");
 
     useEffect(() => {
         if (isTurnoJugador === false) {
@@ -206,6 +207,8 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             const indice = Math.floor(Math.random() * bossNombresHabilidades.length);
     
             habilidadElegida = bossNombresHabilidades[indice];
+
+            setHabilidadElegidaBoss(habilidadElegida)
 
             if (contadorTurnos > 1) {
                 setTimeout(() => {
@@ -235,6 +238,10 @@ const CajaAcciones = ({infoCajaAcciones, mostrarNotificacion, personajeActivoId,
             
         }
     }, [isTurnoJugador])
+
+    useEffect(() => {
+        cambiarHabilidadElegidaBoss(habilidadElegidaBoss)
+    }, [habilidadElegidaBoss])
 
     useEffect(() => {
         if (vidaActualPersonajeActivo[personajeActivoId] <= 0) {

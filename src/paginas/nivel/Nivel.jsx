@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useAudio } from '../../shared/AudioContext/AudioContext';
 import Personaje from "../../componentes/personaje/Personaje";
 import CajaAcciones from "../../componentes/cajaAcciones/CajaAcciones";
 import NotificacionAccion from "../../componentes/notificacionAccion/NotificacionAccion";
+import CuentaRegresiva from "../../componentes/cuenta-regresiva/CuentaRegresiva";
 import JugadorService from "../../services/jugador-service";
 import MundoService from "../../services/mundo-service";
 import PersonajeService from "../../services/personaje-service";
@@ -14,6 +16,8 @@ import JugadorObjetoService from "../../services/jugador-objeto-service";
 import "./Nivel.css";
 
 const Nivel = () => {
+  const { stopHabilitySFX } = useAudio();
+
   let habilidadesDePersonajes = {}
   let mundoId = Number(localStorage.getItem("nivel"));
   let objetoAux = {} //guarda los nombres de las habilidades asociadas a los IDs de lospersonajes
@@ -25,6 +29,8 @@ const Nivel = () => {
   const iconoVolver = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTMuNDI3IDMuMDIxaC03LjQyN3YtMy4wMjFsLTYgNS4zOSA2IDUuNjF2LTNoNy40MjdjMy4wNzEgMCA1LjU2MSAyLjM1NiA1LjU2MSA1LjQyNyAwIDMuMDcxLTIuNDg5IDUuNTczLTUuNTYxIDUuNTczaC03LjQyN3Y1aDcuNDI3YzUuODQgMCAxMC41NzMtNC43MzQgMTAuNTczLTEwLjU3M3MtNC43MzMtMTAuNDA2LTEwLjU3My0xMC40MDZ6Ii8+PC9zdmc+"
   const navegar = useNavigate();
 
+  const [habilidadElegidaBoss, setHabilidadElegidaBoss] = useState("");
+  const [contardorSinTerminar, setContardorSinTerminar] = useState(true);
   const [nivelSinIniciar, setNivelSinIniciar] = useState(true);
   const [infoBoss, setInfoBoss] = useState({
     id: 0,
@@ -54,6 +60,14 @@ const Nivel = () => {
   const [isVeneno, setIsVeneno] = useState(false);
   const [turnosVeneno, setTurnosVeneno] = useState(3);
   const [vidaAnteriorPersonaje, setVidaAnteriorPersonaje] = useState(0);
+
+  const cambiarHabilidadElegidaBoss = (habilidad) => {
+    setHabilidadElegidaBoss(habilidad)
+  }
+
+  const cambiarCuentaRegresiva = () => {
+    setContardorSinTerminar(false)
+  }
 
   const cambiarVidaAnterior = (vida) => {
     setVidaAnteriorPersonaje(vida)
@@ -414,68 +428,87 @@ const Nivel = () => {
     }
   }, [vidaActualBoss, vidaActualPersonajeActivo, loading])
 
+  // Detener la música cuando el componente se desmonta
+  useEffect(() => {
+    return () => {
+        stopHabilitySFX(habilidadElegidaBoss);
+    };
+  }, [stopHabilitySFX]);
+
+
   return (
     <div>
       {nivelSinIniciar ? (
         <div className="iniciar-nivel">
           <button className="boton-iniciar-nivel" onClick={() => setNivelSinIniciar(false)}>Iniciar nivel</button>
         </div>
-      ) : loading ? (
+      )
+      :
+      loading ? (
         <div className="load-page">
           <div className="spinner"></div>
         </div>
-      ) : (
-            <div style={mundoBGStyle}>
-              <img className='boton-nivel-volver' src={iconoVolver} alt="Botón volver" onClick={regresarMenu} />
-              
-              {/*BORRAR BOTON ELIMNAR BOSS*/}
-              <button onClick={() => setVidaActualBoss(0)}>Eliminar boss</button>
-              
-              <div className="mundo-center">
-                <Personaje
-                  nombre={infoBoss.nombre}
-                  imagen={infoBoss.imagen}
-                  vidaMaxima={infoBoss.vida}
-                  vidaActual={vidaActualBoss}
-                  vidaAnterior={infoBoss.vida}
-                  categoria={"boss"}
-                  isVeneno={isVeneno}
-                  turnosVeneno={turnosVeneno}
-                />
-                <Personaje
-                  nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
-                  imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")}
-                  vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")}
-                  vidaAnterior={vidaAnteriorPersonaje}
-                  vidaActual={vidaActualPersonajeActivo[personajeActivoId]} categoria={"personaje"}
-                />
-                <CajaAcciones
-                  infoCajaAcciones={infoCajaAcciones}
-                  mostrarNotificacion={mostrarNotificacion}
-                  personajeActivoId={personajeActivoId}
-                  multiplicadores={multiplicadoresHabilidades}
-                  isTurnoJugador={turnoJugador}
-                  cambiarVidaBoss={cambiarVidaBoss}
-                  cambiarVidaPersonaje={cambiarVidaPersonajeActivo}
-                  cambiarTurno={cambiarTurno}
-                  infoBoss={infoBoss}
-                  bossNombresHabilidades={bossNombresHabilidades}
-                  vidaActualBoss={vidaActualBoss}
-                  vidaActualPersonajeActivo={vidaActualPersonajeActivo}
-                  cambiarVidaAnterior={cambiarVidaAnterior}
-                  nombrePersonajeActivo={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
-                  cantidadObjetos={cantidadObjetos}
-                  cambiarTurnosVeneno={cambiarTurnosVeneno}
-                  toggleVeneno={toggleVeneno}
-                />
-                <NotificacionAccion
-                  tipoAccion={notificacionTipo}
-                  eleccion={notificacionEleccion}
-                  visible={notificacionVisible}
-                />
-              </div>
-            </div>
-          )}
+      )
+      :
+      contardorSinTerminar ? (
+        <div>
+          <CuentaRegresiva cambiarCuentaRegresiva={cambiarCuentaRegresiva} />
+        </div>
+      ) 
+      :
+      (
+        <div style={mundoBGStyle}>
+          <img className='boton-nivel-volver' src={iconoVolver} alt="Botón volver" onClick={regresarMenu} />
+          
+          {/*BORRAR BOTON ELIMNAR BOSS*/}
+          <button onClick={() => setVidaActualBoss(0)}>Eliminar boss</button>
+          
+          <div className="mundo-center">
+            <Personaje
+              nombre={infoBoss.nombre}
+              imagen={infoBoss.imagen}
+              vidaMaxima={infoBoss.vida}
+              vidaActual={vidaActualBoss}
+              vidaAnterior={infoBoss.vida}
+              categoria={"boss"}
+              isVeneno={isVeneno}
+              turnosVeneno={turnosVeneno}
+            />
+            <Personaje
+              nombre={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
+              imagen={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "imagen")}
+              vidaMaxima={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "vida")}
+              vidaAnterior={vidaAnteriorPersonaje}
+              vidaActual={vidaActualPersonajeActivo[personajeActivoId]} categoria={"personaje"}
+            />
+            <CajaAcciones
+              infoCajaAcciones={infoCajaAcciones}
+              mostrarNotificacion={mostrarNotificacion}
+              personajeActivoId={personajeActivoId}
+              multiplicadores={multiplicadoresHabilidades}
+              isTurnoJugador={turnoJugador}
+              cambiarVidaBoss={cambiarVidaBoss}
+              cambiarVidaPersonaje={cambiarVidaPersonajeActivo}
+              cambiarTurno={cambiarTurno}
+              infoBoss={infoBoss}
+              bossNombresHabilidades={bossNombresHabilidades}
+              vidaActualBoss={vidaActualBoss}
+              vidaActualPersonajeActivo={vidaActualPersonajeActivo}
+              cambiarVidaAnterior={cambiarVidaAnterior}
+              nombrePersonajeActivo={findCharacterByPlayerId(infoCajaAcciones.infoPersonajes, personajeActivoId, "nombre")}
+              cantidadObjetos={cantidadObjetos}
+              cambiarTurnosVeneno={cambiarTurnosVeneno}
+              toggleVeneno={toggleVeneno}
+              cambiarHabilidadElegidaBoss={cambiarHabilidadElegidaBoss}
+            />
+            <NotificacionAccion
+              tipoAccion={notificacionTipo}
+              eleccion={notificacionEleccion}
+              visible={notificacionVisible}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

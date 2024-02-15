@@ -90,6 +90,16 @@ export const AudioProvider = ({ children }) => {
     });
   }
 
+  const stopHabilitySFX = (nombre) => {
+    audioElement = new Audio(`../../src/assets/audios/HbtSFX/${nombre}.mp3`)
+
+    if (!audioElement.paused) {
+      audioElement.pause();
+      audioElement.onended = null; // Eliminamos el listener onended
+    }
+    audioElement.currentTime = 0;
+  }
+
   const obtenerLongitudAudio = (nombre) => {
     return new Promise((resolve, reject) => {
       const audioElement = new Audio(`../../src/assets/audios/HbtSFX/${nombre}.mp3`);
@@ -162,8 +172,81 @@ export const AudioProvider = ({ children }) => {
     });
   }
 
+  const playStartSFX = () => {
+    audioElement = new Audio('../../src/assets/audios/StSFX/marioKartRaceStart.mp3')
+    audioElement.volume = 0.3;
+
+    audioElement.addEventListener('canplaythrough', () => {
+      // El evento 'canplaythrough' se dispara cuando el navegador ha cargado
+      // lo suficiente para reproducir el audio sin interrupciones
+      audioElement.play().catch(error => {
+        console.error('Error al reproducir el audio:', error);
+      });
+    });
+
+    audioElement.addEventListener('error', (error) => {
+        console.error('Error al cargar el audio:', error);
+    });
+  }
+
+  const endgameVictorySFX = [
+    "laFe",
+    "doodiofoo"
+  ]
+  const endgameDefeatSFX = [
+    "estoNoEsUnJuego",
+    "nasheeNo",
+    "weWindows",
+    "llanto",
+    "ohMyGodBruh"
+  ]
+
+  const playEndgameSFX = (resultado) => {
+    if (resultado === "victoria") {
+      const randomIndex = Math.floor(Math.random() * endgameVictorySFX.length);
+      audioElement = new Audio(`../../src/assets/audios/StSFX/${endgameVictorySFX[randomIndex]}.mp3`)
+    } else if (resultado === "derrota") {
+      const randomIndex = Math.floor(Math.random() * endgameDefeatSFX.length);
+      audioElement = new Audio(`../../src/assets/audios/StSFX/${endgameDefeatSFX[randomIndex]}.mp3`)
+    } else if (resultado === "victoriaFinal"){
+      audioElement = new Audio('../../src/assets/audios/StSFX/sweetVictory.mp3')
+    }
+    audioElement.volume = 0.3;
+
+    audioElement.addEventListener('canplaythrough', () => {
+      // El evento 'canplaythrough' se dispara cuando el navegador ha cargado
+      // lo suficiente para reproducir el audio sin interrupciones
+      audioElement.play().catch(error => {
+        console.error('Error al reproducir el audio:', error);
+      });
+    });
+
+    audioElement.addEventListener('error', (error) => {
+        console.error('Error al cargar el audio:', error);
+    });
+  }
+
+  //CORREGIR ESTO
+  const stopEndgameSFX = () => {
+    endgameVictorySFX.forEach((trackName) => {
+      const audioElement = new Audio(`../../src/assets/audios/StSFX/${trackName}.mp3`);
+      if (!audioElement.paused) {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+      }
+    });
+
+    endgameDefeatSFX.forEach((trackName) => {
+      const audioElement = new Audio(`../../src/assets/audios/StSFX/${trackName}.mp3`);
+      if (!audioElement.paused) {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+      }
+    });
+  }
+
   return (
-    <AudioContext.Provider value={{ playAudio, pauseAudio, stopAudio, setVolumeForAll, volume, playHabilitySFX, obtenerLongitudAudio, playAccionesAudio, playSituationAudio }}>
+    <AudioContext.Provider value={{ playAudio, pauseAudio, stopAudio, setVolumeForAll, volume, playHabilitySFX, stopHabilitySFX, obtenerLongitudAudio, playAccionesAudio, playSituationAudio, playStartSFX, playEndgameSFX, stopEndgameSFX }}>
       {children}
     </AudioContext.Provider>
   );

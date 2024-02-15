@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
+import { useAudio } from '../../shared/AudioContext/AudioContext';
 import './FinNivel.css'
 
 const FinNivel = () => {
+    const { playEndgameSFX, stopEndgameSFX } = useAudio();
+
     const navigate = useNavigate();
     const { resultado } = useParams();
 
@@ -37,6 +40,24 @@ const FinNivel = () => {
             setEndGame(true);
         }
     }, [])
+
+    useEffect(() => {
+        if (endGame && resultado === "victoria") {
+            playEndgameSFX("victoriaFinal")
+        } else if (resultado === "derrota") {
+            playEndgameSFX(resultado)
+        } else if (resultado === "victoria") {
+
+        }
+    }, [endGame])
+
+    // CORREGIR ESTO
+    useEffect(() => {
+        return () => {
+            console.log("DETENIENDO AUDIO FIN NIVEL")
+            stopEndgameSFX();
+        };
+    }, [stopEndgameSFX]);
 
     return resultado === "victoria" ? (
         <div className="finNivel" style={{background: "linear-gradient(180deg, #fdf2c5, #82bfa0)"}}>

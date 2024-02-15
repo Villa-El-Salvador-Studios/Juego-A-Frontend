@@ -1,0 +1,21 @@
+.CuentaRegresiva {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(180deg, #82bfa0, #55939e);
+}
+.CuentaRegresiva-titulo {
+    animation: animacion-contador 1s ease-in-out; /*Intervalo de animación*/
+    animation-iteration-count: 4; /*Veces que se repetirá la animación*/
+    font-size: 20vmin;
+}
+@keyframes animacion-contador {
+    0% {
+        scale: 0;
+    }
+    100% {
+        scale: 1;
+    }
+}
