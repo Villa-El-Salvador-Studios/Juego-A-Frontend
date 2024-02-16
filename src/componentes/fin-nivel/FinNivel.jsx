@@ -4,11 +4,12 @@ import { useAudio } from '../../shared/AudioContext/AudioContext';
 import './FinNivel.css'
 
 const FinNivel = () => {
-    const { playEndgameSFX, stopEndgameSFX } = useAudio();
+    const { playEndgameSFX } = useAudio();
 
     const navigate = useNavigate();
     const { resultado } = useParams();
 
+    const [isExit, setIsExit] = useState(false);
     const [endGame, setEndGame] = useState(false);
 
     const entrarSiguienteNivel = () => {
@@ -43,21 +44,25 @@ const FinNivel = () => {
 
     useEffect(() => {
         if (endGame && resultado === "victoria") {
-            playEndgameSFX("victoriaFinal")
+            playEndgameSFX("victoriaFinal", isExit)
         } else if (resultado === "derrota") {
-            playEndgameSFX(resultado)
+            playEndgameSFX(resultado, isExit)
         } else if (resultado === "victoria") {
-
+            playEndgameSFX(resultado, isExit)
         }
     }, [endGame])
 
     // CORREGIR ESTO
     useEffect(() => {
-        return () => {
-            console.log("DETENIENDO AUDIO FIN NIVEL")
-            stopEndgameSFX();
+        const cleanup = () => {
+            console.log("ANTES DEL CAMBIO", isExit)
+            setIsExit(true);
+            console.log("ANTES DEL CAMBIO", isExit)
         };
-    }, [stopEndgameSFX]);
+    
+        // El cleanup effect se ejecuta solo al salir del componente FinNivel
+        return cleanup;
+    }, []);
 
     return resultado === "victoria" ? (
         <div className="finNivel" style={{background: "linear-gradient(180deg, #fdf2c5, #82bfa0)"}}>

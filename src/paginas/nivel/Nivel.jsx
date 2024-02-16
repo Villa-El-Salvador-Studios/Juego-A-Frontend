@@ -460,9 +460,6 @@ const Nivel = () => {
         <div style={mundoBGStyle}>
           <img className='boton-nivel-volver' src={iconoVolver} alt="Botón volver" onClick={regresarMenu} />
           
-          {/*BORRAR BOTON ELIMNAR BOSS*/}
-          <button onClick={() => setVidaActualBoss(0)}>Eliminar boss</button>
-          
           <div className="mundo-center">
             <Personaje
               nombre={infoBoss.nombre}
