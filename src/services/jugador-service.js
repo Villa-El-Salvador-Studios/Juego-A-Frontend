@@ -1,6 +1,6 @@
- import http from '../shared/services/http-common'
+import http from '../shared/services/http-common'
 
- class JugadorService {
+class JugadorService {
     GetAll() {
         return http.get('/jugadores')
     }
@@ -28,6 +28,6 @@
     VerifyUser(data) {
         return http.post('/jugadores/verificar-usuario', data)
     }
- }
+}
 
- export default new JugadorService()
+export default new JugadorService()

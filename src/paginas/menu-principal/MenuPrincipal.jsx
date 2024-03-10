@@ -41,7 +41,7 @@ const MenuPrincipal = () => {
     
     return (
         <div className='menu-principal'>
-            <h1 className='titulo'>Juego-A</h1>
+            <h1 className='titulo'>Chafamon</h1>
             <div className="espacio-botones">
                 <button className='boton-menu' onClick={irASelectorDeNiveles}>Jugar</button>
                 <button className='boton-menu' onClick={volverHome}>
