@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import Carousel from '../../componentes/carousel/Carousel';
+import Carousel from '../../componentes/Carousel/Carousel';
 import PersonajeService from '../../services/personaje-service';
 import HabilidadPersonajeService from '../../services/habilidad-personaje-service';
 import './creacion-personaje.css';
