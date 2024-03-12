@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
                     className="toolbar-home-icon"
                   />
                 </Link>
-                Juego A
+                Chafamon
               </div>
             );
           }
