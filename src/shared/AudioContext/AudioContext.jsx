@@ -12,16 +12,16 @@ export const useAudio = () => {
 
 export const AudioProvider = ({ children }) => {
   const [volume, setVolume] = useState(1);
-  let audioElement = new Audio('../../src/assets/audios/Beach-Sakura Girl.mp3');
+  let audioElement = new Audio('/assets/audios/Beach-Sakura Girl.mp3');
 
   // Lista de pistas de música de fondo
   const backgroundMusicAudioElements = [
-    new Audio('../../src/assets/audios/Beach-Sakura Girl.mp3'),
-    new Audio('../../src/assets/audios/DRIVE.mp3'),
-    new Audio('../../src/assets/audios/Fluffing-a-Duck.mp3'),
-    new Audio('../../src/assets/audios/Powerful Trap Beat.mp3'),
-    new Audio('../../src/assets/audios/Run-Amok.mp3'),
-    new Audio('../../src/assets/audios/Sneaky-Snitch.mp3')
+    new Audio('/assets/audios/Beach-Sakura Girl.mp3'),
+    new Audio('/assets/audios/DRIVE.mp3'),
+    new Audio('/assets/audios/Fluffing-a-Duck.mp3'),
+    new Audio('/assets/audios/Powerful Trap Beat.mp3'),
+    new Audio('/assets/audios/Run-Amok.mp3'),
+    new Audio('/assets/audios/Sneaky-Snitch.mp3')
   ];
 
   const playAudio = (index, volumen) => {
@@ -73,7 +73,7 @@ export const AudioProvider = ({ children }) => {
   };
 
   const playHabilitySFX = (nombre) => {
-    audioElement = new Audio(`../../src/assets/audios/HbtSFX/${nombre}.mp3`)
+    audioElement = new Audio(`/assets/audios/HbtSFX/${nombre}.mp3`)
     
     audioElement.volume = 0.1;
 
@@ -91,7 +91,7 @@ export const AudioProvider = ({ children }) => {
   }
 
   const stopHabilitySFX = (nombre) => {
-    audioElement = new Audio(`../../src/assets/audios/HbtSFX/${nombre}.mp3`)
+    audioElement = new Audio(`/assets/audios/HbtSFX/${nombre}.mp3`)
 
     if (!audioElement.paused) {
       audioElement.pause();
@@ -102,7 +102,7 @@ export const AudioProvider = ({ children }) => {
 
   const obtenerLongitudAudio = (nombre) => {
     return new Promise((resolve, reject) => {
-      const audioElement = new Audio(`../../src/assets/audios/HbtSFX/${nombre}.mp3`);
+      const audioElement = new Audio(`/assets/audios/HbtSFX/${nombre}.mp3`);
       audioElement.addEventListener('loadedmetadata', () => {
           resolve(audioElement.duration);
       });
@@ -111,9 +111,9 @@ export const AudioProvider = ({ children }) => {
 
   const playAccionesAudio = (tipo) => {
     if (tipo === "personajes") {
-      audioElement = new Audio(`../../src/assets/audios/ActSFX/apartaHijoDePuta.mp3`)
+      audioElement = new Audio(`/assets/audios/ActSFX/apartaHijoDePuta.mp3`)
     } else if (tipo === "objetos") {
-      audioElement = new Audio(`../../src/assets/audios/ObjSFX/minecraftPotion.mp3`)
+      audioElement = new Audio(`/assets/audios/ObjSFX/minecraftPotion.mp3`)
     }
 
     audioElement.volume = 0.1;
@@ -149,12 +149,12 @@ export const AudioProvider = ({ children }) => {
     if (situation === "vidaBajaBoss") {
       const randomIndex = Math.floor(Math.random() * lowHealthBossSFX.length);
 
-      audioElement = new Audio(`../../src/assets/audios/StSFX/${lowHealthBossSFX[randomIndex]}.mp3`)
+      audioElement = new Audio(`/assets/audios/StSFX/${lowHealthBossSFX[randomIndex]}.mp3`)
 
     } else if (situation === "vidaBajaPersonaje") {
       const randomIndex = Math.floor(Math.random() * lowHealthPersonajeSFX.length);
 
-      audioElement = new Audio(`../../src/assets/audios/StSFX/${lowHealthPersonajeSFX[randomIndex]}.mp3`)
+      audioElement = new Audio(`/assets/audios/StSFX/${lowHealthPersonajeSFX[randomIndex]}.mp3`)
     }
 
     audioElement.volume = 0.5;
@@ -173,7 +173,7 @@ export const AudioProvider = ({ children }) => {
   }
 
   const playStartSFX = () => {
-    audioElement = new Audio('../../src/assets/audios/StSFX/marioKartRaceStart.mp3')
+    audioElement = new Audio('/assets/audios/StSFX/marioKartRaceStart.mp3')
     audioElement.volume = 0.3;
 
     audioElement.addEventListener('canplaythrough', () => {
@@ -206,14 +206,14 @@ export const AudioProvider = ({ children }) => {
     if (isExit === false) {
       if (resultado === "victoria") {
         const randomIndex = Math.floor(Math.random() * endgameVictorySFX.length);
-        audioElement = new Audio(`../../src/assets/audios/StSFX/${endgameVictorySFX[randomIndex]}.mp3`)
+        audioElement = new Audio(`/assets/audios/StSFX/${endgameVictorySFX[randomIndex]}.mp3`)
         localStorage.setItem('endGameSFX', endgameVictorySFX[randomIndex]);
       } else if (resultado === "derrota") {
         const randomIndex = Math.floor(Math.random() * endgameDefeatSFX.length);
-        audioElement = new Audio(`../../src/assets/audios/StSFX/${endgameDefeatSFX[randomIndex]}.mp3`)
+        audioElement = new Audio(`/assets/audios/StSFX/${endgameDefeatSFX[randomIndex]}.mp3`)
         localStorage.setItem('endGameSFX', endgameDefeatSFX[randomIndex]);
       } else if (resultado === "victoriaFinal"){
-        audioElement = new Audio('../../src/assets/audios/StSFX/sweetVictory.mp3')
+        audioElement = new Audio('/assets/audios/StSFX/sweetVictory.mp3')
         localStorage.setItem('endGameSFX', 'sweetVictory');
       }
       audioElement.volume = 0.3;

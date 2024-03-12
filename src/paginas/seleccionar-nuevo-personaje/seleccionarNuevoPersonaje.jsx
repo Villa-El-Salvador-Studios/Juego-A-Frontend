@@ -16,11 +16,11 @@ const SeleccionarNuevoPersonaje = () => {
     const [isPersonajeSeleccionado, setIsPersonajeSeleccionado] = useState(false);
     const [images, setImages] = useState({
         names: ["Robotin", "URL", "Mage", "Dambeldor", "Pedrito"],
-        imageList: ["../../src/assets/images/characters/bombolbi.webp",
-                "../../src/assets/images/characters/enlace.webp",
-                "../../src/assets/images/characters/mago.webp",
-                "../../src/assets/images/characters/magoAnemico.webp",
-                "../../src/assets/images/characters/ven10.webp",]
+        imageList: ["/assets/images/characters/bombolbi.webp",
+                    "/assets/images/characters/enlace.webp",
+                    "/assets/images/characters/mago.webp",
+                    "/assets/images/characters/magoAnemico.webp",
+                    "/assets/images/characters/ven10.webp",]
     });
 
     const mensaje = '¿Estás seguro de tu elección? Esta acción no se puede revertir.'
